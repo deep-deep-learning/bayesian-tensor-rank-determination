@@ -535,7 +535,7 @@ if __name__ == "__main__":
     # onnx
     parser.add_argument("--save-onnx", action="store_true", default=False)
     # gpu
-    parser.add_argument("--use-gpu", action="store_true", default=False)
+    parser.add_argument("--use-gpu", action="store_true", default=True)
     # debugging and profiling
     parser.add_argument("--print-freq", type=int, default=1)
     parser.add_argument("--test-freq", type=int, default=-1)
@@ -561,6 +561,7 @@ if __name__ == "__main__":
     parser.add_argument("--lr-decay-start-step", type=int, default=0)
     parser.add_argument("--lr-num-decay-steps", type=int, default=0)
     args = parser.parse_args()
+    print(args)
 
     if args.mlperf_logging:
         print('command line args: ', json.dumps(vars(args)))

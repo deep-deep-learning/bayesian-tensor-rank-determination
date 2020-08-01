@@ -1,0 +1,1 @@
+CUDA_VISIBLE_DEVICES=0 ./bench/dlrm_s_criteo_kaggle.sh --test-freq=1024
