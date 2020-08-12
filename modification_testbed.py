@@ -45,44 +45,106 @@ import torch
 import random
 import numpy as np
 
-batch_size = 20
+
+batch_size = 100
+
+n = 10000
+r = 64
+
 
 x_list = [random.randint(0,n) for _ in range(batch_size)]
 x = torch.tensor(x_list).view(batch_size,)
-
-n = 100
-r = 20
 
 layer = t3.TTEmbedding(voc_size=n,emb_size=r,auto_shapes=True)
 
 for core in layer.tt_matrix.tt_cores:
     print(core.shape)
 
-#%%
 
-std_out = layer(x)
+cum_prod =torch.tensor(list(reversed([1]+list(np.cumprod(layer.voc_quant[::-1])[:-1]))))
+idx = x
+
+for i,y in enumerate(cum_prod):
+    print(i,y)
 
 
+def ind2sub(idx):
 
-def ind2sub(idx,dims):
-
-    cum_prod =list(reversed([1]+list(np.cumprod(layer.voc_quant[1:]))))
     out = []
-    rem = x.numpy()
+    rem = idx
 
     for i,y in enumerate(cum_prod):
-        val,rem = divmod(rem,y)
+        val = torch.floor(rem.float() / y).long()
+        rem = torch.fmod(rem, y)
+#        print(idx)
+
+#        val,rem = divmod(rem,y)
         out.append(torch.tensor(val))
 
     out = torch.stack(out,dim=1).view(x.shape[0],-1)
     return out
 
-x_ind = ind2sub(x,layer.voc_quant)
+#%%
 
+def a():
+    full = layer.tt_matrix.full()
+    x_list = [random.randint(0,n-1) for _ in range(batch_size)]
+    x = torch.tensor(x_list).view(batch_size,)
+    return full[x]
+
+x_list = [random.randint(0,n-1) for _ in range(batch_size)]
+
+def b():
+#    x_list = [random.randint(0,n-1) for _ in range(batch_size)]
+    x = torch.tensor(x_list).view(batch_size,)
+    rows = layer(x)
+    """     
+    x_ind = ind2sub(x)
+
+    rows = t3.gather_rows(layer.tt_matrix, x_ind)
+    rows = rows.view(x.shape[0], -1)
+    """    
+    return rows
+
+full = layer.tt_matrix.full()
+
+def c():
+#    x_list = [random.randint(0,n-1) for _ in range(batch_size)]
+    x = torch.tensor(x_list).view(batch_size,)
+    return full[x]
+
+torch.norm(b()-c())/torch.norm(b())
+#%%
+
+import matplotlib.pyplot as plt
+import seaborn as sns
+old = [91e-3,448e-3,891e-3,1.65,3.1]
+mine = [712e-6,732e-6,723e-6,708e-6,718e-6]
+std_lookup = [217e-6,229e-6,235e-6,238e-6,237e-6] 
+x = [1000000,5000000,10000000,20000000,40000000]
+
+plt.loglog(x,old,label='tensorized-naive')
+plt.loglog(x,mine,label='tensorized-proposed')
+plt.loglog(x,std_lookup,label='not tensorized')
+plt.xlabel('Embedding Size')
+plt.ylabel('Batch Inference Time')
+sns.set_context('poster')
+
+plt.legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
+#%%
+
+x_list = [random.randint(0,n-1) for _ in range(batch_size)]
+
+x = torch.tensor(x_list).view(batch_size,)
+
+b,c = layer(x)
+
+
+torch.norm(b-c)/torch.norm(b)
+
+#%%
 #x_ind = t3.ind2sub(layer.voc_quant, x)
 #x_ind = out # torch.tensor([[0,0,1],[0,2,2]]).view([2,3])#t3.ind2sub(layer.voc_quant, x)
-rows = t3.gather_rows(layer.tt_matrix, x_ind)
-rows = rows.view(x.shape[0], -1)
 
 torch.norm(rows-std_out)/torch.norm(std_out)
 

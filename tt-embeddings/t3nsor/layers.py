@@ -59,6 +59,24 @@ class TTEmbedding(nn.Module):
 
         self.padding_idx = padding_idx
         self.naive = naive
+        self.cum_prod = torch.tensor(list(reversed([1]+list(np.cumprod(self.voc_quant[::-1])[:-1]))))
+
+    
+    def ind2sub(self,idx):
+
+        out = []
+        rem = idx
+
+        for y in self.cum_prod.to(idx.device):
+            val = torch.floor(rem.float() / y).long()
+            rem = torch.fmod(rem, y)
+    #        print(idx)
+
+    #        val,rem = divmod(rem,y)
+            out.append(val)
+
+        out = torch.stack(out,dim=1).view(idx.shape[0],-1)
+        return out
 
     def forward(self, x):
 
@@ -66,16 +84,17 @@ class TTEmbedding(nn.Module):
         xshape_new = xshape + [self.emb_size, ]
         x = x.view(-1)
 
-        # x_ind = t3.ind2sub(self.voc_quant, x)
-        # rows = t3.gather_rows(self.tt_matrix, x_ind)
-        #
-        # rows = rows.view(x.shape[0], -1)
+        x_ind = self.ind2sub(x)
+        rows = t3.gather_rows(self.tt_matrix, x_ind)
+        
+        rows = rows.view(x.shape[0], -1)
+        """         
         if self.naive:
             full = t3.naive_full(self.tt_matrix)
         else:
             full = self.tt_matrix.full()
         rows = full[x]
-
+        """
         if self.padding_idx is not None:
             rows = torch.where(x.view(-1, 1) != self.padding_idx, rows, torch.zeros_like(rows))
 
