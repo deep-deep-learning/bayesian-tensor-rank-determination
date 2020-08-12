@@ -1,8 +1,59 @@
-future
-numpy
-onnx
-pydot
-torch
-torchviz
-scikit-learn
-tqdm
+ax-platform==0.1.13
+backcall==0.2.0
+botorch==0.2.5
+certifi==2020.6.20
+cloudpickle==1.3.0
+cycler==0.10.0
+decorator==4.4.2
+dm-tree==0.1.5
+future==0.18.2
+gpytorch==1.1.1
+graphviz==0.14.1
+ipykernel @ file:///tmp/build/80754af9/ipykernel_1596207638929/work/dist/ipykernel-5.3.4-py3-none-any.whl
+ipython @ file:///tmp/build/80754af9/ipython_1593447377063/work
+ipython-genutils==0.2.0
+jedi @ file:///tmp/build/80754af9/jedi_1592841866100/work
+Jinja2==2.11.2
+joblib==0.16.0
+jupyter-client @ file:///tmp/build/80754af9/jupyter_client_1594826976318/work
+jupyter-core==4.6.3
+kiwisolver==1.2.0
+MarkupSafe==1.1.1
+matplotlib==3.3.0
+mkl-fft==1.1.0
+mkl-random==1.1.1
+mkl-service==2.3.0
+mpmath==1.1.0
+numpy==1.18.5
+onnx==1.7.0
+pandas @ file:///tmp/build/80754af9/pandas_1596825826607/work
+parso==0.7.0
+pexpect==4.8.0
+pickleshare==0.7.5
+Pillow==7.2.0
+plotly==4.8.2
+prompt-toolkit==3.0.5
+protobuf==3.12.2
+ptyprocess==0.6.0
+pydot==1.4.1
+Pygments==2.6.1
+pyparsing==2.4.7
+python-dateutil==2.8.1
+pytz==2020.1
+pyzmq==19.0.1
+retrying==1.3.3
+scikit-learn==0.23.1
+scipy @ file:///tmp/build/80754af9/scipy_1592930511789/work
+seaborn==0.10.1
+sip==4.19.13
+six==1.15.0
+sympy==1.6.1
+tfp-nightly==0.11.0.dev20200703
+threadpoolctl==2.1.0
+torch==1.5.1
+torchviz==0.0.1
+tornado==6.0.4
+tqdm==4.48.0
+traitlets==4.3.3
+typing-extensions==3.7.4.2
+wcwidth @ file:///tmp/build/80754af9/wcwidth_1593447189090/work

@@ -100,3 +100,5 @@ Testing at - 33792/306969 of epoch 0, loss 0.468194, accuracy 78.023 %, best 78.
 Finished training it 34816/306969 of epoch 0, 25.26 ms/it, loss 0.463067, accuracy 78.535 %
 Testing at - 34816/306969 of epoch 0, loss 0.467729, accuracy 78.044 %, best 78.044 %
 Finished training it 35840/306969 of epoch 0, 25.69 ms/it, loss 0.461123, accuracy 78.452 %
+Testing at - 35840/306969 of epoch 0, loss 0.468544, accuracy 77.982 %, best 78.044 %
+Finished training it 36864/306969 of epoch 0, 26.11 ms/it, loss 0.464519, accuracy 78.331 %
