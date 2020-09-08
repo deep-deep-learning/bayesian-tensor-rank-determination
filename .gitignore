@@ -215,3 +215,4 @@ input/train_fea_dict_23.npz
 input/train_fea_dict_24.npz
 input/train_fea_dict_25.npz
 input/train.txt
+weights/

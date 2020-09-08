@@ -265,6 +265,12 @@ class DLRM_Net(nn.Module):
             self.bot_l = self.create_mlp(ln_bot, sigmoid_bot)
             self.top_l = self.create_mlp(ln_top, sigmoid_top)
 
+    def save_embeddings(self):
+
+        for k,emb in enumerate(self.emb_l):
+            torch.save(emb.weight.T, 'weights/emb%s.pt'%k)
+            
+
     def apply_mlp(self, x, layers):
         # approach 1: use ModuleList
         # for layer in layers:
@@ -477,6 +483,9 @@ if __name__ == "__main__":
     ### import packages ###
     import sys
     import argparse
+
+    #sys.argv = ['python dlrm_s_pytorch.py','--arch-sparse-feature-size=16','--arch-mlp-bot=13-512-256-64-16','--arch-mlp-top=512-256-1', '--data-generation=dataset', '--data-set=kaggle', '--raw-data-file=./input/train.txt', '--processed-data-file=./input/kaggleAdDisplayChallenge_processed.npz', '--loss-function=bce', '--round-targets=True', '--learning-rate=0.1', '--mini-batch-size=128', '--print-freq=1024','--test-num-workers=16', '--test-freq=10240', '--memory-map', '--use-gpu']
+
 
     ### parse arguments ###
     parser = argparse.ArgumentParser(
@@ -765,6 +774,8 @@ if __name__ == "__main__":
         md_flag=args.md_flag,
         md_threshold=args.md_threshold,
     )
+
+
     # test prints
     if args.debug_mode:
         print("initial parameters (weights and bias):")
@@ -909,9 +920,12 @@ if __name__ == "__main__":
             )
         )
 
+    dlrm.save_embeddings()
+
     print("time/loss/accuracy (if enabled):")
     with torch.autograd.profiler.profile(args.enable_profiling, use_gpu) as prof:
         while k < args.nepochs:
+
             if k < skip_upto_epoch:
                 continue
 
@@ -1239,3 +1253,5 @@ if __name__ == "__main__":
         dlrm_pytorch_onnx = onnx.load("dlrm_s_pytorch.onnx")
         # check the onnx model
         onnx.checker.check_model(dlrm_pytorch_onnx)
+
+    dlrm.save_embeddings()
