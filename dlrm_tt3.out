@@ -1,0 +1,2 @@
+node42.podcluster
+/var/spool/slurm/d/job1739477/slurm_script: line 12: ../bench/dlrm_tt.sh: No such file or directory

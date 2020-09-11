@@ -1,0 +1,2 @@
+node34.podcluster
+/var/spool/slurm/d/job1739480/slurm_script: line 10: ../bench/dlrm_s_criteo_kaggle.sh: No such file or directory
