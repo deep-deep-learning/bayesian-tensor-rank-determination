@@ -7,12 +7,14 @@ from abc import abstractmethod, ABC
 import torch.distributions as td
 Parameter = torch.nn.Parameter
 
-class LowRankTensor(ABC):
+class LowRankTensor(torch.nn.Module):
     def __init__(self,
                  dims,
                  prior_type=None,
                  init_method='random',
                  **kwargs):
+
+        super(LowRankTensor, self).__init__()
 
         self.eps = 1e-12
 
@@ -96,9 +98,9 @@ class CP(LowRankTensor):
         return torch.square(torch.relu(self.rank_parameter))
 
 
-    def estimate_rank(self, threshold=1e-4):
+    def estimate_rank(self, threshold=1e-5):
 
-        return len(torch.where(self.get_rank_variance() > threshold))
+        return int(sum(sum(self.get_rank_variance() > threshold)))
 
     def prune_ranks(self, threshold=1e-5):
 
@@ -203,12 +205,14 @@ class CP(LowRankTensor):
 
     def _build_low_rank_prior(self):
 
-        self.rank_parameter = Parameter(torch.sqrt(torch.tensor(self.get_rank_parameters_update())))
+        self.rank_parameter = Parameter(torch.sqrt(torch.tensor(self.get_rank_parameters_update())).view([1,self.max_rank]))
 
         self.factor_prior_distributions = []
 
         for x in self.dims:
-            self.factor_prior_distributions.append(td.Independent(td.Normal(loc=torch.zeros([x, self.max_rank]),scale=self.rank_parameter),reinterpreted_batch_ndims=2))
+            base_dist = td.Normal(loc=torch.zeros([x, self.max_rank]),scale=self.rank_parameter)
+            independent_dist = td.Independent(base_dist,reinterpreted_batch_ndims=2)
+            self.factor_prior_distributions.append(independent_dist)#td.Independent(base_dist,reinterpreted_batch_ndims=2))
 
     def sample_full(self):
         return tl.kruskal_to_tensor(
@@ -245,16 +249,18 @@ class CP(LowRankTensor):
 
     def update_rank_parameters(self):
 
-        rank_update = self.get_rank_parameters_update().detach()
 
+        with torch.no_grad():
 
-        self.rank_parameter.data = torch.sqrt((1 - self.em_stepsize) * self.rank_parameter**2 +
-                                   self.em_stepsize * rank_update)
+            rank_update = self.get_rank_parameters_update().detach()
 
+            self.rank_parameter.data.sub_(self.rank_parameter.data)
+
+            self.rank_parameter.data.add_(torch.sqrt((1 - self.em_stepsize) * self.rank_parameter.data**2 +
+                                   self.em_stepsize * rank_update))
 
     def get_rank(self, threshold=1e-4):
         return len(torch.where(self.get_rank_variance() > threshold))
-
 
     def get_kl_divergence_to_prior(self):
 
@@ -263,43 +269,37 @@ class CP(LowRankTensor):
         return torch.sum(torch.stack(kl_divergences))
 
 
-
-
 dims = [50,50,50]
+max_rank = 10
+true_rank = 2
+EM_STEPSIZE = 1.0
 
-tensor = CP(dims=dims,max_rank=10,prior_type='log_uniform',em_stepsize=0.5)
+tensor = CP(dims=dims,max_rank=max_rank,prior_type='log_uniform',em_stepsize=EM_STEPSIZE)
 
-tensor.get_rank_parameters_update()
+full = tl.kruskal_to_tensor(tl.random.random_kruskal(shape=dims,rank=true_rank))
 
-tensor.update_rank_parameters()
-
-
-tensor.sample_full().shape
-
-full = tl.kruskal_to_tensor(tl.random.random_kruskal(shape=dims,rank=3))
-
-
+#%%
 log_likelihood_dist = td.Normal(0.0,0.1)
 
 
 def log_likelihood():
-    return -torch.sum(log_likelihood_dist.log_prob(full-tensor.get_full()))/100
+    return -torch.mean(log_likelihood_dist.log_prob(full-tensor.sample_full()))
 
 
 def mse():
-    return torch.norm(full-tensor.get_full())/torch.norm(full)
+    return torch.norm(full-tensor.sample_full())/torch.norm(full)
 
 def loss():
-    return log_likelihood(tensor.get_full())+tensor.get_kl_divergence_to_prior()
+    return log_likelihood()+tensor.get_kl_divergence_to_prior()
 
+
+#loss = log_likelihood
+
+optimizer = torch.optim.SGD(tensor.trainable_variables,lr=1e-8)
 #%%
 
-loss = log_likelihood
 
-optimizer = torch.optim.SGD(tensor.trainable_variables,lr=0.01)
-
-
-for i in range(1000):
+for i in range(10000):
 
     optimizer.zero_grad()
 
@@ -309,114 +309,12 @@ for i in range(1000):
 
     optimizer.step()
 
-#    tensor.update_rank_parameters()
+    tensor.update_rank_parameters()
 
-    if i%100==0:
-#        print('Loss ',loss())
+    if i%1000==0:
+        print('Loss ',loss())
         print('RMSE ',mse())
-        print(tensor.estimate_rank())
+        print('Rank ',tensor.estimate_rank())
 
-#%%
-
-sums = [torch.sum(torch.square(x.mean) + torch.square(x.stddev),
-                    dim=0) for x in tensor.factor_distributions])
-
-
-M = torch.sum(torch.tensor(,axis=0)
-#%%
-D = 1.0 * (sum(self.dims) + 1.0)
-
-update = M / D
-
-print(M.shape)
-print(update.shape)
-return torch.expand_dims(update, 0)
-
-
-#%%
-import torch
-
-td = torch.distributions
-import numpy as np
-Parameter = torch.nn.Parameter
-
-mean = Parameter(torch.zeros([100,5]))
-std = Parameter(torch.ones([100,5]))
-tmp = td.Normal.mean,std)
-tmp.sample().shape
-
-#%%
-import torch
-import numpy as np
-td = torch.distributions
-
-Parameter = torch.nn.Parameter
-
-mean = Parameter(torch.zeros([1,1]))
-mean = torch.zeros([1,1])
-
-std = Parameter(0.5*torch.ones([1,1]))
-
-tmp = td.Normal.mean,torch.ones(std.shape))
-
-tmp.sample().shape
-
-transforms = [td.transforms.AffineTransform(loc=0,scale=torch.sqrt(std))]
-
-new_normal = td.TransformedDistribution(tmp,transforms)
-
-np.std(new_normal.sample([10000]).numpy())
-
-#td.Normal(loc=torch.zeros([x, self.max_rank]),scale=torch.sqrt(self.rank_parameter))
-# %%
-
-
-class Scale_Normal(td.Transform):
-
-    def __init__(self,scale_squared,cache_size=0):
-
-        self._cache_size = cache_size
+print(tensor.rank_parameter)
         
-        self.scale_squared = scale_squared
-        self._inv = None
-        if cache_size == 0:
-            pass  # default behavior
-        elif cache_size == 1:
-            self._cached_x_y = None, None
-        else:
-            raise ValueError('cache_size must be 0 or 1')
-        super(Scale_Normal, self).__init__()
-
-    def _call(self,x):
-
-        return x*torch.sqrt(self.scale_squared)
-
-transforms = [Scale_Normal(std)]
-
-new_normal = td.TransformedDistribution(tmp,transforms) 
-
-np.std(new_normal.sample([10000]).numpy())
-# %%
-def loss():
-    return torch.norm(new_normal.rsample([1000]))
-
-weights = [std]
-
-optimizer = torch.optim.SGD(weights,lr=0.0001)
-
-#%%
-
-for i in range(1000):
-    optimizer.zero_grad()
-
-    loss_value = loss()
-
-    loss_value.backward(retain_graph=True)
-
-    optimizer.step()
-
-
-    if i%100==0:
-        print(loss())
-
-#%%
