@@ -97,7 +97,7 @@ model = Net().to(device)
 optimizer = optim.Adadelta(model.parameters(), lr=lr)
 
 scheduler = StepLR(optimizer, step_size=1, gamma=gamma)
-for epoch in range(1, epochs + 1):
+for epoch in range(2):
     train(model, device, train_loader, optimizer, epoch)
     test(model, device, test_loader)
     scheduler.step()
@@ -114,33 +114,58 @@ rank = 5
 import tensorly.random
 import torch
 
-factors = tl.random.random_kruskal(dims,rank)
-full = tl.kruskal_to_tensor(factors)
+_, factors = tl.random.random_kruskal(dims,rank)
+full = tl.kruskal_to_tensor((None,factors))
 
-for factor in factors[1]:
+_,new_factors = tl.random.random_kruskal(dims,rank)
+
+for factor in factors+new_factors:
     print(torch.norm(factor))
 
-weights,new_factors = tl.random.random_kruskal(dims,rank)
-
-weights = torch.tensor(weights,requires_grad=True)
 
 new_factors = [torch.tensor(factor,requires_grad=True) for factor in new_factors]
 
 def loss(weights,new_factors):
-    pred = tl.kruskal_to_tensor((weights,new_factors))  
+    pred = tl.kruskal_to_tensor((None,new_factors))  
     return torch.norm(pred-full)/torch.norm(full)
 
-
-optimizer = torch.optim.SGD([weights]+new_factors,lr=0.001)
+optimizer = torch.optim.SGD(new_factors,lr=0.01)
 
 rank_var = torch.zeros(rank)
+
+
+#%%
+
+def update_rank_var(rank_var,alpha=1.0):
+
+    M = torch.sum(torch.stack([torch.sum(torch.square(factor),dim=0) for factor in new_factors]),dim=0)
+
+    D = 1.0*torch.sum(torch.tensor(dims))
+    prior_type = 'log_uniform'
+
+    if prior_type=='half_cauchy':
+        eta = 1.0
+        update = (M - D * eta**2 + torch.sqrt(
+                    torch.square(M) + (2.0 * D + 8.0) * torch.square(eta) * M +
+                    torch.pow(eta, 4.0) * torch.square(D))) / (2.0 * D + 4.0)
+    elif prior_type=='log_uniform':
+        update = M/D
+
+    rank_var = alpha*rank_var+(1-alpha)*update
+
+    return rank_var
+
+
+#%%
+
+
 
 #TODO
 add
 
 #%%
 
-num_steps = 1000
+num_steps = 10000
 
 for _ in range(num_steps):
 
@@ -153,3 +178,4 @@ for _ in range(num_steps):
     optimizer.step()
 
     print(loss(weights,new_factors))
+# %%
