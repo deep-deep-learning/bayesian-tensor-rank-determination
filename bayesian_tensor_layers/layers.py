@@ -3,29 +3,26 @@ import numpy as np
 import torch.nn as nn
 import t3nsor as t3
 
-from .low_rank_tensors import CP
+from low_rank_tensors import CP
 
 class CPEmbedding(nn.Module):
     def __init__(self,
                  init=None,
                  shape=None,
+                 max_rank=16,
+                 em_stepsize=1.0,
                  prior_type='log_uniform',
-                 voc_size=None,
-                 emb_size=None,
-                 auto_shapes=None,
-                 auto_shape_mode='ascending',
-                 auto_shape_criterion='entropy',
-                 d=3,
-                 tt_rank=8,
                  batch_dim_last=None,
                  padding_idx=None,
                  naive=False):
 
+        super(CPEmbedding,self).__init__()
+
         self.shape = shape
 
-        init = t3.glorot_initializer(self.shape, tt_rank=tt_rank)
+        #TODO initializer
 
-        self.tensor = CP(self.shape[0]+self.shape[1],prior_type=prior_type)
+        self.tensor = CP(self.shape[0]+self.shape[1],prior_type=prior_type,em_stepsize=em_stepsize,max_rank=max_rank)
 
         self.parameters = self.tensor.parameters
 
@@ -66,10 +63,10 @@ class CPEmbedding(nn.Module):
         xshape_new = xshape + [self.emb_size, ]
         x = x.view(-1)
 
-        x_ind = self.ind2sub(x)
+        #x_ind = self.ind2sub(x)
 
         full = self.tensor.get_full()
-        full = full.view([np.prod(self.shape[0],np.prod(self.shape[1]))])
+        full = full.view([np.prod(self.shape[0]),np.prod(self.shape[1])])
         rows = full[x]
 
 #        rows = gather_rows(self.tensor, x_ind)
@@ -86,5 +83,9 @@ class CPEmbedding(nn.Module):
             rows = torch.where(x.view(-1, 1) != self.padding_idx, rows, torch.zeros_like(rows))
 
         rows = rows.view(*xshape_new)
+
+        if self.training:
+            self.tensor.update_rank_parameters()
+        
 
         return rows.to(x.device)

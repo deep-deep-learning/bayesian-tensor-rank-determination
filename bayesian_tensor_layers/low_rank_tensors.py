@@ -32,6 +32,8 @@ class LowRankTensor(torch.nn.Module):
         self._build_factor_distributions()
         self._build_low_rank_prior()
 
+        self.trainable_variables = torch.nn.ParameterList(self.trainable_variables)
+
     def get_relative_mse(self, sample_tensor):
         return torch.norm(self.get_full() -
                               sample_tensor) / torch.norm(sample_tensor)
@@ -269,7 +271,7 @@ class CP(LowRankTensor):
 
         return torch.sum(torch.stack(kl_divergences))
 
-
+"""
 dims = [50,50,50]
 max_rank = 10
 true_rank = 2
@@ -279,7 +281,6 @@ tensor = CP(dims=dims,max_rank=max_rank,prior_type='log_uniform',em_stepsize=EM_
 
 full = tl.kruskal_to_tensor(tl.random.random_kruskal(shape=dims,rank=true_rank))
 
-#%%
 log_likelihood_dist = td.Normal(0.0,0.001)
 
 
@@ -297,7 +298,6 @@ def loss():
 #loss = log_likelihood
 
 optimizer = torch.optim.Adam(tensor.trainable_variables,lr=1e-5)
-#%%
 
 for i in range(10000):
 
@@ -317,22 +317,5 @@ for i in range(10000):
         print('Rank ',tensor.estimate_rank())
         print(tensor.get_rank_variance())
 
-        
+"""
 #%%
-
-print(tensor.factor_prior_distributions[0].stddev[0])
-print(tensor.rank_parameter.data)
-print(tensor.factor_distributions[0].mean)
-print(tensor.factor_distributions[0].stddev)
-
-#%%
-
-new_data = torch.tensor([1.0,1.0,1.0,1e-5,1e-5])
-
-tensor.rank_parameter.data.sub_(tensor.rank_parameter.data.detach())
-
-tensor.rank_parameter.data.add_(new_data)
-
-#%%
-
-
