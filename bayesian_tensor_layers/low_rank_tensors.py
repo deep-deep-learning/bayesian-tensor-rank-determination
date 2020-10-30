@@ -6,6 +6,7 @@ import tensorly.random, tensorly.decomposition
 from abc import abstractmethod, ABC
 import torch.distributions as td
 Parameter = torch.nn.Parameter
+import numpy as np
 
 class LowRankTensor(torch.nn.Module):
     def __init__(self,
@@ -65,11 +66,11 @@ class LowRankTensor(torch.nn.Module):
         pass
 
     @abstractmethod
-    def get_rank(self, threshold=1e-4):
+    def get_rank(self, threshold=1e-5):
         pass
 
     @abstractmethod
-    def prune_ranks(self, threshold=1e-4):
+    def prune_ranks(self, threshold=1e-5):
         pass
 
     @abstractmethod
@@ -186,7 +187,7 @@ class CP(LowRankTensor):
 
     def _build_factor_distributions(self):
 
-        factor_scale_prior_multiplier = 1e-3
+        factor_scale_prior_multiplier = 1e-4
 
         factor_scales = [
             self.add_variable(factor_scale_prior_multiplier *
@@ -205,7 +206,7 @@ class CP(LowRankTensor):
 
     def _build_low_rank_prior(self):
 
-        self.rank_parameter = Parameter(torch.sqrt(torch.tensor(self.get_rank_parameters_update())).view([1,self.max_rank]))
+        self.rank_parameter = torch.sqrt(torch.tensor(self.get_rank_parameters_update())).view([1,self.max_rank])# Parameter(torch.sqrt(torch.tensor(self.get_rank_parameters_update())).view([1,self.max_rank]))
 
         self.factor_prior_distributions = []
 
@@ -252,7 +253,7 @@ class CP(LowRankTensor):
 
         with torch.no_grad():
 
-            rank_update = self.get_rank_parameters_update().detach()
+            rank_update = self.get_rank_parameters_update()
 
             self.rank_parameter.data.sub_(self.rank_parameter.data)
 
@@ -279,15 +280,15 @@ tensor = CP(dims=dims,max_rank=max_rank,prior_type='log_uniform',em_stepsize=EM_
 full = tl.kruskal_to_tensor(tl.random.random_kruskal(shape=dims,rank=true_rank))
 
 #%%
-log_likelihood_dist = td.Normal(0.0,0.1)
+log_likelihood_dist = td.Normal(0.0,0.001)
 
 
 def log_likelihood():
-    return -torch.mean(log_likelihood_dist.log_prob(full-tensor.sample_full()))
+    return torch.mean(torch.stack([-torch.mean(log_likelihood_dist.log_prob(full-tensor.sample_full())) for _ in range(5)]))
 
 
 def mse():
-    return torch.norm(full-tensor.sample_full())/torch.norm(full)
+    return torch.norm(full-tensor.get_full())/torch.norm(full)
 
 def loss():
     return log_likelihood()+tensor.get_kl_divergence_to_prior()
@@ -295,9 +296,8 @@ def loss():
 
 #loss = log_likelihood
 
-optimizer = torch.optim.SGD(tensor.trainable_variables,lr=1e-8)
+optimizer = torch.optim.Adam(tensor.trainable_variables,lr=1e-5)
 #%%
-
 
 for i in range(10000):
 
@@ -315,6 +315,24 @@ for i in range(10000):
         print('Loss ',loss())
         print('RMSE ',mse())
         print('Rank ',tensor.estimate_rank())
+        print(tensor.get_rank_variance())
 
-print(tensor.rank_parameter)
         
+#%%
+
+print(tensor.factor_prior_distributions[0].stddev[0])
+print(tensor.rank_parameter.data)
+print(tensor.factor_distributions[0].mean)
+print(tensor.factor_distributions[0].stddev)
+
+#%%
+
+new_data = torch.tensor([1.0,1.0,1.0,1e-5,1e-5])
+
+tensor.rank_parameter.data.sub_(tensor.rank_parameter.data.detach())
+
+tensor.rank_parameter.data.add_(new_data)
+
+#%%
+
+
