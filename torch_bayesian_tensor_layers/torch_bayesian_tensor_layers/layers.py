@@ -1,9 +1,8 @@
 import torch
 import numpy as np
 import torch.nn as nn
-import t3nsor as t3
-
-from low_rank_tensors import CP
+from . import low_rank_tensors
+from .low_rank_tensors import CP
 
 class CPEmbedding(nn.Module):
     def __init__(self,
@@ -20,9 +19,9 @@ class CPEmbedding(nn.Module):
 
         self.shape = shape
 
-        #TODO initializer
+        target_stddev = np.sqrt(2/np.prod(self.shape[0]))
 
-        self.tensor = CP(self.shape[0]+self.shape[1],prior_type=prior_type,em_stepsize=em_stepsize,max_rank=max_rank)
+        self.tensor = CP(self.shape[0]+self.shape[1],prior_type=prior_type,em_stepsize=em_stepsize,max_rank=max_rank,initialization_method='nn',target_stddev=target_stddev)
 
         self.parameters = self.tensor.parameters
 

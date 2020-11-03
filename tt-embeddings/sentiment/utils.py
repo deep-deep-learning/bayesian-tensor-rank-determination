@@ -20,7 +20,7 @@ def binary_accuracy(preds, y):
     return acc
 
 
-def train(model, iterator, optimizer, criterion):
+def train(model, iterator, optimizer, criterion, kl_coeff=1.0):
 
     epoch_loss = 0
     epoch_acc = 0
@@ -40,6 +40,12 @@ def train(model, iterator, optimizer, criterion):
         labels = batch.label.type(dtype).to(device)
         predictions = model(batch.text).squeeze(1)
         loss = criterion(predictions, labels)
+
+        for layer in model.modules():
+            if hasattr(layer,"tensor"):
+                loss+=kl_coeff*layer.tensor.get_kl_divergence_to_prior()
+#                print("Adding kl ",layer.tensor.get_kl_divergence_to_prior())
+
         acc = binary_accuracy(predictions, labels)
         loss.backward()
         optimizer.step()
@@ -72,6 +78,11 @@ def evaluate(model, iterator, criterion):
         dtype = torch.FloatTensor
 
     with torch.no_grad():
+
+        
+        for layer in model.modules():
+            if hasattr(layer,"tensor"):
+                print("Tensor layer rank ",layer.tensor.estimate_rank())
 
         for i, batch in enumerate(iterator):
             

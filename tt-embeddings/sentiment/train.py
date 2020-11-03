@@ -1,20 +1,29 @@
+#%%
+
+
+import torch_bayesian_tensor_layers
+import torch_bayesian_tensor_layers.layers
+
+
+
+#%%
 import argparse
 import sys
 sys.path.insert(0, '..')
-
+import torch_bayesian_tensor_layers
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
     '--embedding', 
-    default='tt',
-    choices=['tt', 'tr', 'full'],
+    default='cp',
+    choices=['cp','tt', 'tr', 'full'],
     type=str)
 parser.add_argument('--ranks', type=int, default=8)
 parser.add_argument('--d', type=int, default=3)
 parser.add_argument('--embed_dim', type=int)
 parser.add_argument('--voc_dim', default=25000, type=int)
 parser.add_argument('--lr', default=5e-4)
-parser.add_argument('--gpu', default='', type=str)
+parser.add_argument('--gpu', default='1', type=str)
 parser.add_argument('--hidden_dim', default=128, type=int)
 parser.add_argument('--n_epochs',  default=10, type=int)
 parser.add_argument('--fout',  default="logdir/", type=str)
@@ -26,14 +35,14 @@ parser.add_argument(
     type=str)
 args = parser.parse_args()
 
-if args.embedding == 'tt':
-    tt = "tt"
+if args.embedding == 'cp':
+    tt = "cp"
 elif args.embedding == 'tr':
     tt = 'tr'
 else:             
     tt = "full"
 
-model_name = f"{args.dataset}-dim_{args.embed_dim}-d_{args.d}-ranks_{args.ranks}-{tt}"
+model_name = f"{args.dataset}-dim_{args.embed_dim}-ranks_{args.ranks}-{tt}"
 
 
 import os
@@ -65,6 +74,7 @@ print('Building dataset...')
 if args.dataset == 'imdb':
     OUTPUT_DIM = 1
     train_data, test_ = datasets.IMDB.splits(TEXT, LABEL)
+    num_train_examples = len(train_data)
     test_list = list(test_)
     random.shuffle(test_list)
     test_data_ = test_list[:12500]
@@ -74,6 +84,7 @@ if args.dataset == 'imdb':
     test_data = data.dataset.Dataset(
         test_data_, fields=[('text', TEXT), ('label', LABEL)])
 elif args.dataset[:3] == 'sst':
+    raise ValueError('Need number of train examples')
     OUTPUT_DIM = int(args.dataset[3])
     fine_grained = (OUTPUT_DIM == 5)
     train_data, valid_data, test_data = datasets.SST.splits(
@@ -96,6 +107,7 @@ train_iterator, valid_iterator, test_iterator = data.BucketIterator.splits(
     batch_size=BATCH_SIZE,
     device=device)
 
+
 valid_iterator.sort_key = sort_key
 test_iterator.sort_key = sort_key
 
@@ -116,7 +128,17 @@ lstm_model = LSTM_Classifier(embedding_dim=EMBEDDING_DIM,
                              bidirectional=BIDIRECTIONAL,
                              dropout=DROPOUT)
 
-if args.embedding == 'tt':
+
+if args.embedding == 'cp':
+        embed_model = torch_bayesian_tensor_layers.layers.CPEmbedding(
+            shape = [[250,100],[16,16]],
+            max_rank=20,
+            padding_idx=1
+        )
+
+        compression_rate = 10.0
+
+elif args.embedding == 'tt':
         embed_model = t3.TTEmbedding(
             voc_size=INPUT_DIM,
             emb_size=EMBEDDING_DIM,
@@ -177,7 +199,7 @@ best_result = {
 
 for epoch in range(N_EPOCHS):
 
-    train_loss, train_acc = train(model, train_iterator, optimizer, criterion)
+    train_loss, train_acc = train(model, train_iterator, optimizer, criterion,kl_coeff=BATCH_SIZE/num_train_examples)
     test_loss, test_acc = evaluate(model, test_iterator, criterion)
     valid_loss, valid_acc = evaluate(model, valid_iterator, criterion)
 

@@ -7,6 +7,7 @@ from abc import abstractmethod, ABC
 import torch.distributions as td
 Parameter = torch.nn.Parameter
 import numpy as np
+from .truncated_normal import TruncatedNormal
 
 class LowRankTensor(torch.nn.Module):
     def __init__(self,
@@ -38,10 +39,10 @@ class LowRankTensor(torch.nn.Module):
         return torch.norm(self.get_full() -
                               sample_tensor) / torch.norm(sample_tensor)
 
-    def add_variable(self, initial_value):
+    def add_variable(self, initial_value,trainable=True):
 
         #add weight using torch interface
-        new_variable = Parameter(torch.tensor(initial_value))
+        new_variable = Parameter(initial_value.clone().detach(),requires_grad=trainable)
 
         self.trainable_variables.append(new_variable)
 
@@ -141,21 +142,19 @@ class CP(LowRankTensor):
 
     def _nn_init(self):
 
-        raise NotImplementedError
 
-        if hasattr(self,"target.stddev"):
+        if hasattr(self,"target_stddev"):
             pass
         else:
-            self.target.stddev = 0.05
+            self.target_stddev = 0.05
     
-        factor.stddev = torch.pow(
-            self.target.stddev / torch.sqrt(1.0 * self.max_rank),
+        factor_stddev = torch.pow(
+            self.target_stddev / torch.sqrt(torch.tensor(1.0 * self.max_rank)),
             1.0 / len(self.dims))
-        self.factor.stddev = factor.stddev
-        initializer_dist = td.TruncatedNormal(loc=0.0,
-                                               scale=factor.stddev,
-                                               low=-3.0 * factor.stddev,
-                                               high=3.0 * factor.stddev)
+        self.factor_stddev = factor_stddev
+        
+        initializer_dist = TruncatedNormal(loc=0.0,scale=factor_stddev,a=-3.0*factor_stddev,b=3.0*factor_stddev)
+        
         init_factors = (torch.ones([self.max_rank]), [
             initializer_dist.sample([x, self.max_rank]) for x in self.dims
         ])
@@ -184,12 +183,12 @@ class CP(LowRankTensor):
 
         #convert all to tensorflow variable
         self.factors = [self.add_variable(x) for x in self.factors]
-
+        self.weights = None
 
 
     def _build_factor_distributions(self):
 
-        factor_scale_prior_multiplier = 1e-4
+        factor_scale_prior_multiplier = 1e-7
 
         factor_scales = [
             self.add_variable(factor_scale_prior_multiplier *
@@ -208,12 +207,13 @@ class CP(LowRankTensor):
 
     def _build_low_rank_prior(self):
 
-        self.rank_parameter = torch.sqrt(torch.tensor(self.get_rank_parameters_update())).view([1,self.max_rank])# Parameter(torch.sqrt(torch.tensor(self.get_rank_parameters_update())).view([1,self.max_rank]))
+        self.rank_parameter = self.add_variable(torch.sqrt(self.get_rank_parameters_update().clone().detach()).view([1,self.max_rank]),trainable=False)# Parameter(torch.sqrt(torch.tensor(self.get_rank_parameters_update())).view([1,self.max_rank]))
 
         self.factor_prior_distributions = []
 
         for x in self.dims:
-            base_dist = td.Normal(loc=torch.zeros([x, self.max_rank]),scale=self.rank_parameter)
+            zero_mean = self.add_variable(torch.zeros([x, self.max_rank]),trainable=False)
+            base_dist = td.Normal(loc=zero_mean,scale=self.rank_parameter)
             independent_dist = td.Independent(base_dist,reinterpreted_batch_ndims=2)
             self.factor_prior_distributions.append(independent_dist)#td.Independent(base_dist,reinterpreted_batch_ndims=2))
 
@@ -259,8 +259,9 @@ class CP(LowRankTensor):
 
             self.rank_parameter.data.sub_(self.rank_parameter.data)
 
-            self.rank_parameter.data.add_(torch.sqrt((1 - self.em_stepsize) * self.rank_parameter.data**2 +
-                                   self.em_stepsize * rank_update))
+            sqrt_parameter_update = torch.sqrt((1 - self.em_stepsize) * self.rank_parameter.data**2 + self.em_stepsize * rank_update)
+
+            self.rank_parameter.data.add_(sqrt_parameter_update.to(self.rank_parameter.device))
 
     def get_rank(self, threshold=1e-4):
         return len(torch.where(self.get_rank_variance() > threshold))
