@@ -199,7 +199,11 @@ best_result = {
 
 for epoch in range(N_EPOCHS):
 
-    train_loss, train_acc = train(model, train_iterator, optimizer, criterion,kl_coeff=BATCH_SIZE/num_train_examples)
+
+    epoch_multiplier = torch.tensor((epoch-20)/50)
+    epoch_multiplier = torch.clamp(epoch_multiplier,0.0,1.0)
+
+    train_loss, train_acc = train(model, train_iterator, optimizer, criterion,kl_coeff=1e-3*epoch_multiplier*BATCH_SIZE/num_train_examples)
     test_loss, test_acc = evaluate(model, test_iterator, criterion)
     valid_loss, valid_acc = evaluate(model, valid_iterator, criterion)
 

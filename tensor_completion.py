@@ -107,9 +107,7 @@ for epoch in range(2):
 import tensorly as tl
 tl.set_backend('pytorch')
 dims = [100,100,10]
-rank = 5
-
-#%%
+rank = 2
 
 import tensorly.random
 import torch
@@ -117,65 +115,43 @@ import torch
 _, factors = tl.random.random_kruskal(dims,rank)
 full = tl.kruskal_to_tensor((None,factors))
 
-_,new_factors = tl.random.random_kruskal(dims,rank)
 
-for factor in factors+new_factors:
-    print(torch.norm(factor))
+import torch_bayesian_tensor_layers.low_rank_tensors
 
+tensor = torch_bayesian_tensor_layers.low_rank_tensors.CP(dims,2*rank,prior_type='log_uniform',em_stepsize=1.0)
 
-new_factors = [torch.tensor(factor,requires_grad=True) for factor in new_factors]
+import torch
 
-def loss(weights,new_factors):
-    pred = tl.kruskal_to_tensor((None,new_factors))  
+likelihood_dist = torch.distributions.Normal(0.0,0.01)
+
+def mse_loss():
+    pred = tensor.get_full()  
     return torch.norm(pred-full)/torch.norm(full)
 
-optimizer = torch.optim.SGD(new_factors,lr=0.01)
+def sample_loss():
+    pred = tensor.sample_full()  
+    return -torch.sum(likelihood_dist.log_prob(pred-full))+tensor.get_kl_divergence_to_prior()
 
-rank_var = torch.zeros(rank)
+optimizer = torch.optim.Adam(tensor.parameters(),lr=1e-4)
 
-
-#%%
-
-def update_rank_var(rank_var,alpha=1.0):
-
-    M = torch.sum(torch.stack([torch.sum(torch.square(factor),dim=0) for factor in new_factors]),dim=0)
-
-    D = 1.0*torch.sum(torch.tensor(dims))
-    prior_type = 'log_uniform'
-
-    if prior_type=='half_cauchy':
-        eta = 1.0
-        update = (M - D * eta**2 + torch.sqrt(
-                    torch.square(M) + (2.0 * D + 8.0) * torch.square(eta) * M +
-                    torch.pow(eta, 4.0) * torch.square(D))) / (2.0 * D + 4.0)
-    elif prior_type=='log_uniform':
-        update = M/D
-
-    rank_var = alpha*rank_var+(1-alpha)*update
-
-    return rank_var
-
+num_steps = 1000
 
 #%%
 
-
-
-#TODO
-add
-
-#%%
-
-num_steps = 10000
 
 for _ in range(num_steps):
 
     optimizer.zero_grad()
 
-    loss_value = loss(weights,new_factors)
+    loss_value = sample_loss()
+#    print(loss_value)
 
     loss_value.backward()
 
     optimizer.step()
+    tensor.update_rank_parameters()
 
-    print(loss(weights,new_factors))
+    if _%100==0:
+        print(torch.norm(tensor.get_full()-full)/torch.norm(full))
+        print('Rank ',tensor.estimate_rank(1e-4))
 # %%

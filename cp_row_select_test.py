@@ -45,8 +45,9 @@ print(kl_sum)
 print(emb.tensor.get_kl_divergence_to_prior())
 
 #%%
-emb.tensor.factor
+emb.to('cuda')
 
+emb.tensor.get_kl_divergence_to_prior()
 
 # %%
 
