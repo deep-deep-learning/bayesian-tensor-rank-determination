@@ -504,6 +504,224 @@ class TensorTrain(LowRankTensor):
 
         return kl_sum
 
+
+
+class Tucker(LowRankTensor):
+    def __init__(self, dims, max_rank, **kwargs):
+
+        self.max_rank = max_rank
+
+        if type(self.max_rank)==int:
+            self.max_ranks = len(dims)*[self.max_rank]
+        else:
+            assert(type(max_rank)==list)
+            self.max_ranks = max_rank
+            self.max_rank = max(self.max_rank)
+
+        super().__init__(dims, **kwargs)
+        self.tensor_type = 'tucker'
+
+    @tf.function
+    def get_full(self):
+
+        factors = list(self.factors)
+
+        if hasattr(self,"masks"):
+            factors[0] = tf.multiply(tl.kruskal_to_tensor(([1.0],[tf.expand_dims(x,axis=1) for x in self.masks])),factors[0])
+
+        return tl.tucker_to_tensor(factors)
+
+    def estimate_rank(self, threshold=1e-4):
+
+        return [len(tf.where(x > threshold)) for x in self.rank_parameters]
+
+    def get_parameter_savings(self):
+        
+        rank_differences = [self.max_ranks[i]-x for i,x in enumerate(self.estimate_rank())]
+        factor_savings = sum([self.dims[i]*x for i,x in enumerate(rank_differences)])
+        
+        core_parameters = np.prod(self.max_ranks)#**(len(self.dims)) 
+        core_savings = core_parameters-np.prod(self.estimate_rank())
+        tensorized_savings = np.prod(self.dims)-core_parameters-sum([self.max_ranks[i]*x for i,x in enumerate(self.dims)])
+
+
+        return factor_savings+core_savings,tensorized_savings
+
+
+    def prune_ranks(self, threshold=1e-4):
+        
+        self.masks =[tf.cast(tf.math.greater(x,threshold),tf.float32) for x in self.rank_parameters]
+
+    def _nn_init(self):
+
+        if hasattr(self,"target_stddev"):
+            pass
+        else:
+            self.target_stddev = 0.05
+
+
+        factor_stddev = tf.pow(
+            tf.pow(1.0 * self.max_rank, -self.order) *
+            tf.square(self.target_stddev), 1 / (2.0 * (self.order + 1)))
+        initializer_dist = tfd.TruncatedNormal(loc=0.0,
+                                               scale=factor_stddev,
+                                               low=-self.order * factor_stddev,
+                                               high=self.order * factor_stddev)
+        sizes = (self.max_ranks, [[dim, rank]
+                                                for dim,rank in zip(self.dims,self.max_ranks)])
+        init_factors = (initializer_dist.sample(sizes[0]),
+                        [initializer_dist.sample(x) for x in sizes[1]])
+
+        return init_factors
+
+    def _random_init(self):
+
+        random_init = tl.random.random_tucker(self.dims,
+                                              self.max_ranks,
+                                              full=False,
+                                              random_state=getattr(
+                                                  self, 'seed', None))
+
+        if hasattr(self, 'target_norm'):
+            curr_norm = tf.linalg.norm(tl.tucker_to_tensor(random_init))
+            multiplier = tf.pow(self.target_norm / curr_norm, 1 / self.order)
+
+            random_init = (random_init[0],
+                           [multiplier * x for x in random_init[1]])
+
+        return random_init
+
+    def _build_factors(self):
+        if hasattr(self, 'initialization_method'):
+            if self.initialization_method == 'random':
+                self.factors = self._random_init()
+            elif self.initialization_method == 'nn':
+                self.factors = self._nn_init()
+            elif self.initialization_method == 'hooi':
+                self.initialization_tensor = tf.reshape(self.initialization_tensor,self.dims)
+                self.factors = tl.decomposition.tucker(
+                    self.initialization_tensor, self.max_ranks)
+        else:
+            self.factors = self._random_init()
+
+        #convert all to tensorflow variable
+        self.factors = (self.add_variable(self.factors[0]),
+                        [self.add_variable(x) for x in self.factors[1]])
+
+    def _build_factor_distributions(self):
+
+        factor_scale_init = 1e-3
+
+        factor_scales = (self.add_variable(
+            factor_scale_init * tf.ones(self.factors[0].shape)), [
+                self.add_variable(factor_scale_init * tf.ones(factor.shape))
+                for factor in self.factors[1]
+            ])
+
+        self.factor_distributions = (tfd.Independent(
+            tfd.Normal(loc=self.factors[0],
+                       scale=tfp.util.DeferredTensor(
+                           factor_scales[0],
+                            lambda x: tf.maximum(self.eps, x))),
+            reinterpreted_batch_ndims=len(self.dims)), [])
+
+        for factor, factor_scale in zip(self.factors[1], factor_scales[1]):
+            self.factor_distributions[1].append(
+                tfd.Independent(tfd.Normal(
+                    loc=factor,
+                    scale=tfp.util.DeferredTensor(
+                        factor_scale,lambda x: tf.maximum(self.eps, x))),
+                                reinterpreted_batch_ndims=2))
+
+    #TODO change core prior as parameter
+    def _build_low_rank_prior(self, core_prior=10.0):
+
+        self.rank_parameters = [
+            tf.Variable(getattr(self, 'rank_init_multiplier', 1.0) * x)
+            for x in self.get_rank_parameters_update()
+        ]
+
+        self.factor_prior_distributions = (tfd.Independent(
+            tfd.Normal(loc=tf.zeros(self.factors[0].shape), scale=core_prior),
+            reinterpreted_batch_ndims=len(self.dims)), [])
+
+        for i in range(len(self.dims)):
+
+            self.factor_prior_distributions[1].append(
+                tfd.Independent(tfd.Normal(
+                    loc=tf.zeros(self.factors[1][i].shape),
+                    scale=tfp.util.DeferredTensor(
+                        self.rank_parameters[i],
+                        lambda a: tf.maximum(self.eps, tf.sqrt(a)))),
+                                reinterpreted_batch_ndims=2))
+
+
+
+    def sample_full(self):
+
+
+        sample_factors = [self.factor_distributions[0].sample(),[x.sample() for x in self.factor_distributions[1]]]
+        
+        if hasattr(self,"masks"):
+            sample_factors[0] = tf.multiply(tl.kruskal_to_tensor(([1.0],[tf.expand_dims(x,axis=1) for x in self.masks])),sample_factors[0])
+
+        return tl.tucker_to_tensor(sample_factors)
+
+    @tf.function
+    def get_rank_parameters_update(self):
+
+        updates = []
+
+        for i in range(len(self.dims)):
+
+            M = tf.reduce_sum(
+                tf.square(self.factor_distributions[1][i].mean()) +
+                tf.square(self.factor_distributions[1][i].stddev()),
+                axis=0)
+
+            if self.prior_type == 'log_uniform':
+                update = M / (self.dims[i] + 1)
+
+            elif self.prior_type == 'gamma':
+                update = (2 * self.beta + M) / (self.dims[i] + 2 +
+                                                2 * self.alpha)
+
+            elif self.prior_type == 'half_cauchy':
+                update = (M - (self.eta**2) * self.dims[i] +
+                          tf.sqrt(M**2 + (M * self.eta**2) *
+                                  (2.0 * self.dims[i] + 8.0) +
+                                  (self.dims[i]**2.0) *
+                                  (self.eta**4.0))) / (2 * self.dims[i] + 4.0)
+
+            updates.append(update)
+
+        return updates
+
+    @tf.function
+    def update_rank_parameters(self):
+
+        rank_updates = self.get_rank_parameters_update()
+        for rank_parameter, update in zip(self.rank_parameters, rank_updates):
+            rank_parameter.assign((1 - self.em_stepsize) * rank_parameter +
+                                  self.em_stepsize * update)
+
+    def get_rank(self, threshold=1e-4):
+        return [len(tf.where(x > threshold)) for x in self.rank_parameters]
+
+    @tf.function
+    def get_kl_divergence_to_prior(self):
+
+        kl_divergences = [
+            tfd.kl_divergence(factor_dist, factor_prior_dist)
+            for (factor_dist,
+                 factor_prior_dist) in zip(self.factor_distributions[1],
+                                           self.factor_prior_distributions[1])
+        ] + tfd.kl_divergence(self.factor_distributions[0],
+                              self.factor_prior_distributions[0])
+
+        return tf.reduce_sum(kl_divergences)
+
+
 #%%
 dims = [50,50,50]
 max_rank = 5
