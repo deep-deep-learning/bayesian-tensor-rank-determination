@@ -7,7 +7,7 @@ from abc import abstractmethod, ABC
 import torch.distributions as td
 Parameter = torch.nn.Parameter
 import numpy as np
-from truncated_normal import TruncatedNormal
+from .truncated_normal import TruncatedNormal
 
 class LowRankTensor(torch.nn.Module):
     def __init__(self,
@@ -258,11 +258,8 @@ class CP(LowRankTensor):
         with torch.no_grad():
 
             rank_update = self.get_rank_parameters_update()
-
-            self.rank_parameter.data.sub_(self.rank_parameter.data)
-
             sqrt_parameter_update = torch.sqrt((1 - self.em_stepsize) * self.rank_parameter.data**2 + self.em_stepsize * rank_update)
-
+            self.rank_parameter.data.sub_(self.rank_parameter.data)
             self.rank_parameter.data.add_(sqrt_parameter_update.to(self.rank_parameter.device))
 
     def get_rank(self, threshold=1e-4):
@@ -405,7 +402,7 @@ class TensorTrain(LowRankTensor):
     def _build_low_rank_prior(self):
 
         self.rank_parameters = [
-            self.add_variable(torch.sqrt(x.clone().detach()))
+            self.add_variable(torch.sqrt(x.clone().detach(),trainable=False))
             for x in self.get_rank_parameters_update()
         ]
 
@@ -474,10 +471,9 @@ class TensorTrain(LowRankTensor):
 
             for rank_parameter, rank_update in zip(self.rank_parameters, rank_updates):
 
-                rank_parameter.data.sub_(rank_parameter.data)
 
                 sqrt_parameter_update = torch.sqrt((1 - self.em_stepsize) * rank_parameter.data**2 + self.em_stepsize * rank_update)
-
+                rank_parameter.data.sub_(rank_parameter.data)
                 rank_parameter.data.add_(sqrt_parameter_update.to(rank_parameter.device))
 
 
@@ -521,19 +517,19 @@ class Tucker(LowRankTensor):
         super().__init__(dims, **kwargs)
         self.tensor_type = 'tucker'
 
-    @tf.function
     def get_full(self):
 
         factors = list(self.factors)
 
         if hasattr(self,"masks"):
+            raise NotImplementedError
             factors[0] = tf.multiply(tl.kruskal_to_tensor(([1.0],[tf.expand_dims(x,axis=1) for x in self.masks])),factors[0])
 
         return tl.tucker_to_tensor(factors)
 
     def estimate_rank(self, threshold=1e-4):
 
-        return [len(tf.where(x > threshold)) for x in self.rank_parameters]
+        return [int(sum(torch.square(x) > threshold)) for x in self.rank_parameters]
 
     def get_parameter_savings(self):
         
@@ -549,7 +545,7 @@ class Tucker(LowRankTensor):
 
 
     def prune_ranks(self, threshold=1e-4):
-        
+        raise NotImplementedError        
         self.masks =[tf.cast(tf.math.greater(x,threshold),tf.float32) for x in self.rank_parameters]
 
     def _nn_init(self):
@@ -560,13 +556,13 @@ class Tucker(LowRankTensor):
             self.target_stddev = 0.05
 
 
-        factor_stddev = tf.pow(
-            tf.pow(1.0 * self.max_rank, -self.order) *
-            tf.square(self.target_stddev), 1 / (2.0 * (self.order + 1)))
-        initializer_dist = tfd.TruncatedNormal(loc=0.0,
+        factor_stddev = torch.pow(
+            torch.pow(1.0 * self.max_rank, -self.order) *
+            torch.square(self.target_stddev), 1 / (2.0 * (self.order + 1)))
+        initializer_dist = TruncatedNormal(loc=0.0,
                                                scale=factor_stddev,
-                                               low=-self.order * factor_stddev,
-                                               high=self.order * factor_stddev)
+                                               a=-self.order * factor_stddev,
+                                               b=self.order * factor_stddev)
         sizes = (self.max_ranks, [[dim, rank]
                                                 for dim,rank in zip(self.dims,self.max_ranks)])
         init_factors = (initializer_dist.sample(sizes[0]),
@@ -583,8 +579,8 @@ class Tucker(LowRankTensor):
                                                   self, 'seed', None))
 
         if hasattr(self, 'target_norm'):
-            curr_norm = tf.linalg.norm(tl.tucker_to_tensor(random_init))
-            multiplier = tf.pow(self.target_norm / curr_norm, 1 / self.order)
+            curr_norm = torch.norm(tl.tucker_to_tensor(random_init))
+            multiplier = torch.pow(self.target_norm / curr_norm, 1 / self.order)
 
             random_init = (random_init[0],
                            [multiplier * x for x in random_init[1]])
@@ -598,97 +594,82 @@ class Tucker(LowRankTensor):
             elif self.initialization_method == 'nn':
                 self.factors = self._nn_init()
             elif self.initialization_method == 'hooi':
-                self.initialization_tensor = tf.reshape(self.initialization_tensor,self.dims)
+                self.initialization_tensor = torch.reshape(self.initialization_tensor,self.dims)
                 self.factors = tl.decomposition.tucker(
                     self.initialization_tensor, self.max_ranks)
         else:
             self.factors = self._random_init()
 
-        #convert all to tensorflow variable
         self.factors = (self.add_variable(self.factors[0]),
                         [self.add_variable(x) for x in self.factors[1]])
 
     def _build_factor_distributions(self):
 
-        factor_scale_init = 1e-3
+        factor_scale_init = 1e-7
 
         factor_scales = (self.add_variable(
-            factor_scale_init * tf.ones(self.factors[0].shape)), [
-                self.add_variable(factor_scale_init * tf.ones(factor.shape))
+            factor_scale_init * torch.ones(self.factors[0].shape)), [
+                self.add_variable(factor_scale_init * torch.ones(factor.shape))
                 for factor in self.factors[1]
             ])
 
-        self.factor_distributions = (tfd.Independent(
-            tfd.Normal(loc=self.factors[0],
-                       scale=tfp.util.DeferredTensor(
-                           factor_scales[0],
-                            lambda x: tf.maximum(self.eps, x))),
+        self.factor_distributions = (td.Independent(
+            td.Normal(loc=self.factors[0],
+                       scale=factor_scales[0]),
             reinterpreted_batch_ndims=len(self.dims)), [])
 
         for factor, factor_scale in zip(self.factors[1], factor_scales[1]):
             self.factor_distributions[1].append(
-                tfd.Independent(tfd.Normal(
+                td.Independent(td.Normal(
                     loc=factor,
-                    scale=tfp.util.DeferredTensor(
-                        factor_scale,lambda x: tf.maximum(self.eps, x))),
+                    scale=factor_scale),
                                 reinterpreted_batch_ndims=2))
 
-    #TODO change core prior as parameter
     def _build_low_rank_prior(self, core_prior=10.0):
 
         self.rank_parameters = [
-            tf.Variable(getattr(self, 'rank_init_multiplier', 1.0) * x)
-            for x in self.get_rank_parameters_update()
+            self.add_variable(torch.sqrt(x.clone().detach()),trainable=False) for x in self.get_rank_parameters_update()
         ]
 
-        self.factor_prior_distributions = (tfd.Independent(
-            tfd.Normal(loc=tf.zeros(self.factors[0].shape), scale=core_prior),
+        self.factor_prior_distributions = (td.Independent(
+            td.Normal(loc=torch.zeros(self.factors[0].shape), scale=core_prior),
             reinterpreted_batch_ndims=len(self.dims)), [])
 
         for i in range(len(self.dims)):
 
             self.factor_prior_distributions[1].append(
-                tfd.Independent(tfd.Normal(
-                    loc=tf.zeros(self.factors[1][i].shape),
-                    scale=tfp.util.DeferredTensor(
-                        self.rank_parameters[i],
-                        lambda a: tf.maximum(self.eps, tf.sqrt(a)))),
+                td.Independent(td.Normal(
+                    loc=torch.zeros(self.factors[1][i].shape),
+                    scale=self.rank_parameters[i]),
                                 reinterpreted_batch_ndims=2))
-
-
 
     def sample_full(self):
 
-
-        sample_factors = [self.factor_distributions[0].sample(),[x.sample() for x in self.factor_distributions[1]]]
+        sample_factors = [self.factor_distributions[0].rsample(),[x.rsample() for x in self.factor_distributions[1]]]
         
         if hasattr(self,"masks"):
+            raise NotImplementedError
             sample_factors[0] = tf.multiply(tl.kruskal_to_tensor(([1.0],[tf.expand_dims(x,axis=1) for x in self.masks])),sample_factors[0])
 
         return tl.tucker_to_tensor(sample_factors)
 
-    @tf.function
     def get_rank_parameters_update(self):
 
         updates = []
 
         for i in range(len(self.dims)):
 
-            M = tf.reduce_sum(
-                tf.square(self.factor_distributions[1][i].mean()) +
-                tf.square(self.factor_distributions[1][i].stddev()),
+            M = torch.sum(
+                torch.square(self.factor_distributions[1][i].mean) +
+                torch.square(self.factor_distributions[1][i].stddev),
                 axis=0)
 
             if self.prior_type == 'log_uniform':
                 update = M / (self.dims[i] + 1)
 
-            elif self.prior_type == 'gamma':
-                update = (2 * self.beta + M) / (self.dims[i] + 2 +
-                                                2 * self.alpha)
-
             elif self.prior_type == 'half_cauchy':
                 update = (M - (self.eta**2) * self.dims[i] +
-                          tf.sqrt(M**2 + (M * self.eta**2) *
+                          torch.sqrt(M**2 + (M * self.eta**2) *
                                   (2.0 * self.dims[i] + 8.0) +
                                   (self.dims[i]**2.0) *
                                   (self.eta**4.0))) / (2 * self.dims[i] + 4.0)
@@ -697,88 +678,332 @@ class Tucker(LowRankTensor):
 
         return updates
 
-    @tf.function
+
     def update_rank_parameters(self):
 
-        rank_updates = self.get_rank_parameters_update()
-        for rank_parameter, update in zip(self.rank_parameters, rank_updates):
-            rank_parameter.assign((1 - self.em_stepsize) * rank_parameter +
-                                  self.em_stepsize * update)
+        with torch.no_grad():
+
+            rank_updates = self.get_rank_parameters_update()
+            for rank_parameter, rank_update in zip(self.rank_parameters, rank_updates):
+                
+                sqrt_parameter_update = torch.sqrt((1 - self.em_stepsize) * rank_parameter.data**2 + self.em_stepsize * rank_update)
+                rank_parameter.data.sub_(rank_parameter.data)
+                rank_parameter.data.add_(sqrt_parameter_update.to(rank_parameter.device))
 
     def get_rank(self, threshold=1e-4):
-        return [len(tf.where(x > threshold)) for x in self.rank_parameters]
+        return [int(sum(torch.square(x) > threshold)) for x in self.rank_parameters]
 
-    @tf.function
     def get_kl_divergence_to_prior(self):
 
-        kl_divergences = [
-            tfd.kl_divergence(factor_dist, factor_prior_dist)
-            for (factor_dist,
-                 factor_prior_dist) in zip(self.factor_distributions[1],
-                                           self.factor_prior_distributions[1])
-        ] + tfd.kl_divergence(self.factor_distributions[0],
+        kl_sum = 0.0
+
+        for p,rank_parameter in zip(self.factor_distributions[1],self.rank_parameters):
+            var_ratio = (p.stddev / rank_parameter).pow(2)
+            t1 = ((p.mean ) / rank_parameter).pow(2)
+            kl = torch.sum(0.5 * (var_ratio + t1 - 1 - var_ratio.log()))
+            kl_sum+=kl
+
+        kl_sum+=td.kl_divergence(self.factor_distributions[0],
                               self.factor_prior_distributions[0])
 
-        return tf.reduce_sum(kl_divergences)
+        return kl_sum
 
 
-#%%
-dims = [50,50,50]
-max_rank = 5
-true_rank = 2
-EM_STEPSIZE = 1.0
 
-tensor = TensorTrain(dims=dims,max_rank=max_rank,prior_type='log_uniform',em_stepsize=EM_STEPSIZE)
+class TensorTrainMatrix(LowRankTensor):
+    def __init__(self, dims, max_rank, **kwargs):
 
-full = tl.tt_to_tensor(tl.random.random_tt(shape=dims,rank=true_rank))
+        self.max_rank = max_rank
 
+        if type(self.max_rank)==int:
+            self.max_ranks = [1]+(len(dims[0])-1)*[self.max_rank]+[1]
+        else:
+            assert(type(max_rank)==list)
+            self.max_ranks = max_rank
+            self.max_rank = max(self.max_rank)
 
-log_likelihood_dist = td.Normal(0.0,0.001)
+        self.dims1,self.dims2 = dims
+        self.shape = [np.prod(self.dims1),np.prod(self.dims2)]
+        assert(len(self.dims1)==len(self.dims2))
 
+        super().__init__(dims, **kwargs)
+        self.tensor_type = 'TensorTrainMatrix'
+        self.order = len(self.dims1)
 
-def log_likelihood():
-    return torch.mean(torch.stack([-torch.mean(log_likelihood_dist.log_prob(full-tensor.sample_full())) for _ in range(5)]))
+    def get_parameter_savings(self):
+        
+        rank_estimates = [1]+self.estimate_rank()+[1]
 
+        reduced_rank_parameters = 0
+        total_tt_parameters = sum([np.prod(x.shape.as_list()) for x in self.factors])
 
-def mse():
-    return torch.norm(full-tensor.get_full())/torch.norm(full)
+        for i,x in enumerate(zip(self.dims1,self.dims2)):
+            reduced_rank_parameters+= rank_estimates[i]*x[0]*x[1]*rank_estimates[i+1]
+            
+        return total_tt_parameters-reduced_rank_parameters,np.prod(self.dims)-total_tt_parameters
 
-def kl_loss():
-    return log_likelihood()+tensor.get_kl_divergence_to_prior()
+    def full_from_factors(self,factors):
 
+        if hasattr(self,'masks'):
+            raise NotImplementedError
+            factors = [tf.multiply(x,y) for x,y in zip(self.factors,self.masks)]+[tf.multiply(tf.expand_dims(tf.expand_dims(tf.expand_dims(self.masks[-1],axis=-1),axis=-1),axis=-1),self.factors[-1])]
 
-loss = kl_loss
+        num_dims = len(self.dims1)
 
-#loss = log_likelihood
+        ranks = [x[0] for x in self.rank_pairs]
+        shape = self.shape
+        raw_shape = self.dims
 
-optimizer = torch.optim.Adam(tensor.trainable_variables,lr=1e-5)
+        res = factors[0]
 
-#%%
-
-for i in range(10000):
-
-    optimizer.zero_grad()
-
-    loss_value = loss()
-
-    loss_value.backward()
-
-    optimizer.step()
-
-    tensor.update_rank_parameters()
-
-    if i%1000==0:
-        print('Loss ',loss())
-        print('RMSE ',mse())
-        print('Rank ',tensor.estimate_rank())
-        print(tensor.rank_parameters)
-
-
-#%%
-
-print(tensor.factor_prior_distributions[-1].stddev[:,0,0])
-print(tensor.rank_parameters[1])
+        for i in range(1, num_dims):
+            res = torch.reshape(res, (-1, ranks[i]))
+            curr_core = torch.reshape(factors[i], (ranks[i], -1))
+            res = torch.matmul(res, curr_core)
 
 
-#%%
-tensor.update_rank_parameters()
+        intermediate_shape = []
+        for i in range(num_dims):
+            intermediate_shape.append(raw_shape[0][i])
+            intermediate_shape.append(raw_shape[1][i])
+        res = torch.reshape(res, intermediate_shape)
+        transpose = []
+        for i in range(0, 2 * num_dims, 2):
+            transpose.append(i)
+        for i in range(1, 2 * num_dims, 2):
+            transpose.append(i)
+        res = torch.Tensor.permute(res, transpose)
+        res = torch.reshape(res, shape)
+
+        return res
+
+    def get_full(self):
+
+        return self.full_from_factors(self.factors)
+
+    def estimate_rank(self, threshold=1e-5):
+
+        return [int(sum(torch.square(x) > threshold)) for x in self.rank_parameters]
+
+    def prune_ranks(self, threshold=1e-5):
+        raise NotImplementedError
+        self.masks =[tf.cast(tf.math.greater(x,threshold),tf.float32) for x in self.rank_parameters]
+
+    def _nn_init(self):
+
+        if hasattr(self,"target_stddev"):
+            pass
+        else:
+            self.target_stddev = 0.05
+
+        factor_stddev = torch.pow(
+            torch.pow(1.0 * self.max_rank, -self.order + 1) *
+            torch.square(self.target_stddev), 1 / (2.0 * self.order))
+
+        self.factor_stddev = factor_stddev
+
+        sizes = [[1, self.dims1[0],self.dims2[0], self.max_ranks[1]]] + [
+            [self.max_ranks[i+1], x,y, self.max_ranks[i+2]] for i,(x,y) in enumerate(zip(self.dims1[1:-1],self.dims2[1:-1]))
+        ] + [[self.max_ranks[-2], self.dims1[-1],self.dims2[-1], 1]]
+
+
+        initializer_dist = TruncatedNormal(loc=0.0,
+                                               scale=factor_stddev,
+                                               a=-3.0 * factor_stddev,
+                                               b=3.0 * factor_stddev)
+        
+        init_factors = [initializer_dist.sample(x) for x in sizes]
+
+        return init_factors
+
+    def _glorot_init(self):
+        raise NotImplementedError
+        initializer = tf.keras.initializers.glorot_normal(0)
+
+        init_factors = [tf.reshape(initializer([self.sizes[0][1],self.sizes[0][2],self.sizes[0][0],self.sizes[0][3]]),self.sizes[0])]
+        
+        for x in self.sizes[1:]:
+
+            unshaped = initializer([np.prod(x[0:2]),np.prod(x[2:])])
+            init_factors.append(tf.reshape(unshaped,x))
+
+        return init_factors
+
+    def _random_init(self):
+
+        factors = [td.Normal(0.0,1.0).sample(sz) for sz in self.sizes]
+
+        if hasattr(self, 'target_norm'):
+            curr_norm = torch.norm(self.full_from_factors(factors))
+            multiplier = torch.pow(self.target_norm / curr_norm, 1 / self.num_cores)
+            factors = [multiplier * x for x in factors]
+
+        return factors
+
+    def _build_factors(self):
+
+        self.num_cores = len(self.dims1)
+        self.rank_pairs = list(zip(self.max_ranks,self.max_ranks[1:]))
+
+        self.sizes = [(rank_pair[0],i,j,rank_pair[1]) for rank_pair,i,j in zip(self.rank_pairs,self.dims1,self.dims2)]
+
+        if hasattr(self, 'initialization_method'):
+            if self.initialization_method == 'random':
+                self.factors = self._random_init()
+            elif self.initialization_method == 'nn':
+                self.factors = self._nn_init()
+            elif self.initialization_method == 'glorot':
+                self.factors = self._glorot_init()
+            else:
+                raise (ValueError("Initialization method not supported."))
+        else:
+            self.factors = self._random_init()
+
+        #convert all to tensorflow variable
+        
+
+        self.factors = [self.add_variable(x) for x in self.factors]
+
+
+
+    def _build_factor_distributions(self):
+
+        factor_scale_init = 1e-7
+
+        factor_scales = [
+            self.add_variable(factor_scale_init * torch.ones(factor.shape))
+            for factor in self.factors
+        ]
+
+        self.factor_distributions = []
+
+        for factor, factor_scale in zip(self.factors, factor_scales):
+            self.factor_distributions.append(
+                td.Independent(td.Normal(
+                    loc=factor,
+                    scale=factor_scale),
+                                reinterpreted_batch_ndims=4))
+
+    def _build_low_rank_prior(self):
+
+        self.rank_parameters = [
+            x.clone().detach()
+            for x in self.get_rank_parameters_update()
+        ]
+
+        self.factor_prior_distributions = []
+
+        for i in range(self.num_cores - 1):
+
+            self.factor_prior_distributions.append(
+                td.Independent(td.Normal(
+                    loc=torch.zeros(self.factors[i].shape),
+                    scale=self.rank_parameters[i]),
+                                reinterpreted_batch_ndims=4))
+
+        self.factor_prior_distributions.append(
+            td.Independent(td.Normal(
+                loc=torch.zeros(self.factors[-1].shape),
+                scale=self.rank_parameters[-1].unsqueeze(1).unsqueeze(2).unsqueeze(3)),
+                            reinterpreted_batch_ndims=4))
+
+    def sample_full(self):
+        return self.full_from_factors(
+            [x.rsample() for x in self.factor_distributions])
+
+    def sample_factors(self):
+        
+        return [x.rsample() for x in self.factor_distributions]
+
+    def get_rank_parameters_update(self):
+
+        updates = []
+
+        for i in range(self.num_cores - 1):
+
+            M = torch.sum(torch.square(self.factor_distributions[i].mean) +
+                              torch.square(self.factor_distributions[i].stddev),
+                              axis=[0,1, 2])
+            if i == len(self.dims) - 2:
+                D = self.dims[0][i]*self.dims[1][i]*self.rank_pairs[i][0]+self.dims[0][i+1]*self.dims[1][i+1]
+                M += torch.sum(
+                    torch.square(self.factor_distributions[i + 1].mean) +
+                    torch.square(self.factor_distributions[i + 1].stddev),
+                    axis=[1, 2, 3])
+            else:
+                D = self.dims[0][i]*self.dims[1][i]*self.rank_pairs[i][0]
+
+            if self.prior_type == 'log_uniform':
+                update = M / (D + 1)
+            elif self.prior_type == 'gamma':
+                update = (2 * self.beta + M) / (D + 2 + 2 * self.alpha)
+
+            elif self.prior_type == 'half_cauchy':
+                update = (M - (self.eta**2) * D +
+                          torch.sqrt(M**2 + (M * self.eta**2) * (2.0 * D + 8.0) +
+                                  (D**2.0) * (self.eta**4.0))) / (2 * D + 4.0)
+
+            updates.append(update)
+
+        return updates
+
+    def update_rank_parameters(self):
+
+        with torch.no_grad():
+
+            rank_updates = self.get_rank_parameters_update()
+            for rank_parameter, rank_update in zip(self.rank_parameters, rank_updates):
+                
+                sqrt_parameter_update = torch.sqrt((1 - self.em_stepsize) * rank_parameter.data**2 + self.em_stepsize * rank_update)
+                rank_parameter.data.sub_(rank_parameter.data)
+                rank_parameter.data.add_(sqrt_parameter_update.to(rank_parameter.device))
+
+    def get_rank(self, threshold=1e-4):
+        return [int(sum(torch.square(x) > threshold)) for x in self.rank_parameters]
+
+    def get_kl_divergence_to_prior(self):
+
+        kl_sum = 0.0
+
+        for p,rank_parameter in zip(self.factor_distributions,self.rank_parameters):
+            var_ratio = (p.stddev / rank_parameter).pow(2)
+            t1 = ((p.mean ) / rank_parameter).pow(2)
+            kl = torch.sum(0.5 * (var_ratio + t1 - 1 - var_ratio.log()))
+            kl_sum+=kl
+
+        kl_sum+=td.kl_divergence(self.factor_distributions[0],
+                              self.factor_prior_distributions[0])
+
+        return kl_sum
+
+    def tensor_times_matrix(self,matrix_b):
+    
+        ndims = len(self.dims1)
+
+        a_columns = self.shape[0]
+        b_rows = matrix_b.get_shape().as_list()[0]
+
+        a_shape = self.shape
+        a_raw_shape = self.dims
+
+        b_shape = matrix_b.shape
+
+        a_ranks = [x[0] for x in self.rank_pairs]
+        # If A is (i0, ..., id-1) x (j0, ..., jd-1) and B is (j0, ..., jd-1) x K,
+        # data is (K, j0, ..., jd-2) x jd-1 x 1
+        data = torch.transpose(matrix_b)
+        data = torch.reshape(data, (-1, a_raw_shape[1][-1], 1))
+
+        for core_idx in reversed(range(ndims)):
+            curr_core = self.factors[core_idx]
+            # On the k = core_idx iteration, after applying einsum the shape of data
+            # becomes ik x (ik-1..., id-1, K, j0, ..., jk-1) x rank_k
+            data = torch.einsum('aijb,rjb->ira', curr_core, data)
+            if core_idx > 0:
+            # After reshape the shape of data becomes
+            # (ik, ..., id-1, K, j0, ..., jk-2) x jk-1 x rank_k
+                new_data_shape = (-1, a_raw_shape[1][core_idx - 1], a_ranks[core_idx])
+                data = torch.reshape(data, new_data_shape)
+        # At the end the shape of the data is (i0, ..., id-1) x K
+        out =  torch.reshape(data, (a_shape[0], b_shape[1]))
+        return out

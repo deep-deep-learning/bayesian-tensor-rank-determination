@@ -132,7 +132,7 @@ lstm_model = LSTM_Classifier(embedding_dim=EMBEDDING_DIM,
 if args.embedding == 'cp':
         embed_model = torch_bayesian_tensor_layers.layers.CPEmbedding(
             shape = [[250,100],[16,16]],
-            max_rank=20,
+            max_rank=50,
             padding_idx=1
         )
 
@@ -202,8 +202,9 @@ for epoch in range(N_EPOCHS):
 
     epoch_multiplier = torch.tensor((epoch-20)/50)
     epoch_multiplier = torch.clamp(epoch_multiplier,0.0,1.0)
+    print("Epoch mult",epoch_multiplier)
 
-    train_loss, train_acc = train(model, train_iterator, optimizer, criterion,kl_coeff=1e-3*epoch_multiplier*BATCH_SIZE/num_train_examples)
+    train_loss, train_acc = train(model, train_iterator, optimizer, criterion,kl_coeff=1e-2*epoch_multiplier*BATCH_SIZE/num_train_examples)
     test_loss, test_acc = evaluate(model, test_iterator, criterion)
     valid_loss, valid_acc = evaluate(model, valid_iterator, criterion)
 
