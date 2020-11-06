@@ -80,10 +80,6 @@ import torch.nn as nn
 from torch.nn.parallel.parallel_apply import parallel_apply
 from torch.nn.parallel.replicate import replicate
 from torch.nn.parallel.scatter_gather import gather, scatter
-# quotient-remainder trick
-from tricks.qr_embedding_bag import QREmbeddingBag
-# mixed-dimension trick
-from tricks.md_embedding_bag import PrEmbeddingBag, md_solver
 
 import sklearn.metrics
 
@@ -94,6 +90,9 @@ import sklearn.metrics
 from torch.optim.lr_scheduler import _LRScheduler
 
 import t3nsor as t3
+import torch_bayesian_tensor_layers
+import torch_bayesian_tensor_layers.layers
+from torch_bayesian_tensor_layers.layers import TensorizedEmbedding 
 
 
 exc = getattr(builtins, "IOError", "FileNotFoundError")
@@ -186,8 +185,13 @@ class DLRM_Net(nn.Module):
 #            print(i,' md flag ',self.md_flag)
             n = ln[i]
             # construct embedding operator
+
+            shape0 = [[200,220,250],[125,130,136],[200,200,209],[166,175,188],[200,200,200]]
+            shape1 = [2,2,4]
+
             if i in tensorized_embedding_layers:
                 print('TT-Embedding %i size %ix%i' %(i,n,m))
+                """
                 EE = t3.TTEmbedding(
                         voc_size=n,
                         emb_size=m,
@@ -196,6 +200,13 @@ class DLRM_Net(nn.Module):
                         d=3,
                         tt_rank=16
                     )
+                print(EE.shape)
+                """
+                EE = TensorizedEmbedding(
+                    tensor_type=args.tensor_type,
+                    max_rank=8,
+                    shape = [shape0.pop(0),shape1]
+                )
 
             else:
                 print('Embedding %i size %ix%i' %(i,n,m))
@@ -300,7 +311,7 @@ class DLRM_Net(nn.Module):
             
             E = emb_l[k]
             
-            if type(E)==t3.TTEmbedding:
+            if type(E) in [t3.TTEmbedding,TensorizedEmbedding]:
                 assert(sparse_offset_group_batch.shape==sparse_index_group_batch.shape)
                 V = E(sparse_index_group_batch)
 
@@ -499,6 +510,7 @@ if __name__ == "__main__":
         description="Train Deep Learning Recommendation Model (DLRM)"
     )
     # model related parameters
+    parser.add_argument("--tensor-type", type=str, default='CP')
     parser.add_argument("--arch-sparse-feature-size", type=int, default=2)
     parser.add_argument("--arch-embedding-size", type=str, default="4-3-2")
     # j will be replaced with the table number
@@ -551,7 +563,7 @@ if __name__ == "__main__":
     # onnx
     parser.add_argument("--save-onnx", action="store_true", default=False)
     # gpu
-    parser.add_argument("--use-gpu", action="store_true", default=True)
+    parser.add_argument("--use-gpu", type=int,default=False)
     # debugging and profiling
     parser.add_argument("--print-freq", type=int, default=1)
     parser.add_argument("--test-freq", type=int, default=-1)
@@ -598,7 +610,12 @@ if __name__ == "__main__":
         # if the parameter is not set, use the same parameter for training
         args.test_num_workers = args.num_workers
 
+
+    print(args.use_gpu)
     use_gpu = args.use_gpu and torch.cuda.is_available()
+    print(args.use_gpu)
+    print(use_gpu)
+
     if use_gpu:
         torch.cuda.manual_seed_all(args.numpy_rand_seed)
         torch.backends.cudnn.deterministic = True

@@ -127,7 +127,7 @@ lstm_model = LSTM_Classifier(embedding_dim=EMBEDDING_DIM,
                              dropout=DROPOUT)
 
 
-if args.embedding == 'cp':
+if args.embedding in ['CP']:
         embed_model = torch_bayesian_tensor_layers.layers.TensorizedEmbedding(
             tensor_type=args.embedding,
             shape = [[250,100],[16,16]],
@@ -136,29 +136,17 @@ if args.embedding == 'cp':
         )
 
         compression_rate = 10.0
+    
+elif args.embedding in ['TensorTrain','TensorTrainMatrix','Tucker']:
+        embed_model = torch_bayesian_tensor_layers.layers.TensorizedEmbedding(
+            tensor_type=args.embedding,
+            shape = [[250,100],[16,16]],
+            max_rank=20,
+            padding_idx=1
+        )
 
-elif args.embedding == 'tt':
-        embed_model = t3.TTEmbedding(
-            voc_size=INPUT_DIM,
-            emb_size=EMBEDDING_DIM,
-            auto_shapes=True,
-            auto_shape_mode='mixed',
-            d=args.d,
-            tt_rank=args.ranks,
-            padding_idx=1
-        )
-        compression_rate = INPUT_DIM * EMBEDDING_DIM / embed_model.tt_matrix.dof
-elif args.embedding == 'tr':
-        embed_model = t3.TREmbedding(
-            voc_size=INPUT_DIM,
-            emb_size=EMBEDDING_DIM,
-            auto_shapes=True,
-            auto_shape_mode='mixed',
-            d=args.d,
-            tr_rank=args.ranks,
-            padding_idx=1
-        )
-        compression_rate = INPUT_DIM * EMBEDDING_DIM / embed_model.tr_matrix.dof
+        compression_rate = 10.0
+
 else:
     embed_model = nn.Embedding(
         num_embeddings=INPUT_DIM,

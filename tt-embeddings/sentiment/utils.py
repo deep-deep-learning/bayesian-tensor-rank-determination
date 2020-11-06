@@ -82,8 +82,9 @@ def evaluate(model, iterator, criterion):
         
         for layer in model.modules():
             if hasattr(layer,"tensor"):
-                print("Tensor layer rank ",layer.tensor.estimate_rank())
-
+                print("Tensor layer rank ",layer.tensor.estimate_rank(1e-3))
+                print("Tensor layer rank ",layer.tensor.estimate_rank(1e-4))
+                print("Tensor layer rank ",layer.tensor.estimate_rank(1e-5))
         for i, batch in enumerate(iterator):
             
             device = batch.text.device

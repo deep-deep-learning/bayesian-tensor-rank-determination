@@ -1,0 +1,10 @@
+Finished training it 1024/306969 of epoch 0, 12.56 ms/it, loss 0.519008, accuracy 75.529 %
+Finished training it 2048/306969 of epoch 0, 11.78 ms/it, loss 0.506066, accuracy 76.246 %
+Finished training it 3072/306969 of epoch 0, 12.72 ms/it, loss 0.500046, accuracy 76.558 %
+Finished training it 4096/306969 of epoch 0, 11.87 ms/it, loss 0.492114, accuracy 76.941 %
+Finished training it 5120/306969 of epoch 0, 11.93 ms/it, loss 0.485314, accuracy 77.384 %
+Finished training it 6144/306969 of epoch 0, 12.46 ms/it, loss 0.481178, accuracy 77.544 %
+Finished training it 7168/306969 of epoch 0, 12.50 ms/it, loss 0.477636, accuracy 77.665 %
+Finished training it 8192/306969 of epoch 0, 12.27 ms/it, loss 0.476305, accuracy 77.759 %
+Finished training it 9216/306969 of epoch 0, 12.91 ms/it, loss 0.476057, accuracy 77.783 %
+Finished training it 10240/306969 of epoch 0, 13.52 ms/it, loss 0.473393, accuracy 77.953 %
