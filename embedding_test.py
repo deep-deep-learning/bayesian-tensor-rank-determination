@@ -3,15 +3,14 @@ import torch_bayesian_tensor_layers
 import os
 os.environ['CUDA_VISIBLE_DEVICES']="1"
 import torch_bayesian_tensor_layers.low_rank_tensors
-from torch_bayesian_tensor_layers.low_rank_tensors import CP
-
+import torch
 import torch_bayesian_tensor_layers.layers
-from torch_bayesian_tensor_layers.layers import CPEmbedding
+from torch_bayesian_tensor_layers.layers import TensorizedEmbedding
 
 #%%
 
 
-shape = [[20,25,30],[10,10]] 
+shape = [[20,20,20],[4,4,4]] 
 
 prior_type = 'log_uniform'
 
@@ -19,42 +18,30 @@ max_rank = 10
 
 # %%
 
-emb = CPEmbedding(shape=shape)
+tensor_type = 'TensorTrainMatrix'
 
-import torch
-torch.std(emb.tensor.get_full())
+emb = TensorizedEmbedding(shape=shape,tensor_type=tensor_type)
 
-#%%
+print(torch.std(emb.tensor.sample_full()))
 
-kl_sum= 0.0
+print(emb.tensor.target_stddev)
 
-for p in emb.tensor.factor_distributions:
-    var_ratio = (p.stddev / emb.tensor.rank_parameter).pow(2)
-    t1 = ((p.mean ) / emb.tensor.rank_parameter).pow(2)
-    kl = torch.sum(0.5 * (var_ratio + t1 - 1 - var_ratio.log()))
-
-
-#    term_1 =2*torch.log(a.stddev/emb.tensor.rank_parameter)
-
-#    term_2 = (torch.square(a.stddev)+torch.square(a.mean))/(2*torch.square(emb.tensor.rank_parameter))
-
-#    kl = torch.sum(term_1)+torch.sum(term_2)-a.stddev.numel()*0.5
-    kl_sum+=kl
-print(kl_sum)
-
-print(emb.tensor.get_kl_divergence_to_prior())
-
-#%%
 emb.to('cuda')
 
 emb.tensor.get_kl_divergence_to_prior()
 
-# %%
+import numpy as np
 
 
-input_values = torch.tensor([1,2,3])
+input_values = torch.tensor([1,2,3,4])
 
 rows = emb.forward(input_values)
+
+#%%
+
+i = 3
+torch.std(emb.tensor.factors[i])
+
 # %%
 
 tensor = emb.tensor

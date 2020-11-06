@@ -3,7 +3,7 @@
 
 import torch_bayesian_tensor_layers
 import torch_bayesian_tensor_layers.layers
-
+from torch_bayesian_tensor_layers.layers import TensorizedEmbedding
 
 
 #%%
@@ -15,8 +15,8 @@ import torch_bayesian_tensor_layers
 parser = argparse.ArgumentParser()
 parser.add_argument(
     '--embedding', 
-    default='cp',
-    choices=['cp','tt', 'tr', 'full'],
+    default='CP',
+    choices=['CP','TensorTrain', 'TensorTrainMatrix', 'Tucker'],
     type=str)
 parser.add_argument('--ranks', type=int, default=8)
 parser.add_argument('--d', type=int, default=3)
@@ -35,14 +35,12 @@ parser.add_argument(
     type=str)
 args = parser.parse_args()
 
-if args.embedding == 'cp':
-    tt = "cp"
-elif args.embedding == 'tr':
-    tt = 'tr'
+if args.embedding == 'CP':
+    args.ranks = 50
 else:             
-    tt = "full"
+    args.ranks = 10
 
-model_name = f"{args.dataset}-dim_{args.embed_dim}-ranks_{args.ranks}-{tt}"
+model_name = f"{args.dataset}-dim_{args.embed_dim}-ranks_{args.ranks}"
 
 
 import os
@@ -130,7 +128,8 @@ lstm_model = LSTM_Classifier(embedding_dim=EMBEDDING_DIM,
 
 
 if args.embedding == 'cp':
-        embed_model = torch_bayesian_tensor_layers.layers.CPEmbedding(
+        embed_model = torch_bayesian_tensor_layers.layers.TensorizedEmbedding(
+            tensor_type=args.embedding,
             shape = [[250,100],[16,16]],
             max_rank=50,
             padding_idx=1

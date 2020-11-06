@@ -331,8 +331,10 @@ class TensorTrain(LowRankTensor):
         else:
             self.target_stddev = 0.05
 
+        self.target_stddev = torch.tensor(self.target_stddev)
+
         factor_stddev = torch.pow(
-            torch.pow(1.0 * self.max_rank, -self.order + 1) *
+            torch.pow(torch.tensor(1.0 * self.max_rank),torch.tensor( -self.order + 1)) *
             torch.square(self.target_stddev), 1 / (2.0 * self.order))
         self.factor_stddev = factor_stddev
 
@@ -402,7 +404,7 @@ class TensorTrain(LowRankTensor):
     def _build_low_rank_prior(self):
 
         self.rank_parameters = [
-            self.add_variable(torch.sqrt(x.clone().detach(),trainable=False))
+            self.add_variable(torch.sqrt(x.clone().detach()),trainable=False)
             for x in self.get_rank_parameters_update()
         ]
 
@@ -555,10 +557,11 @@ class Tucker(LowRankTensor):
         else:
             self.target_stddev = 0.05
 
+        self.target_stddev = torch.tensor(self.target_stddev)
 
         factor_stddev = torch.pow(
-            torch.pow(1.0 * self.max_rank, -self.order) *
-            torch.square(self.target_stddev), 1 / (2.0 * (self.order + 1)))
+            torch.pow(torch.tensor(1.0 * self.max_rank),torch.tensor( -self.order)) *
+            torch.square(self.target_stddev), torch.tensor(1 / (2.0 * (self.order + 1))))
         initializer_dist = TruncatedNormal(loc=0.0,
                                                scale=factor_stddev,
                                                a=-self.order * factor_stddev,
@@ -605,7 +608,7 @@ class Tucker(LowRankTensor):
 
     def _build_factor_distributions(self):
 
-        factor_scale_init = 1e-7
+        factor_scale_init = 1e-8
 
         factor_scales = (self.add_variable(
             factor_scale_init * torch.ones(self.factors[0].shape)), [
@@ -703,9 +706,6 @@ class Tucker(LowRankTensor):
             kl = torch.sum(0.5 * (var_ratio + t1 - 1 - var_ratio.log()))
             kl_sum+=kl
 
-        kl_sum+=td.kl_divergence(self.factor_distributions[0],
-                              self.factor_prior_distributions[0])
-
         return kl_sum
 
 
@@ -796,11 +796,17 @@ class TensorTrainMatrix(LowRankTensor):
         else:
             self.target_stddev = 0.05
 
-        factor_stddev = torch.pow(
-            torch.pow(1.0 * self.max_rank, -self.order + 1) *
-            torch.square(self.target_stddev), 1 / (2.0 * self.order))
+        cr_exponent = -1.0 / (2 * len(self.dims1))
+        var = np.prod(self.max_ranks) ** cr_exponent
+        core_stddev = self.target_stddev ** (1.0 / len(self.dims1)) * var
 
-        self.factor_stddev = factor_stddev
+        self.target_stddev = torch.tensor(self.target_stddev)
+        """
+        factor_stddev = torch.pow(
+            torch.pow(torch.tensor(1.0 * self.max_rank),torch.tensor( -self.order + 1)) *
+            torch.square(self.target_stddev), 1.0 / torch.tensor(2.0 * self.order))
+        """
+        self.factor_stddev = core_stddev
 
         sizes = [[1, self.dims1[0],self.dims2[0], self.max_ranks[1]]] + [
             [self.max_ranks[i+1], x,y, self.max_ranks[i+2]] for i,(x,y) in enumerate(zip(self.dims1[1:-1],self.dims2[1:-1]))
@@ -808,9 +814,9 @@ class TensorTrainMatrix(LowRankTensor):
 
 
         initializer_dist = TruncatedNormal(loc=0.0,
-                                               scale=factor_stddev,
-                                               a=-3.0 * factor_stddev,
-                                               b=3.0 * factor_stddev)
+                                               scale=self.factor_stddev,
+                                               a=-4.0 * self.factor_stddev,
+                                               b=4.0 * self.factor_stddev)
         
         init_factors = [initializer_dist.sample(x) for x in sizes]
 
@@ -868,7 +874,7 @@ class TensorTrainMatrix(LowRankTensor):
 
     def _build_factor_distributions(self):
 
-        factor_scale_init = 1e-7
+        factor_scale_init = 1e-8
 
         factor_scales = [
             self.add_variable(factor_scale_init * torch.ones(factor.shape))
@@ -887,7 +893,7 @@ class TensorTrainMatrix(LowRankTensor):
     def _build_low_rank_prior(self):
 
         self.rank_parameters = [
-            x.clone().detach()
+            self.add_variable(x.clone().detach(),trainable=False)
             for x in self.get_rank_parameters_update()
         ]
 
@@ -965,14 +971,12 @@ class TensorTrainMatrix(LowRankTensor):
 
         kl_sum = 0.0
 
-        for p,rank_parameter in zip(self.factor_distributions,self.rank_parameters):
+        for p,rank_parameter in zip(self.factor_distributions,self.rank_parameters+[self.rank_parameters[-1].unsqueeze(1).unsqueeze(2).unsqueeze(3)]):
             var_ratio = (p.stddev / rank_parameter).pow(2)
             t1 = ((p.mean ) / rank_parameter).pow(2)
             kl = torch.sum(0.5 * (var_ratio + t1 - 1 - var_ratio.log()))
             kl_sum+=kl
 
-        kl_sum+=td.kl_divergence(self.factor_distributions[0],
-                              self.factor_prior_distributions[0])
 
         return kl_sum
 
