@@ -1,5 +1,5 @@
 #!/bin/bash
-./tensorized_dlrm.sh --tensor-type='CP'
-./tensorized_dlrm.sh --tensor-type='TensorTrain'
-./tensorized_dlrm.sh --tensor-type='TensorTrainMatrix'
-./tensorized_dlrm.sh --tensor-type='Tucker'
+./bench/tensorized_dlrm.sh --tensor-type='CP'
+./bench/tensorized_dlrm.sh --tensor-type='TensorTrain'
+./bench/tensorized_dlrm.sh --tensor-type='TensorTrainMatrix'
+./bench/tensorized_dlrm.sh --tensor-type='Tucker'
