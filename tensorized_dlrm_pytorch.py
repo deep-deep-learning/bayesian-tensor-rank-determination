@@ -620,7 +620,7 @@ if __name__ == "__main__":
         torch.cuda.manual_seed_all(args.numpy_rand_seed)
         torch.backends.cudnn.deterministic = True
         device = torch.device("cuda", 0)
-        ngpus = torch.cuda.device_count()  # 1
+        ngpus = 1#torch.cuda.device_count()  # 1
         print("Using {} GPU(s)...".format(ngpus))
     else:
         device = torch.device("cpu")
