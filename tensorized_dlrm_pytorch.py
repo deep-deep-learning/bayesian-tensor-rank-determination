@@ -982,8 +982,8 @@ if __name__ == "__main__":
 
             for j, (X, lS_o, lS_i, T) in enumerate(train_ld):
 
-                if j>249:
-                    break
+#                if j>249:
+#                    break
 
                 if j == 0 and args.save_onnx:
                     (X_onnx, lS_o_onnx, lS_i_onnx) = (X, lS_o, lS_i)

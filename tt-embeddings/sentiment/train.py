@@ -36,7 +36,8 @@ parser.add_argument(
 args = parser.parse_args()
 
 if args.embedding == 'CP':
-    args.ranks = 50
+    args.ranks = 100
+    args.voc_dim= 5*8*25*25
 else:             
     args.ranks = 10
 
@@ -128,11 +129,13 @@ lstm_model = LSTM_Classifier(embedding_dim=EMBEDDING_DIM,
 
 
 if args.embedding in ['CP']:
+
         embed_model = torch_bayesian_tensor_layers.layers.TensorizedEmbedding(
             tensor_type=args.embedding,
-            shape = [[250,100],[16,16]],
-            max_rank=50,
-            padding_idx=1
+            shape = [[5,8,25,25],[4,8,8]],
+            max_rank=100,
+            padding_idx=1,
+            em_stepsize=0.1
         )
 
         compression_rate = 10.0
@@ -140,7 +143,7 @@ if args.embedding in ['CP']:
 elif args.embedding in ['TensorTrain','TensorTrainMatrix','Tucker']:
         embed_model = torch_bayesian_tensor_layers.layers.TensorizedEmbedding(
             tensor_type=args.embedding,
-            shape = [[250,100],[16,16]],
+            shape = [[5,8,25,25],[16,16]],
             max_rank=20,
             padding_idx=1
         )
@@ -191,7 +194,7 @@ for epoch in range(N_EPOCHS):
     epoch_multiplier = torch.clamp(epoch_multiplier,0.0,1.0)
     print("Epoch mult",epoch_multiplier)
 
-    train_loss, train_acc = train(model, train_iterator, optimizer, criterion,kl_coeff=1e-2*epoch_multiplier*BATCH_SIZE/num_train_examples)
+    train_loss, train_acc = train(model, train_iterator, optimizer, criterion,kl_coeff=5e-3*epoch_multiplier*BATCH_SIZE/num_train_examples)
     test_loss, test_acc = evaluate(model, test_iterator, criterion)
     valid_loss, valid_acc = evaluate(model, valid_iterator, criterion)
 

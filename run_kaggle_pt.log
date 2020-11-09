@@ -10,7 +10,7 @@ Sparse features= 26, Dense features= 13
 Embedding 0 size 1460x16
 Embedding 1 size 583x16
 TT-Embedding 2 size 10131227x16
-TT-Embedding 3 size 2202608x16
+Embedding 3 size 2202608x16
 Embedding 4 size 305x16
 Embedding 5 size 24x16
 Embedding 6 size 12517x16
@@ -18,16 +18,16 @@ Embedding 7 size 633x16
 Embedding 8 size 3x16
 Embedding 9 size 93145x16
 Embedding 10 size 5683x16
-TT-Embedding 11 size 8351593x16
+Embedding 11 size 8351593x16
 Embedding 12 size 3194x16
 Embedding 13 size 27x16
 Embedding 14 size 14992x16
-TT-Embedding 15 size 5461306x16
+Embedding 15 size 5461306x16
 Embedding 16 size 10x16
 Embedding 17 size 5652x16
 Embedding 18 size 2173x16
 Embedding 19 size 4x16
-TT-Embedding 20 size 7046547x16
+Embedding 20 size 7046547x16
 Embedding 21 size 18x16
 Embedding 22 size 15x16
 Embedding 23 size 286181x16
@@ -38,5 +38,5 @@ Saved at: epoch = 0/0, batch = 0/0, ntbatch = 0
 Training state: loss = 0.000000, accuracy = 0.000 %
 Testing state: loss = 0.000000, accuracy = 0.000 %
 time/loss/accuracy (if enabled):
-Finished training it 124/306969 of epoch 0, 17125.69 ms/it, loss 0.515802, accuracy 75.800 %
-Finished training it 248/306969 of epoch 0, 17167.50 ms/it, loss 0.515960, accuracy 75.662 %
+Finished training it 124/306969 of epoch 0, 3498.09 ms/it, loss 0.513893, accuracy 76.090 %
+Finished training it 248/306969 of epoch 0, 3463.34 ms/it, loss 0.513938, accuracy 75.756 %
