@@ -177,7 +177,7 @@ class DLRM_Net(nn.Module):
 
     def create_emb(self, m, ln):
 
-        tensorized_embedding_layers = [2],3,11,15,20]
+        tensorized_embedding_layers = [2]#,3,11,15,20]
 
         emb_l = nn.ModuleList()
         for i in range(0, ln.size):
