@@ -177,7 +177,7 @@ class DLRM_Net(nn.Module):
 
     def create_emb(self, m, ln):
 
-        tensorized_embedding_layers = [2,3,11,15,20]
+        tensorized_embedding_layers = [2],3,11,15,20]
 
         emb_l = nn.ModuleList()
         for i in range(0, ln.size):
@@ -908,24 +908,46 @@ if __name__ == "__main__":
             # when targeting inference on CPU
             ld_model = torch.load(args.load_model, map_location=torch.device('cpu'))
         dlrm.load_state_dict(ld_model["state_dict"])
-        ld_j = ld_model["iter"]
-        ld_k = ld_model["epoch"]
-        ld_nepochs = ld_model["nepochs"]
-        ld_nbatches = ld_model["nbatches"]
-        ld_nbatches_test = ld_model["nbatches_test"]
-        ld_gA = ld_model["train_acc"]
-        ld_gL = ld_model["train_loss"]
-        ld_total_loss = ld_model["total_loss"]
-        ld_total_accu = ld_model["total_accu"]
-        ld_gA_test = ld_model["test_acc"]
-        ld_gL_test = ld_model["test_loss"]
+        try:
+            ld_j = ld_model["iter"]
+            ld_k = ld_model["epoch"]
+            ld_nepochs = ld_model["nepochs"]
+            ld_nbatches = ld_model["nbatches"]
+            ld_nbatches_test = ld_model["nbatches_test"]
+            ld_gA = ld_model["train_acc"]
+            ld_gL = ld_model["train_loss"]
+            ld_total_loss = ld_model["total_loss"]
+            ld_total_accu = ld_model["total_accu"]
+            ld_gA_test = ld_model["test_acc"]
+            ld_gL_test = ld_model["test_loss"]
+        except:
+        
+            ld_j = 0
+            ld_k = 0
+            ld_nepochs = 0
+            ld_nbatches = 0
+            ld_nbatches_test = 0
+            ld_gA = 0.0
+            ld_gL = 0.0
+            ld_total_loss = 0.0
+            ld_total_accu = 0.0
+            ld_gA_test = 0.0
+            ld_gL_test = 0.0
         if not args.inference_only:
             optimizer.load_state_dict(ld_model["opt_state_dict"])
-            best_gA_test = ld_gA_test
-            total_loss = ld_total_loss
-            total_accu = ld_total_accu
-            skip_upto_epoch = ld_k  # epochs
-            skip_upto_batch = ld_j  # batches
+            
+            try: 
+                best_gA_test = ld_gA_test
+                total_loss = ld_total_loss
+                total_accu = ld_total_accu
+                skip_upto_epoch = ld_k  # epochs
+                skip_upto_batch = ld_j  # batches
+            except:            
+                best_gA_test = 0.0
+                total_loss = 0.0
+                total_accu = 0.0
+                skip_upto_epoch = ld_k  # epochs
+                skip_upto_batch = ld_j  # batches
         else:
             args.print_freq = ld_nbatches
             args.test_freq = 0
