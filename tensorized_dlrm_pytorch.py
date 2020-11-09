@@ -204,7 +204,7 @@ class DLRM_Net(nn.Module):
                 """
                 EE = TensorizedEmbedding(
                     tensor_type=args.tensor_type,
-                    max_rank=8,
+                    max_rank=4,
                     shape = [shape0.pop(0),shape1]
                 )
 
@@ -510,6 +510,7 @@ if __name__ == "__main__":
         description="Train Deep Learning Recommendation Model (DLRM)"
     )
     # model related parameters
+    parser.add_argument("--load-saved",type=int,default=0)
     parser.add_argument("--tensor-type", type=str, default='CP')
     parser.add_argument("--arch-sparse-feature-size", type=int, default=2)
     parser.add_argument("--arch-embedding-size", type=str, default="4-3-2")
@@ -948,6 +949,7 @@ if __name__ == "__main__":
     print("time/loss/accuracy (if enabled):")
     with torch.autograd.profiler.profile(args.enable_profiling, use_gpu) as prof:
         while k < args.nepochs:
+
             if k < skip_upto_epoch:
                 continue
 
@@ -957,6 +959,10 @@ if __name__ == "__main__":
                 previous_iteration_time = None
 
             for j, (X, lS_o, lS_i, T) in enumerate(train_ld):
+
+                if j>249:
+                    break
+
                 if j == 0 and args.save_onnx:
                     (X_onnx, lS_o_onnx, lS_i_onnx) = (X, lS_o, lS_i)
 
@@ -1062,6 +1068,19 @@ if __name__ == "__main__":
 
                 # testing
                 if should_test and not args.inference_only:
+                    if not (args.save_model == ""):
+                        print("Saving model to {}".format(args.save_model))
+                        torch.save(
+                            {
+                                "state_dict": dlrm.state_dict(),
+                                "opt_state_dict": optimizer.state_dict(),
+                            },
+                            args.save_model,
+                        )
+                    break
+
+
+
                     # don't measure training iter time in a test iteration
                     if args.mlperf_logging:
                         previous_iteration_time = None
@@ -1164,28 +1183,6 @@ if __name__ == "__main__":
                         gL_test = test_loss / test_samp
 
                     is_best = gA_test > best_gA_test
-                    if is_best:
-                        best_gA_test = gA_test
-                        if not (args.save_model == ""):
-                            print("Saving model to {}".format(args.save_model))
-                            torch.save(
-                                {
-                                    "epoch": k,
-                                    "nepochs": args.nepochs,
-                                    "nbatches": nbatches,
-                                    "nbatches_test": nbatches_test,
-                                    "iter": j + 1,
-                                    "state_dict": dlrm.state_dict(),
-                                    "train_acc": gA,
-                                    "train_loss": gL,
-                                    "test_acc": gA_test,
-                                    "test_loss": gL_test,
-                                    "total_loss": total_loss,
-                                    "total_accu": total_accu,
-                                    "opt_state_dict": optimizer.state_dict(),
-                                },
-                                args.save_model,
-                            )
 
                     if args.mlperf_logging:
                         is_best = validation_results['roc_auc'] > best_auc_test

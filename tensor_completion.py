@@ -31,7 +31,7 @@ import numpy as np
 
 
 PATH = 'saved_models/'
-TRAINING= True
+TRAINING= False
 MODEL_NAME = 'CP'
 
 # functions to show an image
@@ -79,7 +79,6 @@ class Net(nn.Module):
 
 net = Net()
 
-import torch.optim as optim
 
 criterion = nn.CrossEntropyLoss()
 optimizer = optim.SGD(net.parameters(), lr=0.001, momentum=0.9)
@@ -114,10 +113,9 @@ if TRAINING:
 
 
     print('Finished Training')
-    torch.save(model.state_dict(), PATH+model_name)
+    torch.save(net.state_dict(), PATH+MODEL_NAME)
 else:
-    model = Net()
-    model.load_state_dict(torch.load(PATH+model_name), strict=False)
+    net.load_state_dict(torch.load(PATH+MODEL_NAME), strict=False)
 
 correct = 0
 total = 0
