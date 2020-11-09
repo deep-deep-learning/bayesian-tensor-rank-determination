@@ -1099,7 +1099,6 @@ if __name__ == "__main__":
                             },
                             args.save_model,
                         )
-                    break
 
 
 

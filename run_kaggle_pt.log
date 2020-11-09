@@ -38,5 +38,5 @@ Saved at: epoch = 0/0, batch = 0/0, ntbatch = 0
 Training state: loss = 0.000000, accuracy = 0.000 %
 Testing state: loss = 0.000000, accuracy = 0.000 %
 time/loss/accuracy (if enabled):
-Finished training it 124/306969 of epoch 0, 3498.09 ms/it, loss 0.513893, accuracy 76.090 %
-Finished training it 248/306969 of epoch 0, 3463.34 ms/it, loss 0.513938, accuracy 75.756 %
+Finished training it 124/306969 of epoch 0, 5519.00 ms/it, loss 0.513893, accuracy 76.090 %
+Finished training it 248/306969 of epoch 0, 5537.11 ms/it, loss 0.513938, accuracy 75.756 %
