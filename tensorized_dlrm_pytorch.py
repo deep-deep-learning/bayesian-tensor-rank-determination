@@ -97,6 +97,25 @@ from torch_bayesian_tensor_layers.layers import TensorizedEmbedding
 
 exc = getattr(builtins, "IOError", "FileNotFoundError")
 
+def print_ranks(model):
+        
+    for layer in model.emb_l:
+        if hasattr(layer,"tensor"):
+            print('Tensor type ',layer.tensor.tensor_type)
+            print("Tensor layer rank 1e-3",layer.tensor.estimate_rank(1e-3))
+            print("Tensor layer rank 1e-5",layer.tensor.estimate_rank(1e-5))
+            print("Tensor layer rank 1e-7",layer.tensor.estimate_rank(1e-7))
+
+def get_kl_loss(model):
+    
+    kl_loss = 0.0
+    for layer in model.emb_l:
+        if hasattr(layer,"tensor"):
+
+            kl_loss+=layer.tensor.get_kl_divergence_to_prior()
+
+    return kl_loss
+
 class LRPolicyScheduler(_LRScheduler):
     def __init__(self, optimizer, num_warmup_steps, decay_start_step, num_decay_steps):
         self.num_warmup_steps = num_warmup_steps
@@ -589,6 +608,7 @@ if __name__ == "__main__":
     parser.add_argument("--lr-num-warmup-steps", type=int, default=0)
     parser.add_argument("--lr-decay-start-step", type=int, default=0)
     parser.add_argument("--lr-num-decay-steps", type=int, default=0)
+    parser.add_argument("--kl-multiplier", type=float, default=0.0)
     args = parser.parse_args()
 
 #    args = Namespace(activation_function='relu', arch_embedding_size='4-3-2', arch_interaction_itself=False, arch_interaction_op='dot', arch_mlp_bot='13-512-256-64-16', arch_mlp_top='512-256-1', arch_sparse_feature_size=16, data_generation='dataset', data_randomize='total', data_set='kaggle', data_size=1, data_sub_sample_rate=0.0, data_trace_enable_padding=False, data_trace_file='./input/dist_emb_j.log', debug_mode=False, enable_profiling=False, inference_only=False, learning_rate=0.1, load_model='', loss_function='bce', loss_threshold=0.0, loss_weights='1.0-1.0', lr_decay_start_step=0, lr_num_decay_steps=0, lr_num_warmup_steps=0, max_ind_range=-1, md_flag=False, md_round_dims=False, md_temperature=0.3, md_threshold=200, memory_map=True, mini_batch_size=128, mlperf_acc_threshold=0.0, mlperf_auc_threshold=0.0, mlperf_bin_loader=False, mlperf_bin_shuffle=False, mlperf_logging=False, nepochs=1, num_batches=0, num_indices_per_lookup=10, num_indices_per_lookup_fixed=False, num_workers=0, numpy_rand_seed=123, plot_compute_graph=False, print_freq=1024, print_precision=5, print_time=True, processed_data_file='./input/kaggleAdDisplayChallenge_processed.npz', qr_collisions=4, qr_flag=False, qr_operation='mult', qr_threshold=200, raw_data_file='./input/train.txt', round_targets=True, save_model='', save_onnx=False, sync_dense_params=True, test_freq=1024, test_mini_batch_size=-1, test_num_workers=16, use_gpu=False)
@@ -612,10 +632,7 @@ if __name__ == "__main__":
         args.test_num_workers = args.num_workers
 
 
-    print(args.use_gpu)
     use_gpu = args.use_gpu and torch.cuda.is_available()
-    print(args.use_gpu)
-    print(use_gpu)
 
     if use_gpu:
         torch.cuda.manual_seed_all(args.numpy_rand_seed)
@@ -981,6 +998,8 @@ if __name__ == "__main__":
                 previous_iteration_time = None
 
             for j, (X, lS_o, lS_i, T) in enumerate(train_ld):
+                
+                iter_kl_multiplier = torch.clamp(torch.tensor(args.kl_multiplier*(2*j/len(train_ld))),0.0,1.0)
 
 #                if j>249:
 #                    break
@@ -1019,6 +1038,10 @@ if __name__ == "__main__":
 
                 # loss
                 E = loss_fn_wrap(Z, T, use_gpu, device)
+
+                low_rank_kl_loss = iter_kl_multiplier*get_kl_loss(dlrm)
+
+                E += low_rank_kl_loss
                 '''
                 # debug prints
                 print("output and loss")
@@ -1082,6 +1105,10 @@ if __name__ == "__main__":
                         )
                         + "loss {:.6f}, accuracy {:3.3f} %".format(gL, gA * 100)
                     )
+
+                    print("KL loss ",low_rank_kl_loss,"iteration kl_multiplier ",iter_kl_multiplier," iter ",j)
+                    print_ranks(dlrm)
+
                     # Uncomment the line below to print out the total time with overhead
                     # print("Accumulated time so far: {}" \
                     # .format(time_wrap(use_gpu) - accum_time_begin))
