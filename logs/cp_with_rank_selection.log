@@ -1,0 +1,1869 @@
+run pytorch ...
+Namespace(activation_function='relu', arch_embedding_size='4-3-2', arch_interaction_itself=False, arch_interaction_op='dot', arch_mlp_bot='13-512-256-64-16', arch_mlp_top='512-256-1', arch_sparse_feature_size=16, data_generation='dataset', data_randomize='total', data_set='kaggle', data_size=1, data_sub_sample_rate=0.0, data_trace_enable_padding=False, data_trace_file='./input/dist_emb_j.log', debug_mode=False, enable_profiling=False, inference_only=False, kl_multiplier=1.0, learning_rate=0.1, load_model='saved_models/CP', load_saved=0, loss_function='bce', loss_threshold=0.0, loss_weights='1.0-1.0', lr_decay_start_step=0, lr_num_decay_steps=0, lr_num_warmup_steps=0, max_ind_range=-1, md_flag=False, md_round_dims=False, md_temperature=0.3, md_threshold=200, memory_map=True, mini_batch_size=128, mlperf_acc_threshold=0.0, mlperf_auc_threshold=0.0, mlperf_bin_loader=False, mlperf_bin_shuffle=False, mlperf_logging=False, nepochs=1, num_batches=0, num_indices_per_lookup=10, num_indices_per_lookup_fixed=False, num_workers=0, numpy_rand_seed=123, plot_compute_graph=False, print_freq=1024, print_precision=5, print_time=True, processed_data_file='./input/kaggleAdDisplayChallenge_processed.npz', qr_collisions=4, qr_flag=False, qr_operation='mult', qr_threshold=200, raw_data_file='./input/train.txt', round_targets=True, save_model='', save_onnx=False, sync_dense_params=True, tensor_type='CP', test_freq=10240, test_mini_batch_size=-1, test_num_workers=16, use_gpu=1)
+Using 1 GPU(s)...
+Reading pre-processed data=./input/kaggleAdDisplayChallenge_processed.npz
+Sparse features= 26, Dense features= 13
+Reading pre-processed data=./input/kaggleAdDisplayChallenge_processed.npz
+Sparse features= 26, Dense features= 13
+Embedding 0 size 1460x16
+Embedding 1 size 583x16
+TT-Embedding 2 size 10131227x16
+Embedding 3 size 2202608x16
+Embedding 4 size 305x16
+Embedding 5 size 24x16
+Embedding 6 size 12517x16
+Embedding 7 size 633x16
+Embedding 8 size 3x16
+Embedding 9 size 93145x16
+Embedding 10 size 5683x16
+Embedding 11 size 8351593x16
+Embedding 12 size 3194x16
+Embedding 13 size 27x16
+Embedding 14 size 14992x16
+Embedding 15 size 5461306x16
+Embedding 16 size 10x16
+Embedding 17 size 5652x16
+Embedding 18 size 2173x16
+Embedding 19 size 4x16
+Embedding 20 size 7046547x16
+Embedding 21 size 18x16
+Embedding 22 size 15x16
+Embedding 23 size 286181x16
+Embedding 24 size 105x16
+Embedding 25 size 142572x16
+Loading saved model saved_models/CP
+Saved at: epoch = 0/0, batch = 0/0, ntbatch = 0
+Training state: loss = 0.000000, accuracy = 0.000 %
+Testing state: loss = 0.000000, accuracy = 0.000 %
+time/loss/accuracy (if enabled):
+Finished training it 1024/306969 of epoch 0, 26.85 ms/it, loss 0.497499, accuracy 79.498 %
+KL loss  tensor(0.10098, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.00667)  iter  1023
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 2048/306969 of epoch 0, 26.59 ms/it, loss 0.595140, accuracy 79.169 %
+KL loss  tensor(0.19255, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.01334)  iter  2047
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 3072/306969 of epoch 0, 26.63 ms/it, loss 0.680500, accuracy 79.191 %
+KL loss  tensor(0.26657, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.02001)  iter  3071
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 4096/306969 of epoch 0, 26.64 ms/it, loss 0.742223, accuracy 79.142 %
+KL loss  tensor(0.31767, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.02668)  iter  4095
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 5120/306969 of epoch 0, 26.61 ms/it, loss 0.778105, accuracy 79.420 %
+KL loss  tensor(0.34367, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.03335)  iter  5119
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 6144/306969 of epoch 0, 26.64 ms/it, loss 0.791877, accuracy 79.315 %
+KL loss  tensor(0.34563, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.04002)  iter  6143
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 7168/306969 of epoch 0, 26.68 ms/it, loss 0.780845, accuracy 79.536 %
+KL loss  tensor(0.32727, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.04670)  iter  7167
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 8192/306969 of epoch 0, 26.67 ms/it, loss 0.755344, accuracy 79.393 %
+KL loss  tensor(0.29400, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.05337)  iter  8191
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 9216/306969 of epoch 0, 26.61 ms/it, loss 0.718898, accuracy 79.267 %
+KL loss  tensor(0.25178, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.06004)  iter  9215
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 10240/306969 of epoch 0, 26.63 ms/it, loss 0.673195, accuracy 79.395 %
+KL loss  tensor(0.20631, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.06671)  iter  10239
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Testing at - 10240/306969 of epoch 0, loss 0.451813, accuracy 78.890 %, best 0.000 %
+Finished training it 11264/306969 of epoch 0, 26.60 ms/it, loss 0.627336, accuracy 79.350 %
+KL loss  tensor(0.16215, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.07338)  iter  11263
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 12288/306969 of epoch 0, 26.59 ms/it, loss 0.587265, accuracy 79.288 %
+KL loss  tensor(0.12252, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.08005)  iter  12287
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 13312/306969 of epoch 0, 26.54 ms/it, loss 0.548623, accuracy 79.324 %
+KL loss  tensor(0.08920, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.08673)  iter  13311
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 14336/306969 of epoch 0, 26.56 ms/it, loss 0.517587, accuracy 79.491 %
+KL loss  tensor(0.06272, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.09340)  iter  14335
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 15360/306969 of epoch 0, 27.97 ms/it, loss 0.495652, accuracy 79.491 %
+KL loss  tensor(0.04275, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.10007)  iter  15359
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 16384/306969 of epoch 0, 28.72 ms/it, loss 0.481888, accuracy 79.212 %
+KL loss  tensor(0.02840, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.10674)  iter  16383
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 17408/306969 of epoch 0, 27.90 ms/it, loss 0.465999, accuracy 79.472 %
+KL loss  tensor(0.01855, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.11341)  iter  17407
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 18432/306969 of epoch 0, 27.00 ms/it, loss 0.460102, accuracy 79.312 %
+KL loss  tensor(0.01210, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.12008)  iter  18431
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 19456/306969 of epoch 0, 27.00 ms/it, loss 0.454313, accuracy 79.278 %
+KL loss  tensor(0.00806, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.12676)  iter  19455
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 20480/306969 of epoch 0, 27.05 ms/it, loss 0.450473, accuracy 79.367 %
+KL loss  tensor(0.00566, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.13343)  iter  20479
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Testing at - 20480/306969 of epoch 0, loss 0.452428, accuracy 78.796 %, best 0.000 %
+Finished training it 21504/306969 of epoch 0, 27.03 ms/it, loss 0.449459, accuracy 79.266 %
+KL loss  tensor(0.00430, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.14010)  iter  21503
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 22528/306969 of epoch 0, 27.04 ms/it, loss 0.448075, accuracy 79.361 %
+KL loss  tensor(0.00360, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.14677)  iter  22527
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 23552/306969 of epoch 0, 26.99 ms/it, loss 0.446906, accuracy 79.399 %
+KL loss  tensor(0.00327, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.15344)  iter  23551
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 24576/306969 of epoch 0, 27.03 ms/it, loss 0.446548, accuracy 79.533 %
+KL loss  tensor(0.00315, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.16011)  iter  24575
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 25600/306969 of epoch 0, 27.00 ms/it, loss 0.446394, accuracy 79.472 %
+KL loss  tensor(0.00315, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.16679)  iter  25599
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 26624/306969 of epoch 0, 26.94 ms/it, loss 0.448726, accuracy 79.230 %
+KL loss  tensor(0.00321, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.17346)  iter  26623
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 27648/306969 of epoch 0, 26.93 ms/it, loss 0.446442, accuracy 79.488 %
+KL loss  tensor(0.00332, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.18013)  iter  27647
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 28672/306969 of epoch 0, 27.02 ms/it, loss 0.447321, accuracy 79.536 %
+KL loss  tensor(0.00344, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.18680)  iter  28671
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 29696/306969 of epoch 0, 26.98 ms/it, loss 0.445680, accuracy 79.380 %
+KL loss  tensor(0.00356, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.19347)  iter  29695
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 30720/306969 of epoch 0, 26.95 ms/it, loss 0.446583, accuracy 79.485 %
+KL loss  tensor(0.00369, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.20014)  iter  30719
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Testing at - 30720/306969 of epoch 0, loss 0.452476, accuracy 78.846 %, best 0.000 %
+Finished training it 31744/306969 of epoch 0, 28.57 ms/it, loss 0.448189, accuracy 79.261 %
+KL loss  tensor(0.00381, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.20682)  iter  31743
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 32768/306969 of epoch 0, 28.74 ms/it, loss 0.448613, accuracy 79.430 %
+KL loss  tensor(0.00393, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.21349)  iter  32767
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 33792/306969 of epoch 0, 28.01 ms/it, loss 0.446538, accuracy 79.370 %
+KL loss  tensor(0.00406, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.22016)  iter  33791
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 34816/306969 of epoch 0, 27.02 ms/it, loss 0.447150, accuracy 79.570 %
+KL loss  tensor(0.00418, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.22683)  iter  34815
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 35840/306969 of epoch 0, 27.09 ms/it, loss 0.445651, accuracy 79.562 %
+KL loss  tensor(0.00430, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.23350)  iter  35839
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 36864/306969 of epoch 0, 27.05 ms/it, loss 0.449003, accuracy 79.323 %
+KL loss  tensor(0.00442, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.24017)  iter  36863
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 37888/306969 of epoch 0, 27.00 ms/it, loss 0.446636, accuracy 79.427 %
+KL loss  tensor(0.00455, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.24685)  iter  37887
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 38912/306969 of epoch 0, 26.97 ms/it, loss 0.449642, accuracy 79.378 %
+KL loss  tensor(0.00467, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.25352)  iter  38911
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 39936/306969 of epoch 0, 27.00 ms/it, loss 0.446836, accuracy 79.485 %
+KL loss  tensor(0.00479, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.26019)  iter  39935
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 40960/306969 of epoch 0, 27.01 ms/it, loss 0.447986, accuracy 79.530 %
+KL loss  tensor(0.00492, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.26686)  iter  40959
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Testing at - 40960/306969 of epoch 0, loss 0.452546, accuracy 78.844 %, best 0.000 %
+Finished training it 41984/306969 of epoch 0, 28.66 ms/it, loss 0.445885, accuracy 79.642 %
+KL loss  tensor(0.00504, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.27353)  iter  41983
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 43008/306969 of epoch 0, 28.76 ms/it, loss 0.446617, accuracy 79.544 %
+KL loss  tensor(0.00516, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.28020)  iter  43007
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 44032/306969 of epoch 0, 28.76 ms/it, loss 0.448232, accuracy 79.347 %
+KL loss  tensor(0.00528, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.28688)  iter  44031
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 45056/306969 of epoch 0, 28.72 ms/it, loss 0.448993, accuracy 79.395 %
+KL loss  tensor(0.00541, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.29355)  iter  45055
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 46080/306969 of epoch 0, 28.75 ms/it, loss 0.449424, accuracy 79.357 %
+KL loss  tensor(0.00553, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.30022)  iter  46079
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 47104/306969 of epoch 0, 28.70 ms/it, loss 0.447514, accuracy 79.528 %
+KL loss  tensor(0.00565, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.30689)  iter  47103
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 48128/306969 of epoch 0, 28.77 ms/it, loss 0.446108, accuracy 79.640 %
+KL loss  tensor(0.00578, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.31356)  iter  48127
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 49152/306969 of epoch 0, 28.75 ms/it, loss 0.449704, accuracy 79.447 %
+KL loss  tensor(0.00590, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.32023)  iter  49151
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 50176/306969 of epoch 0, 26.97 ms/it, loss 0.448456, accuracy 79.591 %
+KL loss  tensor(0.00602, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.32691)  iter  50175
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 51200/306969 of epoch 0, 26.94 ms/it, loss 0.449877, accuracy 79.358 %
+KL loss  tensor(0.00614, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.33358)  iter  51199
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Testing at - 51200/306969 of epoch 0, loss 0.452008, accuracy 78.882 %, best 0.000 %
+Finished training it 52224/306969 of epoch 0, 26.95 ms/it, loss 0.449885, accuracy 79.437 %
+KL loss  tensor(0.00627, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.34025)  iter  52223
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 53248/306969 of epoch 0, 27.01 ms/it, loss 0.450262, accuracy 79.296 %
+KL loss  tensor(0.00639, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.34692)  iter  53247
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 54272/306969 of epoch 0, 27.01 ms/it, loss 0.447181, accuracy 79.607 %
+KL loss  tensor(0.00651, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.35359)  iter  54271
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 55296/306969 of epoch 0, 26.97 ms/it, loss 0.447947, accuracy 79.532 %
+KL loss  tensor(0.00664, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.36026)  iter  55295
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 56320/306969 of epoch 0, 27.04 ms/it, loss 0.447282, accuracy 79.639 %
+KL loss  tensor(0.00676, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.36694)  iter  56319
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 57344/306969 of epoch 0, 27.03 ms/it, loss 0.449214, accuracy 79.465 %
+KL loss  tensor(0.00688, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.37361)  iter  57343
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 58368/306969 of epoch 0, 27.04 ms/it, loss 0.450043, accuracy 79.409 %
+KL loss  tensor(0.00700, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.38028)  iter  58367
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 59392/306969 of epoch 0, 27.01 ms/it, loss 0.448601, accuracy 79.514 %
+KL loss  tensor(0.00713, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.38695)  iter  59391
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 60416/306969 of epoch 0, 27.00 ms/it, loss 0.446772, accuracy 79.619 %
+KL loss  tensor(0.00725, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.39362)  iter  60415
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 61440/306969 of epoch 0, 26.96 ms/it, loss 0.449327, accuracy 79.476 %
+KL loss  tensor(0.00737, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.40029)  iter  61439
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Testing at - 61440/306969 of epoch 0, loss 0.451901, accuracy 78.898 %, best 0.000 %
+Finished training it 62464/306969 of epoch 0, 27.02 ms/it, loss 0.447422, accuracy 79.632 %
+KL loss  tensor(0.00750, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.40697)  iter  62463
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 63488/306969 of epoch 0, 26.93 ms/it, loss 0.449313, accuracy 79.519 %
+KL loss  tensor(0.00762, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.41364)  iter  63487
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 64512/306969 of epoch 0, 26.92 ms/it, loss 0.451525, accuracy 79.375 %
+KL loss  tensor(0.00774, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.42031)  iter  64511
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 65536/306969 of epoch 0, 26.99 ms/it, loss 0.448492, accuracy 79.714 %
+KL loss  tensor(0.00786, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.42698)  iter  65535
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 66560/306969 of epoch 0, 26.93 ms/it, loss 0.450647, accuracy 79.382 %
+KL loss  tensor(0.00798, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.43365)  iter  66559
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 67584/306969 of epoch 0, 26.90 ms/it, loss 0.450873, accuracy 79.361 %
+KL loss  tensor(0.00811, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.44032)  iter  67583
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 68608/306969 of epoch 0, 26.94 ms/it, loss 0.450973, accuracy 79.461 %
+KL loss  tensor(0.00823, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.44700)  iter  68607
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 69632/306969 of epoch 0, 27.01 ms/it, loss 0.451901, accuracy 79.393 %
+KL loss  tensor(0.00836, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.45367)  iter  69631
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 70656/306969 of epoch 0, 26.99 ms/it, loss 0.450244, accuracy 79.562 %
+KL loss  tensor(0.00848, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.46034)  iter  70655
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 71680/306969 of epoch 0, 27.00 ms/it, loss 0.448017, accuracy 79.621 %
+KL loss  tensor(0.00860, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.46701)  iter  71679
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Testing at - 71680/306969 of epoch 0, loss 0.451265, accuracy 78.917 %, best 0.000 %
+Finished training it 72704/306969 of epoch 0, 28.60 ms/it, loss 0.450523, accuracy 79.462 %
+KL loss  tensor(0.00873, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.47368)  iter  72703
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 73728/306969 of epoch 0, 28.75 ms/it, loss 0.450972, accuracy 79.415 %
+KL loss  tensor(0.00885, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.48035)  iter  73727
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 74752/306969 of epoch 0, 27.54 ms/it, loss 0.453109, accuracy 79.420 %
+KL loss  tensor(0.00897, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.48703)  iter  74751
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 75776/306969 of epoch 0, 26.99 ms/it, loss 0.453839, accuracy 79.336 %
+KL loss  tensor(0.00909, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.49370)  iter  75775
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 76800/306969 of epoch 0, 26.97 ms/it, loss 0.448946, accuracy 79.660 %
+KL loss  tensor(0.00922, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.50037)  iter  76799
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 77824/306969 of epoch 0, 27.03 ms/it, loss 0.448094, accuracy 79.661 %
+KL loss  tensor(0.00934, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.50704)  iter  77823
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 78848/306969 of epoch 0, 27.06 ms/it, loss 0.451753, accuracy 79.428 %
+KL loss  tensor(0.00946, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.51371)  iter  78847
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 79872/306969 of epoch 0, 26.93 ms/it, loss 0.451405, accuracy 79.476 %
+KL loss  tensor(0.00958, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.52038)  iter  79871
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 80896/306969 of epoch 0, 26.90 ms/it, loss 0.453079, accuracy 79.530 %
+KL loss  tensor(0.00971, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.52706)  iter  80895
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 81920/306969 of epoch 0, 26.98 ms/it, loss 0.449392, accuracy 79.516 %
+KL loss  tensor(0.00983, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.53373)  iter  81919
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Testing at - 81920/306969 of epoch 0, loss 0.451626, accuracy 78.922 %, best 0.000 %
+Finished training it 82944/306969 of epoch 0, 28.60 ms/it, loss 0.452163, accuracy 79.525 %
+KL loss  tensor(0.00996, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.54040)  iter  82943
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 83968/306969 of epoch 0, 28.73 ms/it, loss 0.449148, accuracy 79.733 %
+KL loss  tensor(0.01008, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.54707)  iter  83967
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 84992/306969 of epoch 0, 27.97 ms/it, loss 0.451914, accuracy 79.523 %
+KL loss  tensor(0.01020, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.55374)  iter  84991
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 86016/306969 of epoch 0, 27.00 ms/it, loss 0.452687, accuracy 79.468 %
+KL loss  tensor(0.01032, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.56041)  iter  86015
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 87040/306969 of epoch 0, 27.01 ms/it, loss 0.451336, accuracy 79.518 %
+KL loss  tensor(0.01045, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.56709)  iter  87039
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 88064/306969 of epoch 0, 26.99 ms/it, loss 0.450177, accuracy 79.623 %
+KL loss  tensor(0.01057, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.57376)  iter  88063
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 89088/306969 of epoch 0, 26.98 ms/it, loss 0.452400, accuracy 79.516 %
+KL loss  tensor(0.01069, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.58043)  iter  89087
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 90112/306969 of epoch 0, 27.06 ms/it, loss 0.454996, accuracy 79.257 %
+KL loss  tensor(0.01081, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.58710)  iter  90111
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 91136/306969 of epoch 0, 26.99 ms/it, loss 0.449278, accuracy 79.762 %
+KL loss  tensor(0.01094, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.59377)  iter  91135
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 92160/306969 of epoch 0, 26.92 ms/it, loss 0.454586, accuracy 79.491 %
+KL loss  tensor(0.01106, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.60044)  iter  92159
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Testing at - 92160/306969 of epoch 0, loss 0.451529, accuracy 78.905 %, best 0.000 %
+Finished training it 93184/306969 of epoch 0, 27.03 ms/it, loss 0.448334, accuracy 79.771 %
+KL loss  tensor(0.01118, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.60712)  iter  93183
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 94208/306969 of epoch 0, 26.89 ms/it, loss 0.453898, accuracy 79.482 %
+KL loss  tensor(0.01131, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.61379)  iter  94207
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 95232/306969 of epoch 0, 26.99 ms/it, loss 0.454442, accuracy 79.379 %
+KL loss  tensor(0.01143, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.62046)  iter  95231
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 96256/306969 of epoch 0, 26.97 ms/it, loss 0.450935, accuracy 79.600 %
+KL loss  tensor(0.01155, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.62713)  iter  96255
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 97280/306969 of epoch 0, 27.03 ms/it, loss 0.454344, accuracy 79.564 %
+KL loss  tensor(0.01168, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.63380)  iter  97279
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 98304/306969 of epoch 0, 27.09 ms/it, loss 0.451552, accuracy 79.443 %
+KL loss  tensor(0.01180, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.64048)  iter  98303
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 99328/306969 of epoch 0, 27.03 ms/it, loss 0.452135, accuracy 79.494 %
+KL loss  tensor(0.01192, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.64715)  iter  99327
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 100352/306969 of epoch 0, 26.97 ms/it, loss 0.451818, accuracy 79.671 %
+KL loss  tensor(0.01205, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.65382)  iter  100351
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 101376/306969 of epoch 0, 27.03 ms/it, loss 0.450939, accuracy 79.676 %
+KL loss  tensor(0.01217, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.66049)  iter  101375
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 102400/306969 of epoch 0, 26.92 ms/it, loss 0.453553, accuracy 79.524 %
+KL loss  tensor(0.01229, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.66716)  iter  102399
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Testing at - 102400/306969 of epoch 0, loss 0.451707, accuracy 78.917 %, best 0.000 %
+Finished training it 103424/306969 of epoch 0, 26.72 ms/it, loss 0.451995, accuracy 79.784 %
+KL loss  tensor(0.01241, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.67383)  iter  103423
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 104448/306969 of epoch 0, 26.95 ms/it, loss 0.452819, accuracy 79.568 %
+KL loss  tensor(0.01254, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.68051)  iter  104447
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 105472/306969 of epoch 0, 27.00 ms/it, loss 0.457052, accuracy 79.310 %
+KL loss  tensor(0.01266, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.68718)  iter  105471
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 106496/306969 of epoch 0, 27.01 ms/it, loss 0.449797, accuracy 79.718 %
+KL loss  tensor(0.01278, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.69385)  iter  106495
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 107520/306969 of epoch 0, 26.98 ms/it, loss 0.454620, accuracy 79.505 %
+KL loss  tensor(0.01290, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.70052)  iter  107519
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 108544/306969 of epoch 0, 27.04 ms/it, loss 0.451571, accuracy 79.690 %
+KL loss  tensor(0.01303, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.70719)  iter  108543
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 109568/306969 of epoch 0, 27.09 ms/it, loss 0.454025, accuracy 79.626 %
+KL loss  tensor(0.01315, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.71386)  iter  109567
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 110592/306969 of epoch 0, 26.95 ms/it, loss 0.456245, accuracy 79.461 %
+KL loss  tensor(0.01328, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.72054)  iter  110591
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 111616/306969 of epoch 0, 27.10 ms/it, loss 0.452458, accuracy 79.771 %
+KL loss  tensor(0.01339, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.72721)  iter  111615
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 112640/306969 of epoch 0, 26.99 ms/it, loss 0.455815, accuracy 79.352 %
+KL loss  tensor(0.01352, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.73388)  iter  112639
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Testing at - 112640/306969 of epoch 0, loss 0.451832, accuracy 78.843 %, best 0.000 %
+Finished training it 113664/306969 of epoch 0, 28.68 ms/it, loss 0.458188, accuracy 79.315 %
+KL loss  tensor(0.01364, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.74055)  iter  113663
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 114688/306969 of epoch 0, 28.79 ms/it, loss 0.457592, accuracy 79.355 %
+KL loss  tensor(0.01377, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.74722)  iter  114687
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 115712/306969 of epoch 0, 28.76 ms/it, loss 0.454896, accuracy 79.527 %
+KL loss  tensor(0.01389, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.75389)  iter  115711
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 116736/306969 of epoch 0, 28.79 ms/it, loss 0.455703, accuracy 79.457 %
+KL loss  tensor(0.01401, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.76057)  iter  116735
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 117760/306969 of epoch 0, 28.78 ms/it, loss 0.455281, accuracy 79.474 %
+KL loss  tensor(0.01413, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.76724)  iter  117759
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 118784/306969 of epoch 0, 28.73 ms/it, loss 0.453311, accuracy 79.758 %
+KL loss  tensor(0.01426, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.77391)  iter  118783
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 119808/306969 of epoch 0, 28.77 ms/it, loss 0.456259, accuracy 79.457 %
+KL loss  tensor(0.01438, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.78058)  iter  119807
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 120832/306969 of epoch 0, 28.80 ms/it, loss 0.455655, accuracy 79.492 %
+KL loss  tensor(0.01450, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.78725)  iter  120831
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 121856/306969 of epoch 0, 28.79 ms/it, loss 0.457131, accuracy 79.510 %
+KL loss  tensor(0.01462, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.79392)  iter  121855
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 122880/306969 of epoch 0, 28.72 ms/it, loss 0.454781, accuracy 79.501 %
+KL loss  tensor(0.01475, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.80060)  iter  122879
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Testing at - 122880/306969 of epoch 0, loss 0.451641, accuracy 78.898 %, best 0.000 %
+Finished training it 123904/306969 of epoch 0, 26.78 ms/it, loss 0.457548, accuracy 79.374 %
+KL loss  tensor(0.01487, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.80727)  iter  123903
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 124928/306969 of epoch 0, 26.96 ms/it, loss 0.454327, accuracy 79.652 %
+KL loss  tensor(0.01499, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.81394)  iter  124927
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 125952/306969 of epoch 0, 27.04 ms/it, loss 0.454802, accuracy 79.561 %
+KL loss  tensor(0.01511, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.82061)  iter  125951
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 126976/306969 of epoch 0, 27.00 ms/it, loss 0.455079, accuracy 79.577 %
+KL loss  tensor(0.01524, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.82728)  iter  126975
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 128000/306969 of epoch 0, 27.02 ms/it, loss 0.457265, accuracy 79.475 %
+KL loss  tensor(0.01536, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.83395)  iter  127999
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 129024/306969 of epoch 0, 26.93 ms/it, loss 0.458477, accuracy 79.431 %
+KL loss  tensor(0.01549, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.84063)  iter  129023
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 130048/306969 of epoch 0, 26.98 ms/it, loss 0.455556, accuracy 79.565 %
+KL loss  tensor(0.01561, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.84730)  iter  130047
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 131072/306969 of epoch 0, 27.01 ms/it, loss 0.458675, accuracy 79.512 %
+KL loss  tensor(0.01572, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.85397)  iter  131071
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 132096/306969 of epoch 0, 26.98 ms/it, loss 0.461662, accuracy 79.164 %
+KL loss  tensor(0.01585, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.86064)  iter  132095
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 133120/306969 of epoch 0, 26.97 ms/it, loss 0.456056, accuracy 79.712 %
+KL loss  tensor(0.01598, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.86731)  iter  133119
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Testing at - 133120/306969 of epoch 0, loss 0.450797, accuracy 78.931 %, best 0.000 %
+Finished training it 134144/306969 of epoch 0, 27.05 ms/it, loss 0.453887, accuracy 79.768 %
+KL loss  tensor(0.01609, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.87398)  iter  134143
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 135168/306969 of epoch 0, 27.02 ms/it, loss 0.456923, accuracy 79.494 %
+KL loss  tensor(0.01622, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.88066)  iter  135167
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 136192/306969 of epoch 0, 27.00 ms/it, loss 0.455841, accuracy 79.524 %
+KL loss  tensor(0.01634, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.88733)  iter  136191
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 137216/306969 of epoch 0, 27.02 ms/it, loss 0.453618, accuracy 79.848 %
+KL loss  tensor(0.01647, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.89400)  iter  137215
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 138240/306969 of epoch 0, 27.02 ms/it, loss 0.457243, accuracy 79.591 %
+KL loss  tensor(0.01659, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.90067)  iter  138239
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 139264/306969 of epoch 0, 26.97 ms/it, loss 0.457177, accuracy 79.607 %
+KL loss  tensor(0.01672, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.90734)  iter  139263
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 140288/306969 of epoch 0, 26.95 ms/it, loss 0.457567, accuracy 79.641 %
+KL loss  tensor(0.01684, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.91401)  iter  140287
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 141312/306969 of epoch 0, 27.02 ms/it, loss 0.455378, accuracy 79.650 %
+KL loss  tensor(0.01696, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.92069)  iter  141311
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 142336/306969 of epoch 0, 26.98 ms/it, loss 0.454422, accuracy 79.832 %
+KL loss  tensor(0.01709, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.92736)  iter  142335
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 143360/306969 of epoch 0, 27.03 ms/it, loss 0.457141, accuracy 79.623 %
+KL loss  tensor(0.01721, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.93403)  iter  143359
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Testing at - 143360/306969 of epoch 0, loss 0.451553, accuracy 78.901 %, best 0.000 %
+Finished training it 144384/306969 of epoch 0, 27.07 ms/it, loss 0.458955, accuracy 79.361 %
+KL loss  tensor(0.01733, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.94070)  iter  144383
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 145408/306969 of epoch 0, 27.10 ms/it, loss 0.458216, accuracy 79.520 %
+KL loss  tensor(0.01745, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.94737)  iter  145407
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 146432/306969 of epoch 0, 27.08 ms/it, loss 0.456291, accuracy 79.719 %
+KL loss  tensor(0.01757, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.95404)  iter  146431
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 147456/306969 of epoch 0, 27.03 ms/it, loss 0.456781, accuracy 79.503 %
+KL loss  tensor(0.01770, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.96072)  iter  147455
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 148480/306969 of epoch 0, 26.96 ms/it, loss 0.458395, accuracy 79.590 %
+KL loss  tensor(0.01782, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.96739)  iter  148479
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 149504/306969 of epoch 0, 27.04 ms/it, loss 0.455616, accuracy 79.560 %
+KL loss  tensor(0.01794, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.97406)  iter  149503
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 150528/306969 of epoch 0, 27.02 ms/it, loss 0.459296, accuracy 79.513 %
+KL loss  tensor(0.01807, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.98073)  iter  150527
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 151552/306969 of epoch 0, 27.02 ms/it, loss 0.458482, accuracy 79.590 %
+KL loss  tensor(0.01819, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.98740)  iter  151551
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 152576/306969 of epoch 0, 27.06 ms/it, loss 0.459122, accuracy 79.462 %
+KL loss  tensor(0.01831, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(0.99407)  iter  152575
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 153600/306969 of epoch 0, 26.89 ms/it, loss 0.453405, accuracy 79.877 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  153599
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Testing at - 153600/306969 of epoch 0, loss 0.453683, accuracy 78.659 %, best 0.000 %
+Finished training it 154624/306969 of epoch 0, 26.91 ms/it, loss 0.455406, accuracy 79.696 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  154623
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 155648/306969 of epoch 0, 27.09 ms/it, loss 0.454334, accuracy 79.921 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  155647
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 156672/306969 of epoch 0, 26.96 ms/it, loss 0.455721, accuracy 79.759 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  156671
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 157696/306969 of epoch 0, 27.03 ms/it, loss 0.455781, accuracy 79.758 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  157695
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 158720/306969 of epoch 0, 27.01 ms/it, loss 0.457925, accuracy 79.511 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  158719
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 159744/306969 of epoch 0, 26.97 ms/it, loss 0.457070, accuracy 79.717 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  159743
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 160768/306969 of epoch 0, 26.98 ms/it, loss 0.457621, accuracy 79.640 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  160767
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 161792/306969 of epoch 0, 26.95 ms/it, loss 0.457332, accuracy 79.624 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  161791
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 162816/306969 of epoch 0, 26.94 ms/it, loss 0.457208, accuracy 79.731 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  162815
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 163840/306969 of epoch 0, 27.03 ms/it, loss 0.456682, accuracy 79.767 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  163839
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Testing at - 163840/306969 of epoch 0, loss 0.451414, accuracy 78.893 %, best 0.000 %
+Finished training it 164864/306969 of epoch 0, 28.63 ms/it, loss 0.455500, accuracy 79.654 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  164863
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 165888/306969 of epoch 0, 28.78 ms/it, loss 0.456953, accuracy 79.633 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  165887
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 166912/306969 of epoch 0, 28.68 ms/it, loss 0.455029, accuracy 79.774 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  166911
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 167936/306969 of epoch 0, 28.70 ms/it, loss 0.459415, accuracy 79.370 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  167935
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 168960/306969 of epoch 0, 28.68 ms/it, loss 0.457082, accuracy 79.614 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  168959
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 169984/306969 of epoch 0, 28.11 ms/it, loss 0.459789, accuracy 79.561 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  169983
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 171008/306969 of epoch 0, 27.04 ms/it, loss 0.458812, accuracy 79.606 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  171007
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 172032/306969 of epoch 0, 27.02 ms/it, loss 0.456674, accuracy 79.785 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  172031
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 173056/306969 of epoch 0, 27.04 ms/it, loss 0.456643, accuracy 79.733 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  173055
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 174080/306969 of epoch 0, 27.02 ms/it, loss 0.457185, accuracy 79.709 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  174079
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Testing at - 174080/306969 of epoch 0, loss 0.451786, accuracy 78.855 %, best 0.000 %
+Finished training it 175104/306969 of epoch 0, 28.65 ms/it, loss 0.457579, accuracy 79.658 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  175103
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 176128/306969 of epoch 0, 28.74 ms/it, loss 0.459968, accuracy 79.539 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  176127
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 177152/306969 of epoch 0, 28.72 ms/it, loss 0.455958, accuracy 79.860 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  177151
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 178176/306969 of epoch 0, 28.77 ms/it, loss 0.455756, accuracy 79.861 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  178175
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 179200/306969 of epoch 0, 28.72 ms/it, loss 0.455797, accuracy 79.665 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  179199
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 180224/306969 of epoch 0, 28.78 ms/it, loss 0.456273, accuracy 79.663 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  180223
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 181248/306969 of epoch 0, 28.75 ms/it, loss 0.456894, accuracy 79.630 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  181247
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 182272/306969 of epoch 0, 28.83 ms/it, loss 0.455121, accuracy 79.732 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  182271
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 183296/306969 of epoch 0, 28.79 ms/it, loss 0.457613, accuracy 79.584 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  183295
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 184320/306969 of epoch 0, 28.77 ms/it, loss 0.457341, accuracy 79.636 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  184319
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Testing at - 184320/306969 of epoch 0, loss 0.451194, accuracy 78.895 %, best 0.000 %
+Finished training it 185344/306969 of epoch 0, 28.67 ms/it, loss 0.455663, accuracy 79.639 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  185343
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 186368/306969 of epoch 0, 28.75 ms/it, loss 0.457784, accuracy 79.617 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  186367
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 187392/306969 of epoch 0, 28.80 ms/it, loss 0.456516, accuracy 79.716 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  187391
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 188416/306969 of epoch 0, 28.75 ms/it, loss 0.455468, accuracy 79.818 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  188415
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 189440/306969 of epoch 0, 28.73 ms/it, loss 0.456402, accuracy 79.663 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  189439
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 190464/306969 of epoch 0, 28.76 ms/it, loss 0.458040, accuracy 79.659 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  190463
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 191488/306969 of epoch 0, 28.73 ms/it, loss 0.456311, accuracy 79.723 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  191487
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 192512/306969 of epoch 0, 28.75 ms/it, loss 0.456413, accuracy 79.659 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  192511
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 193536/306969 of epoch 0, 28.66 ms/it, loss 0.458075, accuracy 79.623 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  193535
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 194560/306969 of epoch 0, 28.70 ms/it, loss 0.456605, accuracy 79.654 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  194559
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Testing at - 194560/306969 of epoch 0, loss 0.451591, accuracy 78.875 %, best 0.000 %
+Finished training it 195584/306969 of epoch 0, 27.00 ms/it, loss 0.457678, accuracy 79.655 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  195583
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 196608/306969 of epoch 0, 27.06 ms/it, loss 0.456793, accuracy 79.660 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  196607
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 197632/306969 of epoch 0, 27.08 ms/it, loss 0.454740, accuracy 79.852 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  197631
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 198656/306969 of epoch 0, 27.07 ms/it, loss 0.453629, accuracy 80.003 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  198655
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 199680/306969 of epoch 0, 27.07 ms/it, loss 0.456534, accuracy 79.658 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  199679
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 200704/306969 of epoch 0, 27.02 ms/it, loss 0.455705, accuracy 79.785 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  200703
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 201728/306969 of epoch 0, 27.11 ms/it, loss 0.453358, accuracy 79.949 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  201727
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 202752/306969 of epoch 0, 27.10 ms/it, loss 0.455409, accuracy 79.636 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  202751
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 203776/306969 of epoch 0, 27.03 ms/it, loss 0.456629, accuracy 79.798 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  203775
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 204800/306969 of epoch 0, 26.99 ms/it, loss 0.453937, accuracy 79.929 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  204799
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Testing at - 204800/306969 of epoch 0, loss 0.451830, accuracy 78.893 %, best 0.000 %
+Finished training it 205824/306969 of epoch 0, 27.02 ms/it, loss 0.454960, accuracy 79.830 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  205823
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 206848/306969 of epoch 0, 27.00 ms/it, loss 0.458673, accuracy 79.556 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  206847
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 207872/306969 of epoch 0, 26.92 ms/it, loss 0.455510, accuracy 79.742 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  207871
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 208896/306969 of epoch 0, 27.08 ms/it, loss 0.454734, accuracy 79.816 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  208895
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 209920/306969 of epoch 0, 26.96 ms/it, loss 0.457356, accuracy 79.526 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  209919
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 210944/306969 of epoch 0, 27.01 ms/it, loss 0.455955, accuracy 79.865 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  210943
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 211968/306969 of epoch 0, 27.01 ms/it, loss 0.456557, accuracy 79.752 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  211967
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 212992/306969 of epoch 0, 27.02 ms/it, loss 0.453619, accuracy 79.929 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  212991
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 214016/306969 of epoch 0, 26.97 ms/it, loss 0.457821, accuracy 79.624 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  214015
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 215040/306969 of epoch 0, 27.00 ms/it, loss 0.453751, accuracy 79.777 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  215039
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Testing at - 215040/306969 of epoch 0, loss 0.455196, accuracy 78.631 %, best 0.000 %
+Finished training it 216064/306969 of epoch 0, 28.30 ms/it, loss 0.456261, accuracy 79.778 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  216063
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 217088/306969 of epoch 0, 28.12 ms/it, loss 0.452809, accuracy 79.906 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  217087
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 218112/306969 of epoch 0, 27.32 ms/it, loss 0.456045, accuracy 79.641 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  218111
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 219136/306969 of epoch 0, 26.95 ms/it, loss 0.453666, accuracy 79.900 %
+KL loss  tensor(0.01843, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  219135
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 220160/306969 of epoch 0, 26.93 ms/it, loss 0.455160, accuracy 79.751 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  220159
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 221184/306969 of epoch 0, 26.99 ms/it, loss 0.452897, accuracy 79.996 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  221183
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 222208/306969 of epoch 0, 26.94 ms/it, loss 0.453711, accuracy 79.752 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  222207
+Tensor type  CP
+Tensor layer rank 1e-3 36
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 223232/306969 of epoch 0, 26.97 ms/it, loss 0.453577, accuracy 79.839 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  223231
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 224256/306969 of epoch 0, 26.97 ms/it, loss 0.454078, accuracy 79.866 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  224255
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 225280/306969 of epoch 0, 26.92 ms/it, loss 0.452966, accuracy 79.871 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  225279
+Tensor type  CP
+Tensor layer rank 1e-3 42
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Testing at - 225280/306969 of epoch 0, loss 0.452382, accuracy 78.870 %, best 0.000 %
+Finished training it 226304/306969 of epoch 0, 26.69 ms/it, loss 0.451913, accuracy 79.998 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  226303
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 227328/306969 of epoch 0, 26.90 ms/it, loss 0.450544, accuracy 79.999 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  227327
+Tensor type  CP
+Tensor layer rank 1e-3 45
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 228352/306969 of epoch 0, 26.97 ms/it, loss 0.454320, accuracy 79.891 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  228351
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 229376/306969 of epoch 0, 26.97 ms/it, loss 0.450511, accuracy 80.054 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  229375
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 230400/306969 of epoch 0, 26.91 ms/it, loss 0.453230, accuracy 79.944 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  230399
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 231424/306969 of epoch 0, 27.40 ms/it, loss 0.451399, accuracy 80.083 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  231423
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 232448/306969 of epoch 0, 27.02 ms/it, loss 0.449190, accuracy 80.278 %
+KL loss  tensor(0.01841, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  232447
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 233472/306969 of epoch 0, 27.04 ms/it, loss 0.450351, accuracy 80.109 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  233471
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 234496/306969 of epoch 0, 27.03 ms/it, loss 0.447127, accuracy 80.323 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  234495
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 235520/306969 of epoch 0, 27.02 ms/it, loss 0.448810, accuracy 80.181 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  235519
+Tensor type  CP
+Tensor layer rank 1e-3 32
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Testing at - 235520/306969 of epoch 0, loss 0.456165, accuracy 78.613 %, best 0.000 %
+Finished training it 236544/306969 of epoch 0, 26.98 ms/it, loss 0.452053, accuracy 79.983 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  236543
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 237568/306969 of epoch 0, 27.02 ms/it, loss 0.450340, accuracy 80.080 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  237567
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 238592/306969 of epoch 0, 26.98 ms/it, loss 0.447593, accuracy 80.318 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  238591
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 239616/306969 of epoch 0, 26.98 ms/it, loss 0.447085, accuracy 80.270 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  239615
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 240640/306969 of epoch 0, 27.00 ms/it, loss 0.448288, accuracy 80.320 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  240639
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 241664/306969 of epoch 0, 27.07 ms/it, loss 0.447605, accuracy 80.203 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  241663
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 242688/306969 of epoch 0, 26.94 ms/it, loss 0.443799, accuracy 80.515 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  242687
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 243712/306969 of epoch 0, 27.01 ms/it, loss 0.442974, accuracy 80.513 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  243711
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 244736/306969 of epoch 0, 27.07 ms/it, loss 0.443089, accuracy 80.564 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  244735
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 245760/306969 of epoch 0, 27.02 ms/it, loss 0.444204, accuracy 80.572 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  245759
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Testing at - 245760/306969 of epoch 0, loss 0.461545, accuracy 78.586 %, best 0.000 %
+Finished training it 246784/306969 of epoch 0, 26.85 ms/it, loss 0.442054, accuracy 80.684 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  246783
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 247808/306969 of epoch 0, 26.95 ms/it, loss 0.442988, accuracy 80.592 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  247807
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 248832/306969 of epoch 0, 27.01 ms/it, loss 0.442196, accuracy 80.678 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  248831
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 249856/306969 of epoch 0, 26.94 ms/it, loss 0.441194, accuracy 80.676 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  249855
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 250880/306969 of epoch 0, 26.90 ms/it, loss 0.440743, accuracy 80.649 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  250879
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 251904/306969 of epoch 0, 26.89 ms/it, loss 0.438193, accuracy 80.911 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  251903
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 252928/306969 of epoch 0, 26.98 ms/it, loss 0.436023, accuracy 80.941 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  252927
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 253952/306969 of epoch 0, 26.99 ms/it, loss 0.439128, accuracy 80.769 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  253951
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 254976/306969 of epoch 0, 27.07 ms/it, loss 0.436487, accuracy 81.095 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  254975
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 256000/306969 of epoch 0, 26.88 ms/it, loss 0.438176, accuracy 80.920 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  255999
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Testing at - 256000/306969 of epoch 0, loss 0.467697, accuracy 77.908 %, best 0.000 %
+Finished training it 257024/306969 of epoch 0, 26.96 ms/it, loss 0.432820, accuracy 81.251 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  257023
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 258048/306969 of epoch 0, 26.97 ms/it, loss 0.432890, accuracy 81.149 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  258047
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 259072/306969 of epoch 0, 26.93 ms/it, loss 0.434926, accuracy 81.069 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  259071
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 260096/306969 of epoch 0, 27.00 ms/it, loss 0.432642, accuracy 81.169 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  260095
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 261120/306969 of epoch 0, 26.95 ms/it, loss 0.434108, accuracy 81.013 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  261119
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 262144/306969 of epoch 0, 27.02 ms/it, loss 0.432981, accuracy 81.120 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  262143
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 263168/306969 of epoch 0, 27.04 ms/it, loss 0.433702, accuracy 81.064 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  263167
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 264192/306969 of epoch 0, 27.05 ms/it, loss 0.433830, accuracy 81.111 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  264191
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 265216/306969 of epoch 0, 27.02 ms/it, loss 0.432796, accuracy 81.098 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  265215
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 266240/306969 of epoch 0, 27.03 ms/it, loss 0.430100, accuracy 81.140 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  266239
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Testing at - 266240/306969 of epoch 0, loss 0.468908, accuracy 78.460 %, best 0.000 %
+Finished training it 267264/306969 of epoch 0, 26.88 ms/it, loss 0.434807, accuracy 81.076 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  267263
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 268288/306969 of epoch 0, 26.93 ms/it, loss 0.433090, accuracy 81.052 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  268287
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 269312/306969 of epoch 0, 26.93 ms/it, loss 0.432581, accuracy 81.078 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  269311
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 270336/306969 of epoch 0, 26.92 ms/it, loss 0.433998, accuracy 80.948 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  270335
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 271360/306969 of epoch 0, 26.96 ms/it, loss 0.433507, accuracy 80.937 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  271359
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 272384/306969 of epoch 0, 26.93 ms/it, loss 0.429731, accuracy 81.268 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  272383
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 273408/306969 of epoch 0, 26.89 ms/it, loss 0.429165, accuracy 81.229 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  273407
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 274432/306969 of epoch 0, 27.02 ms/it, loss 0.427938, accuracy 81.419 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  274431
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 275456/306969 of epoch 0, 26.96 ms/it, loss 0.430129, accuracy 81.204 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  275455
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 276480/306969 of epoch 0, 26.87 ms/it, loss 0.431558, accuracy 81.203 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  276479
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Testing at - 276480/306969 of epoch 0, loss 0.477094, accuracy 78.321 %, best 0.000 %
+Finished training it 277504/306969 of epoch 0, 26.97 ms/it, loss 0.432319, accuracy 81.123 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  277503
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 278528/306969 of epoch 0, 26.93 ms/it, loss 0.431971, accuracy 81.066 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  278527
+Tensor type  CP
+Tensor layer rank 1e-3 38
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 279552/306969 of epoch 0, 26.93 ms/it, loss 0.430692, accuracy 81.178 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  279551
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 280576/306969 of epoch 0, 26.99 ms/it, loss 0.431480, accuracy 81.242 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  280575
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 281600/306969 of epoch 0, 26.94 ms/it, loss 0.429693, accuracy 81.339 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  281599
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 282624/306969 of epoch 0, 27.02 ms/it, loss 0.432529, accuracy 81.056 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  282623
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 283648/306969 of epoch 0, 26.92 ms/it, loss 0.430853, accuracy 81.171 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  283647
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 284672/306969 of epoch 0, 27.01 ms/it, loss 0.428065, accuracy 81.363 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  284671
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 285696/306969 of epoch 0, 27.03 ms/it, loss 0.431183, accuracy 81.159 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  285695
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 286720/306969 of epoch 0, 26.98 ms/it, loss 0.428579, accuracy 81.317 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  286719
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Testing at - 286720/306969 of epoch 0, loss 0.467517, accuracy 78.546 %, best 0.000 %
+Finished training it 287744/306969 of epoch 0, 26.73 ms/it, loss 0.428276, accuracy 81.216 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  287743
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 288768/306969 of epoch 0, 26.94 ms/it, loss 0.431786, accuracy 81.071 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  288767
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 289792/306969 of epoch 0, 26.95 ms/it, loss 0.428079, accuracy 81.232 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  289791
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 290816/306969 of epoch 0, 26.94 ms/it, loss 0.427457, accuracy 81.348 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  290815
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 291840/306969 of epoch 0, 26.91 ms/it, loss 0.430674, accuracy 81.129 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  291839
+Tensor type  CP
+Tensor layer rank 1e-3 41
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 292864/306969 of epoch 0, 26.90 ms/it, loss 0.426271, accuracy 81.312 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  292863
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 293888/306969 of epoch 0, 26.94 ms/it, loss 0.429163, accuracy 81.266 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  293887
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 294912/306969 of epoch 0, 26.90 ms/it, loss 0.429365, accuracy 81.295 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  294911
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 295936/306969 of epoch 0, 26.97 ms/it, loss 0.429684, accuracy 81.195 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  295935
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 296960/306969 of epoch 0, 26.93 ms/it, loss 0.426018, accuracy 81.515 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  296959
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Testing at - 296960/306969 of epoch 0, loss 0.478869, accuracy 78.568 %, best 0.000 %
+Finished training it 297984/306969 of epoch 0, 26.97 ms/it, loss 0.430501, accuracy 81.046 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  297983
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 299008/306969 of epoch 0, 26.92 ms/it, loss 0.428422, accuracy 81.348 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  299007
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 300032/306969 of epoch 0, 27.00 ms/it, loss 0.430706, accuracy 81.113 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  300031
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 301056/306969 of epoch 0, 26.97 ms/it, loss 0.429368, accuracy 81.217 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  301055
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 302080/306969 of epoch 0, 27.02 ms/it, loss 0.425592, accuracy 81.364 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  302079
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 303104/306969 of epoch 0, 27.01 ms/it, loss 0.426003, accuracy 81.306 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  303103
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 304128/306969 of epoch 0, 27.02 ms/it, loss 0.429326, accuracy 81.215 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  304127
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 305152/306969 of epoch 0, 27.00 ms/it, loss 0.429200, accuracy 81.138 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  305151
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 306176/306969 of epoch 0, 27.00 ms/it, loss 0.427820, accuracy 81.297 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  306175
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Finished training it 306969/306969 of epoch 0, 26.93 ms/it, loss 0.428083, accuracy 81.330 %
+KL loss  tensor(0.01842, device='cuda:0', grad_fn=<MulBackward0>) iteration kl_multiplier  tensor(1.)  iter  306968
+Tensor type  CP
+Tensor layer rank 1e-3 50
+Tensor layer rank 1e-5 50
+Tensor layer rank 1e-7 50
+Testing at - 306969/306969 of epoch 0, loss 0.477913, accuracy 78.510 %, best 0.000 %
+done
