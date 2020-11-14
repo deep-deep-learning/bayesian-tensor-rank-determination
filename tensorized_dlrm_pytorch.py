@@ -1106,7 +1106,7 @@ if __name__ == "__main__":
                         + "loss {:.6f}, accuracy {:3.3f} %".format(gL, gA * 100)
                     )
 
-                    print("KL loss ",low_rank_kl_loss,"iteration kl_multiplier ",iter_kl_multiplier," iter ",j)
+                    print("KL loss ",low_rank_kl_loss.detach().numpy(),"iteration kl_multiplier ",iter_kl_multiplier.detach().numpy()," iter ",j)
                     print_ranks(dlrm)
 
                     # Uncomment the line below to print out the total time with overhead
