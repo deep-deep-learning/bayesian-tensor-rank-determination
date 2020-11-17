@@ -81,9 +81,6 @@ from torch.nn.parallel.parallel_apply import parallel_apply
 from torch.nn.parallel.replicate import replicate
 from torch.nn.parallel.scatter_gather import gather, scatter
 # quotient-remainder trick
-from tricks.qr_embedding_bag import QREmbeddingBag
-# mixed-dimension trick
-from tricks.md_embedding_bag import PrEmbeddingBag, md_solver
 
 import sklearn.metrics
 
@@ -920,8 +917,11 @@ if __name__ == "__main__":
             )
         )
 
-    dlrm.save_embeddings()
+    #dlrm.save_embeddings()
+    print('****************************************')
 
+    print(sum(p.numel() for p in dlrm.parameters()))
+    print('******************************************')
     print("time/loss/accuracy (if enabled):")
     with torch.autograd.profiler.profile(args.enable_profiling, use_gpu) as prof:
         while k < args.nepochs:

@@ -206,7 +206,7 @@ class DLRM_Net(nn.Module):
 
             shape0 = [[200,220,250],[125,130,136],[200,200,209],[166,175,188],[200,200,200]]
             shape1 = [2,2,4]
-
+            max_ranks = {'CP':300,'TensorTrainMatrix':20,'TensorTrain':21,'Tucker':21}
             if i in tensorized_embedding_layers:
                 print('TT-Embedding %i size %ix%i' %(i,n,m))
                 """
@@ -222,7 +222,7 @@ class DLRM_Net(nn.Module):
                 """
                 EE = TensorizedEmbedding(
                     tensor_type=args.tensor_type,
-                    max_rank=100,
+                    max_rank=max_ranks[args.tensor_type],
                     shape = [shape0.pop(0),shape1]
                 )
 
