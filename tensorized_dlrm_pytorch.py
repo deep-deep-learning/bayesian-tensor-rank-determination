@@ -222,7 +222,7 @@ class DLRM_Net(nn.Module):
                 """
                 EE = TensorizedEmbedding(
                     tensor_type=args.tensor_type,
-                    max_rank=50,
+                    max_rank=100,
                     shape = [shape0.pop(0),shape1]
                 )
 
@@ -1106,7 +1106,7 @@ if __name__ == "__main__":
                         + "loss {:.6f}, accuracy {:3.3f} %".format(gL, gA * 100)
                     )
 
-                    print("KL loss ",low_rank_kl_loss.detach().numpy(),"iteration kl_multiplier ",iter_kl_multiplier.detach().numpy()," iter ",j)
+                    print("KL loss ",low_rank_kl_loss.detach().cpu().numpy(),"iteration kl_multiplier ",iter_kl_multiplier.detach().cpu().numpy()," iter ",j)
                     print_ranks(dlrm)
 
                     # Uncomment the line below to print out the total time with overhead
