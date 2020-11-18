@@ -802,6 +802,10 @@ if __name__ == "__main__":
     if not args.inference_only:
         # specify the optimizer algorithm
         optimizer = torch.optim.SGD(dlrm.parameters(), lr=args.learning_rate)
+        #%%
+
+
+        #%%
         lr_scheduler = LRPolicyScheduler(optimizer, args.lr_num_warmup_steps, args.lr_decay_start_step,
                                          args.lr_num_decay_steps)
 
