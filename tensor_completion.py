@@ -167,18 +167,18 @@ true_rank = 2
 EM_STEPSIZE = 1.0
 
 
-dims = [[10,10],[10,10]]
+dims = [10,10,10]
 
 tensor = CP(dims=dims,max_rank=max_rank,prior_type='log_uniform',em_stepsize=EM_STEPSIZE)
 
-true_tensor = TensorTrainMatrix(dims=dims,max_rank=true_rank,prior_type='log_uniform',em_stepsize=EM_STEPSIZE)
+true_tensor = CP(dims=dims,max_rank=true_rank,prior_type='log_uniform',em_stepsize=EM_STEPSIZE)
 
 
 #%%
 full = true_tensor.get_full().clone().detach()
 #full = tl.tucker_to_tensor(tl.random.random_tucker(shape=dims,rank=true_rank))
 
-
+import torch.distributions as td
 log_likelihood_dist = td.Normal(0.0,0.001)
 
 
@@ -199,7 +199,25 @@ loss = kl_loss
 
 #loss = log_likelihood
 #%%
-optimizer = torch.optim.Adam(tensor.trainable_variables,lr=1e-2)
+
+from allennlp.training.optimizers import DenseSparseAdam
+
+
+tensor.trainable_variables[0].name
+
+tmp_params = [(None,x) for x in tensor.parameters()]
+
+
+optimizer = DenseSparseAdam(tmp_params,lr=1e-3)
+
+#optimizer = torch.optim.Adam(tensor.trainable_variables,lr=1e-2)
+
+
+
+
+
+#%%
+
 
 for i in range(10000):
 
@@ -217,9 +235,9 @@ for i in range(10000):
         print('Loss ',loss())
         print('RMSE ',mse())
         print('Rank ',tensor.estimate_rank())
-        print(tensor.rank_parameters)
+        print(tensor.rank_parameter)
 
-optimizer = torch.optim.Adam(tensor.trainable_variables,lr=1e-4)
+optimizer = DenseSparseAdam(tmp_params,lr=1e-4)
 
 for i in range(10000):
 
@@ -237,7 +255,7 @@ for i in range(10000):
         print('Loss ',loss())
         print('RMSE ',mse())
         print('Rank ',tensor.estimate_rank())
-        print(tensor.rank_parameters)
+        print(tensor.rank_parameter)
 
 #%%
 

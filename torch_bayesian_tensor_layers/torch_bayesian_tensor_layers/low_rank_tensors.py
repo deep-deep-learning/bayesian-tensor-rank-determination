@@ -14,12 +14,14 @@ class LowRankTensor(torch.nn.Module):
                  dims,
                  prior_type=None,
                  init_method='random',
+                 learned_scale=True,
                  **kwargs):
 
         super(LowRankTensor, self).__init__()
 
         self.eps = 1e-12
-
+        self.learned_scale = learned_scale
+        print(self.learned_scale)
         self.dims = dims
         self.order = len(self.dims)
         self.prior_type = prior_type
@@ -86,7 +88,7 @@ class LowRankTensor(torch.nn.Module):
 
 
 class CP(LowRankTensor):
-    def __init__(self, dims, max_rank, **kwargs):
+    def __init__(self, dims, max_rank, learned_scale=True,**kwargs):
 
         self.max_rank = max_rank
         self.max_ranks = max_rank
@@ -190,11 +192,11 @@ class CP(LowRankTensor):
 
     def _build_factor_distributions(self):
 
-        factor_scale_multiplier = 1e-7
+        factor_scale_multiplier = 1e-9
 
         factor_scales = [
             self.add_variable(factor_scale_multiplier *
-                              torch.ones(factor.shape)) for factor in self.factors
+                              torch.ones(factor.shape),trainable=self.learned_scale) for factor in self.factors
         ]
 
         self.factor_distributions = []
@@ -279,7 +281,7 @@ class CP(LowRankTensor):
 
 
 class TensorTrain(LowRankTensor):
-    def __init__(self, dims, max_rank, **kwargs):
+    def __init__(self, dims, max_rank,learned_scale=True, **kwargs):
 
         self.max_rank = max_rank
 
@@ -385,10 +387,10 @@ class TensorTrain(LowRankTensor):
 
     def _build_factor_distributions(self):
 
-        factor_scale_init = 1e-7
+        factor_scale_init = 1e-9
 
         factor_scales = [
-            self.add_variable(factor_scale_init * torch.ones(factor.shape))
+            self.add_variable(factor_scale_init * torch.ones(factor.shape),trainable=self.learned_scale)
             for factor in self.factors
         ]
 
@@ -505,7 +507,7 @@ class TensorTrain(LowRankTensor):
 
 
 class Tucker(LowRankTensor):
-    def __init__(self, dims, max_rank, **kwargs):
+    def __init__(self, dims, max_rank,learned_scale=True, **kwargs):
 
         self.max_rank = max_rank
 
@@ -608,11 +610,11 @@ class Tucker(LowRankTensor):
 
     def _build_factor_distributions(self):
 
-        factor_scale_init = 1e-8
+        factor_scale_init = 1e-9
 
         factor_scales = (self.add_variable(
             factor_scale_init * torch.ones(self.factors[0].shape)), [
-                self.add_variable(factor_scale_init * torch.ones(factor.shape))
+                self.add_variable(factor_scale_init * torch.ones(factor.shape),trainable=self.learned_scale)
                 for factor in self.factors[1]
             ])
 
@@ -711,7 +713,7 @@ class Tucker(LowRankTensor):
 
 
 class TensorTrainMatrix(LowRankTensor):
-    def __init__(self, dims, max_rank, **kwargs):
+    def __init__(self, dims, max_rank,learned_scale=True, **kwargs):
 
         self.max_rank = max_rank
 
@@ -874,10 +876,10 @@ class TensorTrainMatrix(LowRankTensor):
 
     def _build_factor_distributions(self):
 
-        factor_scale_init = 1e-8
+        factor_scale_init = 1e-9
 
         factor_scales = [
-            self.add_variable(factor_scale_init * torch.ones(factor.shape))
+            self.add_variable(factor_scale_init * torch.ones(factor.shape),trainable=self.learned_scale)
             for factor in self.factors
         ]
 

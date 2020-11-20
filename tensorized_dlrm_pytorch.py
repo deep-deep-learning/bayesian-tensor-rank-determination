@@ -859,10 +859,12 @@ if __name__ == "__main__":
 
             optimizer = torch.optim.Adagrad(dlrm.parameters(), lr=args.learning_rate)
 
-
+        elif args.optimizer == 'Adam':
+            from allennlp.training.optimizers import DenseSparseAdam
+            optimizer = DenseSparseAdam([(None,x) for x in dlrm.parameters()], lr=0.005)
+        
         lr_scheduler = LRPolicyScheduler(optimizer, args.lr_num_warmup_steps, args.lr_decay_start_step,
                                          args.lr_num_decay_steps)
-
 
 
     ### main loop ###
