@@ -20,8 +20,6 @@ class LowRankTensor(torch.nn.Module):
         super(LowRankTensor, self).__init__()
 
         self.eps = 1e-12
-        self.learned_scale = learned_scale
-        print(self.learned_scale)
         self.dims = dims
         self.order = len(self.dims)
         self.prior_type = prior_type
@@ -91,6 +89,7 @@ class CP(LowRankTensor):
     def __init__(self, dims, max_rank, learned_scale=True,**kwargs):
 
         self.max_rank = max_rank
+        self.learned_scale=learned_scale
         self.max_ranks = max_rank
         super().__init__(dims, **kwargs)
         self.tensor_type = 'CP'
@@ -283,6 +282,7 @@ class CP(LowRankTensor):
 class TensorTrain(LowRankTensor):
     def __init__(self, dims, max_rank,learned_scale=True, **kwargs):
 
+        self.learned_scale=learned_scale
         self.max_rank = max_rank
 
         if type(self.max_rank)==int:
@@ -510,6 +510,7 @@ class Tucker(LowRankTensor):
     def __init__(self, dims, max_rank,learned_scale=True, **kwargs):
 
         self.max_rank = max_rank
+        self.learned_scale=learned_scale
 
         if type(self.max_rank)==int:
             self.max_ranks = len(dims)*[self.max_rank]
@@ -613,7 +614,7 @@ class Tucker(LowRankTensor):
         factor_scale_init = 1e-9
 
         factor_scales = (self.add_variable(
-            factor_scale_init * torch.ones(self.factors[0].shape)), [
+            factor_scale_init * torch.ones(self.factors[0].shape),learned_scale=self.learned_scale), [
                 self.add_variable(factor_scale_init * torch.ones(factor.shape),trainable=self.learned_scale)
                 for factor in self.factors[1]
             ])
@@ -716,6 +717,7 @@ class TensorTrainMatrix(LowRankTensor):
     def __init__(self, dims, max_rank,learned_scale=True, **kwargs):
 
         self.max_rank = max_rank
+        self.learned_scale=learned_scale
 
         if type(self.max_rank)==int:
             self.max_ranks = [1]+(len(dims[0])-1)*[self.max_rank]+[1]

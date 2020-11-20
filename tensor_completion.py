@@ -156,9 +156,6 @@ import numpy as np
 
 os.environ['CUDA_VISIBLE_DEVICES']='1'
 
-import torch_bayesian_tensor_layers
-#%%
-
 from torch_bayesian_tensor_layers.low_rank_tensors import TensorTrainMatrix,Tucker,TensorTrain,CP
 
 
@@ -169,9 +166,9 @@ EM_STEPSIZE = 1.0
 
 dims = [10,10,10]
 
-tensor = CP(dims=dims,max_rank=max_rank,prior_type='log_uniform',em_stepsize=EM_STEPSIZE)
+tensor = Tucker(dims=dims,max_rank=max_rank,prior_type='log_uniform',em_stepsize=EM_STEPSIZE,learned_scale=False)
 
-true_tensor = CP(dims=dims,max_rank=true_rank,prior_type='log_uniform',em_stepsize=EM_STEPSIZE)
+true_tensor = Tucker(dims=dims,max_rank=true_rank,prior_type='log_uniform',em_stepsize=EM_STEPSIZE)
 
 
 #%%
@@ -235,7 +232,7 @@ for i in range(10000):
         print('Loss ',loss())
         print('RMSE ',mse())
         print('Rank ',tensor.estimate_rank())
-        print(tensor.rank_parameter)
+        print(tensor.rank_parameters)
 
 optimizer = DenseSparseAdam(tmp_params,lr=1e-4)
 
@@ -255,7 +252,7 @@ for i in range(10000):
         print('Loss ',loss())
         print('RMSE ',mse())
         print('Rank ',tensor.estimate_rank())
-        print(tensor.rank_parameter)
+        print(tensor.rank_parameters)
 
 #%%
 

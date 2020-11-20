@@ -1,0 +1,22 @@
+Namespace(activation_function='relu', arch_embedding_size='4-3-2', arch_interaction_itself=False, arch_interaction_op='dot', arch_mlp_bot='13-512-256-64-16', arch_mlp_top='512-256-1', arch_sparse_feature_size=16, data_generation='dataset', data_randomize='total', data_set='kaggle', data_size=1, data_sub_sample_rate=0.0, data_trace_enable_padding=False, data_trace_file='./input/dist_emb_j.log', debug_mode=False, enable_profiling=False, inference_only=False, kl_multiplier=0.0, learning_rate=0.005, load_model='', load_saved=0, loss_function='bce', loss_threshold=0.0, loss_weights='1.0-1.0', lr_decay_start_step=0, lr_num_decay_steps=0, lr_num_warmup_steps=0, max_ind_range=-1, md_flag=False, md_round_dims=False, md_temperature=0.3, md_threshold=200, memory_map=True, mini_batch_size=128, mlperf_acc_threshold=0.0, mlperf_auc_threshold=0.0, mlperf_bin_loader=False, mlperf_bin_shuffle=False, mlperf_logging=False, nepochs=1, no_kl_steps=0, num_batches=0, num_indices_per_lookup=10, num_indices_per_lookup_fixed=False, num_workers=0, numpy_rand_seed=123, optimizer='Adam', plot_compute_graph=False, print_freq=124, print_precision=5, print_time=True, processed_data_file='./input/kaggleAdDisplayChallenge_processed.npz', qr_collisions=4, qr_flag=False, qr_operation='mult', qr_threshold=200, raw_data_file='./input/train.txt', round_targets=True, save_model='saved_models/CP', save_onnx=False, sync_dense_params=True, tensor_type='CP', test_freq=248, test_mini_batch_size=-1, test_num_workers=16, use_gpu=0)
+Using CPU...
+Reading pre-processed data=./input/kaggleAdDisplayChallenge_processed.npz
+Sparse features= 26, Dense features= 13
+Reading pre-processed data=./input/kaggleAdDisplayChallenge_processed.npz
+Sparse features= 26, Dense features= 13
+Embedding 0 size 1460x16
+Embedding 1 size 583x16
+TT-Embedding 2 size 10131227x16
+False
+Traceback (most recent call last):
+  File "tensorized_dlrm_pytorch.py", line 807, in <module>
+    dlrm = DLRM_Net(
+  File "tensorized_dlrm_pytorch.py", line 304, in __init__
+    self.emb_l = self.create_emb(m_spa, ln_emb)
+  File "tensorized_dlrm_pytorch.py", line 226, in create_emb
+    EE = TensorizedEmbedding(
+  File "/home/cole/Github/dlrm-tt/torch_bayesian_tensor_layers/torch_bayesian_tensor_layers/layers.py", line 36, in __init__
+    for p in self.tensor.factor_scales:
+  File "/home/cole/anaconda3/envs/dlrm/lib/python3.8/site-packages/torch/nn/modules/module.py", line 771, in __getattr__
+    raise ModuleAttributeError("'{}' object has no attribute '{}'".format(
+torch.nn.modules.module.ModuleAttributeError: 'CP' object has no attribute 'factor_scales'
