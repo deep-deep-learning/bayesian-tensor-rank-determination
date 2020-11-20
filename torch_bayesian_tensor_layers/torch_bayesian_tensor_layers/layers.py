@@ -54,7 +54,7 @@ class TensorizedEmbedding(nn.Module):
 
         #x_ind = self.ind2sub(x)
 
-        full = self.tensor.sample_full()
+        full = self.tensor.get_full()
         full = torch.reshape(full,[self.voc_quant,self.emb_quant])
         rows = full[x]
 

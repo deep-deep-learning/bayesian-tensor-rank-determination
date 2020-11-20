@@ -94,7 +94,8 @@ from torch.optim.lr_scheduler import _LRScheduler
 import torch_bayesian_tensor_layers
 import torch_bayesian_tensor_layers.layers
 from torch_bayesian_tensor_layers.layers import TensorizedEmbedding 
-
+import os
+#os.environ['CUDA_VISIBLE_DEVICES']=''
 
 exc = getattr(builtins, "IOError", "FileNotFoundError")
 
