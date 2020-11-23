@@ -614,7 +614,7 @@ class Tucker(LowRankTensor):
         factor_scale_init = 1e-9
 
         factor_scales = (self.add_variable(
-            factor_scale_init * torch.ones(self.factors[0].shape),learned_scale=self.learned_scale), [
+            factor_scale_init * torch.ones(self.factors[0].shape),trainable=self.learned_scale), [
                 self.add_variable(factor_scale_init * torch.ones(factor.shape),trainable=self.learned_scale)
                 for factor in self.factors[1]
             ])
