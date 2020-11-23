@@ -104,9 +104,9 @@ def print_ranks(model):
     for layer in model.emb_l:
         if hasattr(layer,"tensor"):
             print('Tensor type ',layer.tensor.tensor_type)
-            print("Tensor layer rank 1e-3",layer.tensor.estimate_rank(1e-3))
-            print("Tensor layer rank 1e-5",layer.tensor.estimate_rank(1e-5))
-            print("Tensor layer rank 1e-7",layer.tensor.estimate_rank(1e-7))
+            print("Tensor layer rank 1e-6",layer.tensor.estimate_rank(1e-7))
+            print("Tensor layer rank 1e-8",layer.tensor.estimate_rank(1e-7))
+            print("Tensor layer rank 1e-10",layer.tensor.estimate_rank(1e-7))
 
 def get_kl_loss(model):
     

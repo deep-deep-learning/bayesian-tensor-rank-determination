@@ -240,17 +240,27 @@ import torch
 import random
 import numpy as np
 
-shapes = [100,100]
 
-n = 100
-r = 2*4
+def convert_to_tt(idx,dims):
+    out = []
+    rem = idx
+
+    for x in dims:
+        val,rem = divmod(rem,int(x)) 
+        out.append(val)
+    return out
+
+
+#%%
+n = 1000
+r = 2*2*4
 
 layer = t3.TTEmbedding(voc_size=n,emb_size=r,auto_shapes=True)
 
 for x in layer.tt_matrix.tt_cores:
     print(x.shape)
 
-batch_size = 1
+batch_size = 100
 
 x_list = [random.randint(0,n) for _ in range(batch_size)]
 
@@ -263,13 +273,49 @@ tt_matrix = layer.tt_matrix
 
 raw_shapes = tt_matrix.raw_shape
 
-full = layer.tt_matrix.full()
+full = layer.tt_matrix.full() 
 
 rows = full[x]
 
-tensorized_indices = t3.ind2sub(layer.voc_quant,x)
+idx = x
+
+"""
+x = 11
+y = 5
+print(divmod(x,y))
+a = torch.fmod(torch.tensor(x),torch.tensor(y))
+b = torch.tensor(x)//torch.tensor(y)
+print((b,a))
+"""
+
+def torch_divmod(x,y):
+    return torch.tensor(x)//torch.tensor(y),torch.fmod(torch.tensor(x),torch.tensor(y))
+#%%
+print(idx)
+dims = layer.shape[0]
+out = []
+rem = idx
+
+cum_prod = torch.tensor([100,10])
+
+for x in cum_prod:
+    val,rem = torch_divmod(rem,x) 
+    out.append(val)
+
+out.append(rem)
+out = torch.stack(out).T
+
+print(out)
+
+tensorized_indices = torch.tensor(out).view(batch_size,-1)
+
+torch.norm(full[idx]-t3.gather_rows(layer.tt_matrix,tensorized_indices).view(batch_size,-1))/torch.norm(full[idx])
+
+#%%
+tensorized_indices = t3.ind2sub(layer.voc_quant,idx)
 
 new_rows = t3.gather_rows(layer.tt_matrix,tensorized_indices)
-new_rows = new_rows.view(x.shape[0], -1)
+new_rows = new_rows.view(idx.shape[0], -1)
 
 torch.norm(rows-new_rows)/torch.norm(rows)
+# %%
