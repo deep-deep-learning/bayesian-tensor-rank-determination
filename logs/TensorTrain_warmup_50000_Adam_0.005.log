@@ -1,0 +1,75 @@
+run pytorch ...
+Namespace(activation_function='relu', arch_embedding_size='4-3-2', arch_interaction_itself=False, arch_interaction_op='dot', arch_mlp_bot='13-512-256-64-16', arch_mlp_top='512-256-1', arch_sparse_feature_size=16, data_generation='dataset', data_randomize='total', data_set='kaggle', data_size=1, data_sub_sample_rate=0.0, data_trace_enable_padding=False, data_trace_file='./input/dist_emb_j.log', debug_mode=False, enable_profiling=False, inference_only=False, kl_multiplier=1.0, learning_rate=0.005, load_model='', load_saved=0, loss_function='bce', loss_threshold=0.0, loss_weights='1.0-1.0', lr_decay_start_step=0, lr_num_decay_steps=0, lr_num_warmup_steps=0, max_ind_range=-1, md_flag=False, md_round_dims=False, md_temperature=0.3, md_threshold=200, memory_map=True, mini_batch_size=128, mlperf_acc_threshold=0.0, mlperf_auc_threshold=0.0, mlperf_bin_loader=False, mlperf_bin_shuffle=False, mlperf_logging=False, nepochs=1, no_kl_steps=50000, num_batches=0, num_indices_per_lookup=10, num_indices_per_lookup_fixed=False, num_workers=0, numpy_rand_seed=123, optimizer='Adam', plot_compute_graph=False, print_freq=1024, print_precision=5, print_time=True, processed_data_file='./input/kaggleAdDisplayChallenge_processed.npz', qr_collisions=4, qr_flag=False, qr_operation='mult', qr_threshold=200, raw_data_file='./input/train.txt', round_targets=True, save_model='saved_models/TensorTrain_warmup_50000_Adam_0.005', save_onnx=False, sync_dense_params=True, tensor_type='TensorTrain', test_freq=10240, test_mini_batch_size=-1, test_num_workers=16, use_gpu=1)
+Using 1 GPU(s)...
+Reading pre-processed data=./input/kaggleAdDisplayChallenge_processed.npz
+Sparse features= 26, Dense features= 13
+Reading pre-processed data=./input/kaggleAdDisplayChallenge_processed.npz
+Sparse features= 26, Dense features= 13
+Embedding 0 size 1460x16
+Embedding 1 size 583x16
+TT-Embedding 2 size 10131227x16
+False
+Embedding 3 size 2202608x16
+Embedding 4 size 305x16
+Embedding 5 size 24x16
+Embedding 6 size 12517x16
+Embedding 7 size 633x16
+Embedding 8 size 3x16
+Embedding 9 size 93145x16
+Embedding 10 size 5683x16
+Embedding 11 size 8351593x16
+Embedding 12 size 3194x16
+Embedding 13 size 27x16
+Embedding 14 size 14992x16
+Embedding 15 size 5461306x16
+Embedding 16 size 10x16
+Embedding 17 size 5652x16
+Embedding 18 size 2173x16
+Embedding 19 size 4x16
+Embedding 20 size 7046547x16
+Embedding 21 size 18x16
+Embedding 22 size 15x16
+Embedding 23 size 286181x16
+Embedding 24 size 105x16
+Embedding 25 size 142572x16
+time/loss/accuracy (if enabled):
+Traceback (most recent call last):
+  File "tensorized_dlrm_pytorch.py", line 1081, in <module>
+    E.backward()
+  File "/home/cole/anaconda3/envs/dlrm/lib/python3.8/site-packages/torch/tensor.py", line 185, in backward
+    torch.autograd.backward(self, gradient, retain_graph, create_graph)
+  File "/home/cole/anaconda3/envs/dlrm/lib/python3.8/site-packages/torch/autograd/__init__.py", line 125, in backward
+    Variable._execution_engine.run_backward(
+RuntimeError: CUDA out of memory. Tried to allocate 3.44 GiB (GPU 0; 11.78 GiB total capacity; 8.10 GiB already allocated; 2.61 GiB free; 8.11 GiB reserved in total by PyTorch)
+Exception raised from malloc at /opt/conda/conda-bld/pytorch_1595629395347/work/c10/cuda/CUDACachingAllocator.cpp:272 (most recent call first):
+frame #0: c10::Error::Error(c10::SourceLocation, std::string) + 0x4d (0x7ff9b9c1577d in /home/cole/anaconda3/envs/dlrm/lib/python3.8/site-packages/torch/lib/libc10.so)
+frame #1: <unknown function> + 0x20626 (0x7ff9b9e6d626 in /home/cole/anaconda3/envs/dlrm/lib/python3.8/site-packages/torch/lib/libc10_cuda.so)
+frame #2: <unknown function> + 0x214f4 (0x7ff9b9e6e4f4 in /home/cole/anaconda3/envs/dlrm/lib/python3.8/site-packages/torch/lib/libc10_cuda.so)
+frame #3: <unknown function> + 0x21b81 (0x7ff9b9e6eb81 in /home/cole/anaconda3/envs/dlrm/lib/python3.8/site-packages/torch/lib/libc10_cuda.so)
+frame #4: at::native::empty_cuda(c10::ArrayRef<long>, c10::TensorOptions const&, c10::optional<c10::MemoryFormat>) + 0x249 (0x7ff9bcd6fe39 in /home/cole/anaconda3/envs/dlrm/lib/python3.8/site-packages/torch/lib/libtorch_cuda.so)
+frame #5: <unknown function> + 0xd15c49 (0x7ff9bad90c49 in /home/cole/anaconda3/envs/dlrm/lib/python3.8/site-packages/torch/lib/libtorch_cuda.so)
+frame #6: <unknown function> + 0xd2fa77 (0x7ff9badaaa77 in /home/cole/anaconda3/envs/dlrm/lib/python3.8/site-packages/torch/lib/libtorch_cuda.so)
+frame #7: <unknown function> + 0xe450dd (0x7ff9f11b50dd in /home/cole/anaconda3/envs/dlrm/lib/python3.8/site-packages/torch/lib/libtorch_cpu.so)
+frame #8: <unknown function> + 0xe453f7 (0x7ff9f11b53f7 in /home/cole/anaconda3/envs/dlrm/lib/python3.8/site-packages/torch/lib/libtorch_cpu.so)
+frame #9: at::empty(c10::ArrayRef<long>, c10::TensorOptions const&, c10::optional<c10::MemoryFormat>) + 0xfa (0x7ff9f12bfe7a in /home/cole/anaconda3/envs/dlrm/lib/python3.8/site-packages/torch/lib/libtorch_cpu.so)
+frame #10: at::native::mm_cuda(at::Tensor const&, at::Tensor const&) + 0x6c (0x7ff9bc0c057c in /home/cole/anaconda3/envs/dlrm/lib/python3.8/site-packages/torch/lib/libtorch_cuda.so)
+frame #11: <unknown function> + 0xd04d20 (0x7ff9bad7fd20 in /home/cole/anaconda3/envs/dlrm/lib/python3.8/site-packages/torch/lib/libtorch_cuda.so)
+frame #12: <unknown function> + 0x7b1990 (0x7ff9f0b21990 in /home/cole/anaconda3/envs/dlrm/lib/python3.8/site-packages/torch/lib/libtorch_cpu.so)
+frame #13: at::Tensor c10::Dispatcher::call<at::Tensor, at::Tensor const&, at::Tensor const&>(c10::TypedOperatorHandle<at::Tensor (at::Tensor const&, at::Tensor const&)> const&, at::Tensor const&, at::Tensor const&) const + 0xbc (0x7ff9f1309c7c in /home/cole/anaconda3/envs/dlrm/lib/python3.8/site-packages/torch/lib/libtorch_cpu.so)
+frame #14: at::mm(at::Tensor const&, at::Tensor const&) + 0x4b (0x7ff9f125ab0b in /home/cole/anaconda3/envs/dlrm/lib/python3.8/site-packages/torch/lib/libtorch_cpu.so)
+frame #15: <unknown function> + 0x2c2be8f (0x7ff9f2f9be8f in /home/cole/anaconda3/envs/dlrm/lib/python3.8/site-packages/torch/lib/libtorch_cpu.so)
+frame #16: <unknown function> + 0x7b1990 (0x7ff9f0b21990 in /home/cole/anaconda3/envs/dlrm/lib/python3.8/site-packages/torch/lib/libtorch_cpu.so)
+frame #17: at::Tensor c10::Dispatcher::call<at::Tensor, at::Tensor const&, at::Tensor const&>(c10::TypedOperatorHandle<at::Tensor (at::Tensor const&, at::Tensor const&)> const&, at::Tensor const&, at::Tensor const&) const + 0xbc (0x7ff9f1309c7c in /home/cole/anaconda3/envs/dlrm/lib/python3.8/site-packages/torch/lib/libtorch_cpu.so)
+frame #18: at::Tensor::mm(at::Tensor const&) const + 0x4b (0x7ff9f13f010b in /home/cole/anaconda3/envs/dlrm/lib/python3.8/site-packages/torch/lib/libtorch_cpu.so)
+frame #19: <unknown function> + 0x2a6d094 (0x7ff9f2ddd094 in /home/cole/anaconda3/envs/dlrm/lib/python3.8/site-packages/torch/lib/libtorch_cpu.so)
+frame #20: torch::autograd::generated::MmBackward::apply(std::vector<at::Tensor, std::allocator<at::Tensor> >&&) + 0x294 (0x7ff9f2df8c74 in /home/cole/anaconda3/envs/dlrm/lib/python3.8/site-packages/torch/lib/libtorch_cpu.so)
+frame #21: <unknown function> + 0x30d1017 (0x7ff9f3441017 in /home/cole/anaconda3/envs/dlrm/lib/python3.8/site-packages/torch/lib/libtorch_cpu.so)
+frame #22: torch::autograd::Engine::evaluate_function(std::shared_ptr<torch::autograd::GraphTask>&, torch::autograd::Node*, torch::autograd::InputBuffer&, std::shared_ptr<torch::autograd::ReadyQueue> const&) + 0x1400 (0x7ff9f343c860 in /home/cole/anaconda3/envs/dlrm/lib/python3.8/site-packages/torch/lib/libtorch_cpu.so)
+frame #23: torch::autograd::Engine::thread_main(std::shared_ptr<torch::autograd::GraphTask> const&) + 0x451 (0x7ff9f343d401 in /home/cole/anaconda3/envs/dlrm/lib/python3.8/site-packages/torch/lib/libtorch_cpu.so)
+frame #24: torch::autograd::Engine::thread_init(int, std::shared_ptr<torch::autograd::ReadyQueue> const&, bool) + 0x89 (0x7ff9f3435579 in /home/cole/anaconda3/envs/dlrm/lib/python3.8/site-packages/torch/lib/libtorch_cpu.so)
+frame #25: torch::autograd::python::PythonEngine::thread_init(int, std::shared_ptr<torch::autograd::ReadyQueue> const&, bool) + 0x4a (0x7ff9f775f1ba in /home/cole/anaconda3/envs/dlrm/lib/python3.8/site-packages/torch/lib/libtorch_python.so)
+frame #26: <unknown function> + 0xc819d (0x7ff9fa25819d in /home/cole/anaconda3/envs/dlrm/lib/python3.8/site-packages/torch/lib/../../../.././libstdc++.so.6)
+frame #27: <unknown function> + 0x9609 (0x7ffa13c83609 in /lib/x86_64-linux-gnu/libpthread.so.0)
+frame #28: clone + 0x43 (0x7ffa13baa293 in /lib/x86_64-linux-gnu/libc.so.6)
+
+done
