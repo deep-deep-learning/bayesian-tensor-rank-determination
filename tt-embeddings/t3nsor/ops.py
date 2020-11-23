@@ -2,16 +2,16 @@ from t3nsor import TensorTrainBatch
 from t3nsor import TensorTrain
 import torch
 
-def gather_rows(tt_mat, inds):
+def gather_rows(cores, inds):
     """
     inds -- list of indices of shape batch_size x d
     d = len(tt_mat.raw_shape[1])
     """
-    cores = tt_mat.cores
+
     slices = []
     batch_size = int(inds.shape[0])
 
-    ranks = [int(cores.shape[0]) for cores in tt_mat.cores] + [1, ]
+    ranks = [int(core.shape[0]) for core in cores] + [1, ]
 
     for k, core in enumerate(cores):
         i = inds[:, k]
