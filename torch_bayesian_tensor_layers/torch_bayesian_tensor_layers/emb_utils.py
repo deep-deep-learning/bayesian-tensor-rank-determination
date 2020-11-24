@@ -1,9 +1,60 @@
 
-from torch_bayesian_tensor_layers.layers import TensorizedEmbedding
 import torch
 import numpy as np
 import tensorly as tl
 from functools import reduce
+
+def get_cum_prod(shape):
+    cum_prod = [1]
+    for x in reversed(shape[0][1:]):
+        cum_prod.append(x*cum_prod[-1])
+
+    cum_prod.reverse()
+    cum_prod.pop()
+    return cum_prod
+
+def tensorized_lookup(idx,factors,cum_prod,shape,tensor_type):
+
+    tensorized_indices = get_tensorized_index(idx,cum_prod) 
+
+    if tensor_type == 'TensorTrainMatrix':
+        gathered_rows = ttm_gather_rows(factors,tensorized_indices,shape)
+    elif tensor_type == 'TensorTrain':
+        gathered_rows = tt_gather_rows(factors,tensorized_indices,shape)
+    elif tensor_type =='CP':
+        gathered_rows = cp_gather_rows(factors,tensorized_indices,shape)
+    elif tensor_type == 'Tucker':
+        gathered_rows = tucker_gather_rows(factors,tensorized_indices,shape)
+
+    return gathered_rows
+
+def tucker_gather_rows(factors,tensorized_indices,shape):
+    full_factors = factors[1]
+    core = factors[0]
+
+    tmp_factors = []
+    for i,col in enumerate(tensorized_indices.unbind(1)):
+        tmp_factors.append(full_factors[i][col,:])
+
+    tmp_core = core
+
+    tmp_core = tl.tenalg.mode_dot(tmp_core,tmp_factors[0],0)
+
+    tmp_core = tmp_core.T
+
+    for factor in tmp_factors[1:]:
+        tmp_core = tmp_core*factor.T
+        tmp_core = tmp_core.sum(-2)
+
+    tmp_core = tmp_core.T
+    #tmp_core.shape
+
+    for i,factor in enumerate(factors[1][len(shape[0]):]):
+
+        tmp_core = tl.tenalg.mode_dot(tmp_core,factor,i-len(shape[1]))
+
+    gathered_rows = tmp_core.reshape(-1,np.prod(shape[1]))
+    return gathered_rows
 
 def cp_gather_rows(factors,tensorized_indices,shape):
 
@@ -64,7 +115,7 @@ def get_ttm_cum_prod(dims_0):
 
     return cum_prod
 
-def ttm_gather_rows(cores, inds):
+def ttm_gather_rows(cores, inds,shape):
     """
     inds -- list of indices of shape batch_size x d
     d = len(tt_mat.raw_shape[1])
@@ -92,7 +143,7 @@ def ttm_gather_rows(cores, inds):
             res = torch.einsum('oqb,bow->oqw', (res, curr_core))
     res = torch.einsum('i...i->...', res.view(batch_size, ranks[0], res.shape[1] // ranks[0], -1, ranks[0]).transpose(0, 1))
 
-    return res
+    return res.reshape(-1,np.prod(shape[1]))
 """
 def convert_to_tt(idx,dims):
     out = []
@@ -116,5 +167,6 @@ def get_tensorized_index(x,cum_prod):
     return out
 
 def torch_divmod(x,y):
-    return torch.tensor(x)//torch.tensor(y),torch.fmod(torch.tensor(x),torch.tensor(y))
+    
+    return x//y,torch.fmod(x,y)
 

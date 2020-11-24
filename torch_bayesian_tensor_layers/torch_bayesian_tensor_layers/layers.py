@@ -3,7 +3,7 @@ import numpy as np
 import torch.nn as nn
 from .low_rank_tensors import CP,TensorTrain,TensorTrainMatrix,Tucker
 from . import low_rank_tensors
-
+from .emb_utils import get_cum_prod,tensorized_lookup
 
 class TensorizedEmbedding(nn.Module):
     def __init__(self,
@@ -43,6 +43,10 @@ class TensorizedEmbedding(nn.Module):
         self.padding_idx = padding_idx
         self.naive = naive
 
+        self.cum_prod = get_cum_prod(shape)
+
+
+
     def forward(self, x):
 
         xshape = list(x.shape)
@@ -51,13 +55,18 @@ class TensorizedEmbedding(nn.Module):
 
         #x_ind = self.ind2sub(x)
 
-        full = self.tensor.get_full()
-        full = torch.reshape(full,[self.voc_quant,self.emb_quant])
-        rows = full[x]
+#        full = self.tensor.get_full()
+#        full = torch.reshape(full,[self.voc_quant,self.emb_quant])
+#        rows = full[x]
 
+        gathered_rows = tensorized_lookup(x,self.tensor.factors,self.cum_prod,self.shape,self.tensor_type)
 #        rows = gather_rows(self.tensor, x_ind)
-        
+        rows = gathered_rows
+
         rows = rows.view(x.shape[0], -1)
+        print("REL ERR *************************************")
+        print(torch.norm(gathered_rows-rows)/torch.norm(rows))
+        print("REL ERR *************************************")
         """         
         if self.naive:
             full = t3.naive_full(self.tt_matrix)

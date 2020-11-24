@@ -1,16 +1,18 @@
 #%%
 import torch_bayesian_tensor_layers
 import os
-os.environ['CUDA_VISIBLE_DEVICES']="1"
+os.environ['CUDA_VISIBLE_DEVICES']="0"
 import torch_bayesian_tensor_layers.low_rank_tensors
 import torch
 import torch_bayesian_tensor_layers.layers
+
+#%%
 from torch_bayesian_tensor_layers.layers import TensorizedEmbedding
 
 #%%
 
 
-shape = [[20,20,20],[4,4,4]] 
+shape = [[200,200,200],[4,4,2]] 
 
 prior_type = 'log_uniform'
 
@@ -20,9 +22,9 @@ max_rank = 10
 
 tensor_type = 'TensorTrainMatrix'
 
-emb = TensorizedEmbedding(shape=shape,tensor_type=tensor_type)
+emb = TensorizedEmbedding(shape=shape,tensor_type=tensor_type,max_rank=max_rank)
 
-print(torch.std(emb.tensor.sample_full()))
+#print(torch.std(emb.tensor.sample_full()))
 
 print(emb.tensor.target_stddev)
 
@@ -30,12 +32,16 @@ emb.to('cuda')
 
 emb.tensor.get_kl_divergence_to_prior()
 
+#%%
+
 import numpy as np
+import random
+n = np.prod(shape[0])
+batch_size = 1024
+x_list = [random.randint(0,n-1) for _ in range(batch_size)]
+input_values = torch.tensor(x_list)
 
-
-input_values = torch.tensor([1,2,3,4])
-
-rows = emb.forward(input_values)
+rows = emb.forward(input_values.view(-1,1))
 
 #%%
 
