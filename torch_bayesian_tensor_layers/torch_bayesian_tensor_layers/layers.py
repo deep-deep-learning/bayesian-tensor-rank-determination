@@ -32,7 +32,6 @@ class TensorizedEmbedding(nn.Module):
         self.tensor = getattr(low_rank_tensors,self.tensor_type)(tensor_shape,prior_type=prior_type,em_stepsize=em_stepsize,max_rank=max_rank,initialization_method='nn',target_stddev=target_stddev,learned_scale=False)
 
         self.parameters = self.tensor.parameters
-        print(self.tensor.learned_scale)
 
         self.batch_dim_last = batch_dim_last
         self.voc_size = int(np.prod(self.shape[0]))
