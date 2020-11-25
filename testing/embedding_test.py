@@ -20,7 +20,7 @@ max_rank = 10
 
 # %%
 
-tensor_type = 'TensorTrainMatrix'
+tensor_type = 'TensorTrain'
 
 emb = TensorizedEmbedding(shape=shape,tensor_type=tensor_type,max_rank=max_rank)
 
@@ -28,7 +28,7 @@ emb = TensorizedEmbedding(shape=shape,tensor_type=tensor_type,max_rank=max_rank)
 
 print(emb.tensor.target_stddev)
 
-emb.to('cuda')
+emb.to('cpu')
 
 emb.tensor.get_kl_divergence_to_prior()
 
@@ -41,6 +41,9 @@ batch_size = 1024
 x_list = [random.randint(0,n-1) for _ in range(batch_size)]
 input_values = torch.tensor(x_list)
 
+input_values = input_values.to('cuda')
+from torch_bayesian_tensor_layers.emb_utils import get_tensorized_index
+tensorized_indices = get_tensorized_index(input_values,emb.cum_prod) 
 rows = emb.forward(input_values.view(-1,1))
 
 #%%

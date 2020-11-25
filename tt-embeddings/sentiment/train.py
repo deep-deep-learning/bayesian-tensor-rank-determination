@@ -139,12 +139,23 @@ if args.embedding in ['CP']:
         )
 
         compression_rate = 10.0
-    
-elif args.embedding in ['TensorTrain','TensorTrainMatrix','Tucker']:
+     
+elif args.embedding in ['TensorTrainMatrix']:
         embed_model = torch_bayesian_tensor_layers.layers.TensorizedEmbedding(
             tensor_type=args.embedding,
-            shape = [[5,8,25,25],[16,16]],
-            max_rank=20,
+            shape = [[40,25,25],[4,4,16]],
+            max_rank=5,
+            padding_idx=1
+        )
+
+        compression_rate = 10.0
+
+
+elif args.embedding in ['TensorTrain','Tucker']:
+        embed_model = torch_bayesian_tensor_layers.layers.TensorizedEmbedding(
+            tensor_type=args.embedding,
+            shape = [[40,25,25],[16,16]],
+            max_rank=5,
             padding_idx=1
         )
 

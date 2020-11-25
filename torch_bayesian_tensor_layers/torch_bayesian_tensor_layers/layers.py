@@ -64,10 +64,11 @@ class TensorizedEmbedding(nn.Module):
         rows = gathered_rows
 
         rows = rows.view(x.shape[0], -1)
+        """
         print("REL ERR *************************************")
         print(torch.norm(gathered_rows-rows)/torch.norm(rows))
         print("REL ERR *************************************")
-        """         
+                 
         if self.naive:
             full = t3.naive_full(self.tt_matrix)
         else:

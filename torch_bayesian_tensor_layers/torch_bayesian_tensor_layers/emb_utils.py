@@ -4,6 +4,22 @@ import numpy as np
 import tensorly as tl
 from functools import reduce
 
+
+def get_tensorized_index(idx,cum_prod):
+    rem = idx
+    out = []
+    for x in cum_prod:
+        val,rem = torch_divmod(rem,x) 
+        out.append(val)
+
+    out.append(rem)
+    out = torch.stack(out).T
+    return out.to(idx.device)
+
+def torch_divmod(x,y):
+    
+    return x//y,torch.fmod(x,y)
+
 def get_cum_prod(shape):
     cum_prod = [1]
     for x in reversed(shape[0][1:]):
@@ -154,19 +170,3 @@ def convert_to_tt(idx,dims):
         out.append(val)
     return out
 """
-
-def get_tensorized_index(x,cum_prod):
-    rem = x
-    out = []
-    for x in cum_prod:
-        val,rem = torch_divmod(rem,x) 
-        out.append(val)
-
-    out.append(rem)
-    out = torch.stack(out).T
-    return out
-
-def torch_divmod(x,y):
-    
-    return x//y,torch.fmod(x,y)
-
