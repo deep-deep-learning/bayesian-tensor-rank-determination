@@ -7,19 +7,150 @@ Sparse features= 26, Dense features= 13
 Embedding 0 size 1460x16
 Embedding 1 size 583x16
 TT-Embedding 2 size 10131227x16
-Traceback (most recent call last):
-  File "tensorized_dlrm_pytorch.py", line 807, in <module>
-    dlrm = DLRM_Net(
-  File "tensorized_dlrm_pytorch.py", line 304, in __init__
-    self.emb_l = self.create_emb(m_spa, ln_emb)
-  File "tensorized_dlrm_pytorch.py", line 226, in create_emb
-    EE = TensorizedEmbedding(
-  File "/home/cole/dlrm-tt/torch_bayesian_tensor_layers/torch_bayesian_tensor_layers/layers.py", line 32, in __init__
-    self.tensor = getattr(low_rank_tensors,self.tensor_type)(tensor_shape,prior_type=prior_type,em_stepsize=em_stepsize,max_rank=max_rank,initialization_method='nn',target_stddev=target_stddev,learned_scale=False)
-  File "/home/cole/dlrm-tt/torch_bayesian_tensor_layers/torch_bayesian_tensor_layers/low_rank_tensors.py", line 522, in __init__
-    super().__init__(dims, **kwargs)
-  File "/home/cole/dlrm-tt/torch_bayesian_tensor_layers/torch_bayesian_tensor_layers/low_rank_tensors.py", line 33, in __init__
-    self._build_factor_distributions()
-  File "/home/cole/dlrm-tt/torch_bayesian_tensor_layers/torch_bayesian_tensor_layers/low_rank_tensors.py", line 616, in _build_factor_distributions
-    factor_scales = (self.add_variable(
-TypeError: add_variable() got an unexpected keyword argument 'learned_scale'
+Embedding 3 size 2202608x16
+Embedding 4 size 305x16
+Embedding 5 size 24x16
+Embedding 6 size 12517x16
+Embedding 7 size 633x16
+Embedding 8 size 3x16
+Embedding 9 size 93145x16
+Embedding 10 size 5683x16
+Embedding 11 size 8351593x16
+Embedding 12 size 3194x16
+Embedding 13 size 27x16
+Embedding 14 size 14992x16
+Embedding 15 size 5461306x16
+Embedding 16 size 10x16
+Embedding 17 size 5652x16
+Embedding 18 size 2173x16
+Embedding 19 size 4x16
+Embedding 20 size 7046547x16
+Embedding 21 size 18x16
+Embedding 22 size 15x16
+Embedding 23 size 286181x16
+Embedding 24 size 105x16
+Embedding 25 size 142572x16
+time/loss/accuracy (if enabled):
+Finished training it 1024/306969 of epoch 0, 35.34 ms/it, loss 0.493449, accuracy 76.926 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  1023
+Tensor type  tucker
+Tensor layer rank 1e-6 [21, 21, 21, 21]
+Tensor layer rank 1e-8 [21, 21, 21, 21]
+Tensor layer rank 1e-10 [21, 21, 21, 21]
+Finished training it 2048/306969 of epoch 0, 35.01 ms/it, loss 0.480758, accuracy 77.564 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  2047
+Tensor type  tucker
+Tensor layer rank 1e-6 [21, 21, 21, 21]
+Tensor layer rank 1e-8 [21, 21, 21, 21]
+Tensor layer rank 1e-10 [21, 21, 21, 21]
+Finished training it 3072/306969 of epoch 0, 34.28 ms/it, loss 0.478719, accuracy 77.692 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  3071
+Tensor type  tucker
+Tensor layer rank 1e-6 [21, 21, 21, 21]
+Tensor layer rank 1e-8 [21, 21, 21, 21]
+Tensor layer rank 1e-10 [21, 21, 21, 21]
+Finished training it 4096/306969 of epoch 0, 34.13 ms/it, loss 0.475124, accuracy 77.777 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  4095
+Tensor type  tucker
+Tensor layer rank 1e-6 [21, 21, 21, 21]
+Tensor layer rank 1e-8 [21, 21, 21, 21]
+Tensor layer rank 1e-10 [21, 21, 21, 21]
+Finished training it 5120/306969 of epoch 0, 34.08 ms/it, loss 0.470367, accuracy 78.097 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  5119
+Tensor type  tucker
+Tensor layer rank 1e-6 [21, 21, 21, 21]
+Tensor layer rank 1e-8 [21, 21, 21, 21]
+Tensor layer rank 1e-10 [21, 21, 21, 21]
+Finished training it 6144/306969 of epoch 0, 34.14 ms/it, loss 0.469261, accuracy 78.083 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  6143
+Tensor type  tucker
+Tensor layer rank 1e-6 [21, 21, 21, 21]
+Tensor layer rank 1e-8 [21, 21, 21, 21]
+Tensor layer rank 1e-10 [21, 21, 21, 21]
+Finished training it 7168/306969 of epoch 0, 34.09 ms/it, loss 0.466831, accuracy 78.275 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  7167
+Tensor type  tucker
+Tensor layer rank 1e-6 [21, 21, 21, 21]
+Tensor layer rank 1e-8 [21, 21, 21, 21]
+Tensor layer rank 1e-10 [21, 21, 21, 21]
+Finished training it 8192/306969 of epoch 0, 34.19 ms/it, loss 0.465613, accuracy 78.268 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  8191
+Tensor type  tucker
+Tensor layer rank 1e-6 [21, 21, 21, 21]
+Tensor layer rank 1e-8 [21, 21, 21, 21]
+Tensor layer rank 1e-10 [21, 21, 21, 21]
+Finished training it 9216/306969 of epoch 0, 34.06 ms/it, loss 0.467119, accuracy 78.278 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  9215
+Tensor type  tucker
+Tensor layer rank 1e-6 [21, 21, 21, 21]
+Tensor layer rank 1e-8 [21, 21, 21, 21]
+Tensor layer rank 1e-10 [21, 21, 21, 21]
+Finished training it 10240/306969 of epoch 0, 34.07 ms/it, loss 0.464795, accuracy 78.320 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  10239
+Tensor type  tucker
+Tensor layer rank 1e-6 [21, 21, 21, 21]
+Tensor layer rank 1e-8 [21, 21, 21, 21]
+Tensor layer rank 1e-10 [21, 21, 21, 21]
+Saving model to saved_models/Tucker_warmup_50000_Adam_0.005
+Testing at - 10240/306969 of epoch 0, loss 0.469596, accuracy 77.910 %, best 0.000 %
+Finished training it 11264/306969 of epoch 0, 44.13 ms/it, loss 0.463192, accuracy 78.455 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  11263
+Tensor type  tucker
+Tensor layer rank 1e-6 [21, 21, 21, 21]
+Tensor layer rank 1e-8 [21, 21, 21, 21]
+Tensor layer rank 1e-10 [21, 21, 21, 21]
+Finished training it 12288/306969 of epoch 0, 44.09 ms/it, loss 0.464588, accuracy 78.328 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  12287
+Tensor type  tucker
+Tensor layer rank 1e-6 [21, 21, 21, 21]
+Tensor layer rank 1e-8 [21, 21, 21, 21]
+Tensor layer rank 1e-10 [21, 21, 21, 21]
+Finished training it 13312/306969 of epoch 0, 44.07 ms/it, loss 0.462397, accuracy 78.467 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  13311
+Tensor type  tucker
+Tensor layer rank 1e-6 [21, 21, 21, 21]
+Tensor layer rank 1e-8 [21, 21, 21, 21]
+Tensor layer rank 1e-10 [21, 21, 21, 21]
+Finished training it 14336/306969 of epoch 0, 44.12 ms/it, loss 0.460162, accuracy 78.605 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  14335
+Tensor type  tucker
+Tensor layer rank 1e-6 [21, 21, 21, 21]
+Tensor layer rank 1e-8 [21, 21, 21, 21]
+Tensor layer rank 1e-10 [21, 21, 21, 21]
+Finished training it 15360/306969 of epoch 0, 43.92 ms/it, loss 0.466184, accuracy 78.493 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  15359
+Tensor type  tucker
+Tensor layer rank 1e-6 [21, 21, 21, 21]
+Tensor layer rank 1e-8 [21, 21, 21, 21]
+Tensor layer rank 1e-10 [21, 21, 21, 21]
+Finished training it 16384/306969 of epoch 0, 43.98 ms/it, loss 0.464281, accuracy 78.349 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  16383
+Tensor type  tucker
+Tensor layer rank 1e-6 [21, 21, 21, 21]
+Tensor layer rank 1e-8 [21, 21, 21, 21]
+Tensor layer rank 1e-10 [21, 21, 21, 21]
+Finished training it 17408/306969 of epoch 0, 44.27 ms/it, loss 0.461341, accuracy 78.557 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  17407
+Tensor type  tucker
+Tensor layer rank 1e-6 [21, 21, 21, 21]
+Tensor layer rank 1e-8 [21, 21, 21, 21]
+Tensor layer rank 1e-10 [21, 21, 21, 21]
+Finished training it 18432/306969 of epoch 0, 44.06 ms/it, loss 0.462131, accuracy 78.404 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  18431
+Tensor type  tucker
+Tensor layer rank 1e-6 [21, 21, 21, 21]
+Tensor layer rank 1e-8 [21, 21, 21, 21]
+Tensor layer rank 1e-10 [21, 21, 21, 21]
+Finished training it 19456/306969 of epoch 0, 44.01 ms/it, loss 0.461994, accuracy 78.400 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  19455
+Tensor type  tucker
+Tensor layer rank 1e-6 [21, 21, 21, 21]
+Tensor layer rank 1e-8 [21, 21, 21, 21]
+Tensor layer rank 1e-10 [21, 21, 21, 21]
+Finished training it 20480/306969 of epoch 0, 44.01 ms/it, loss 0.462931, accuracy 78.507 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  20479
+Tensor type  tucker
+Tensor layer rank 1e-6 [21, 21, 21, 21]
+Tensor layer rank 1e-8 [21, 21, 21, 21]
+Tensor layer rank 1e-10 [21, 21, 21, 21]
+Saving model to saved_models/Tucker_warmup_50000_Adam_0.005

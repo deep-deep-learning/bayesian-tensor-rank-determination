@@ -209,6 +209,9 @@ class DLRM_Net(nn.Module):
 
             shape0 = [[200,220,250],[125,130,136],[200,200,209],[166,175,188],[200,200,200]]
             shape1 = [2,2,4]
+            if args.tensor_type!='TensorTrainMatrix':
+                shape1=[16]
+
             max_ranks = {'CP':300,'TensorTrainMatrix':20,'TensorTrain':21,'Tucker':21}
             if i in tensorized_embedding_layers:
                 print('TT-Embedding %i size %ix%i' %(i,n,m))
