@@ -198,7 +198,7 @@ class DLRM_Net(nn.Module):
 
     def create_emb(self, m, ln):
 
-        tensorized_embedding_layers = [2]#,3,11,15,20]
+        tensorized_embedding_layers = [2,3,11,15,20]
 
         emb_l = nn.ModuleList()
         for i in range(0, ln.size):
@@ -208,13 +208,13 @@ class DLRM_Net(nn.Module):
             # construct embedding operator
 
             shape0 = [[200,220,250],[125,130,136],[200,200,209],[166,175,188],[200,200,200]]
-            shape1 = [2,2,4]
+            shape1 = [4,4,8]
             if args.tensor_type!='TensorTrainMatrix':
-                shape1=[16]
+                shape1=[4*4*8]
 
-            max_ranks = {'CP':300,'TensorTrainMatrix':20,'TensorTrain':21,'Tucker':21}
+            max_ranks = {'CP':[350,306,333,326,335],'TensorTrainMatrix':[16,16,16,16,16],'TensorTrain':[24,24,24,24,24],'Tucker':[22,20,22,21,22]}
             if i in tensorized_embedding_layers:
-                print('TT-Embedding %i size %ix%i' %(i,n,m))
+                print('Tensorized-Embedding %i size %ix%i' %(i,n,m))
                 """
                 EE = t3.TTEmbedding(
                         voc_size=n,
@@ -228,10 +228,10 @@ class DLRM_Net(nn.Module):
                 """
                 EE = TensorizedEmbedding(
                     tensor_type=args.tensor_type,
-                    max_rank=max_ranks[args.tensor_type],
+                    max_rank=max_ranks[args.tensor_type].pop(0),
                     shape = [shape0.pop(0),shape1]
                 )
-
+                
             else:
                 print('Embedding %i size %ix%i' %(i,n,m))
                 EE = nn.EmbeddingBag(n, m, mode="sum", sparse=True)
