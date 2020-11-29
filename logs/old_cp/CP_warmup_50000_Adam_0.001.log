@@ -1333,3 +1333,563 @@ Tensor layer rank 1e-6 163
 Tensor layer rank 1e-8 163
 Tensor layer rank 1e-10 163
 Saving model to saved_models/CP_warmup_50000_Adam_0.001
+Testing at - 215040/306969 of epoch 0, loss 0.458111, accuracy 78.647 %, best 0.000 %
+Finished training it 216064/306969 of epoch 0, 35.74 ms/it, loss 1414819.519775, accuracy 79.062 %
+KL loss  1417411.9 iteration kl_multiplier  0.54097646  iter  216063
+Tensor type  CP
+Tensor layer rank 1e-6 147
+Tensor layer rank 1e-8 147
+Tensor layer rank 1e-10 147
+Finished training it 217088/306969 of epoch 0, 34.04 ms/it, loss 1423619.411865, accuracy 79.179 %
+KL loss  1429001.5 iteration kl_multiplier  0.5443123  iter  217087
+Tensor type  CP
+Tensor layer rank 1e-6 150
+Tensor layer rank 1e-8 150
+Tensor layer rank 1e-10 150
+Finished training it 218112/306969 of epoch 0, 34.02 ms/it, loss 1432244.377563, accuracy 78.756 %
+KL loss  1435525.2 iteration kl_multiplier  0.54764813  iter  218111
+Tensor type  CP
+Tensor layer rank 1e-6 139
+Tensor layer rank 1e-8 139
+Tensor layer rank 1e-10 139
+Finished training it 219136/306969 of epoch 0, 33.94 ms/it, loss 1441145.078125, accuracy 79.086 %
+KL loss  1443454.0 iteration kl_multiplier  0.55098397  iter  219135
+Tensor type  CP
+Tensor layer rank 1e-6 146
+Tensor layer rank 1e-8 146
+Tensor layer rank 1e-10 146
+Finished training it 220160/306969 of epoch 0, 34.02 ms/it, loss 1449961.329834, accuracy 78.802 %
+KL loss  1453077.4 iteration kl_multiplier  0.5543198  iter  220159
+Tensor type  CP
+Tensor layer rank 1e-6 149
+Tensor layer rank 1e-8 149
+Tensor layer rank 1e-10 149
+Finished training it 221184/306969 of epoch 0, 34.06 ms/it, loss 1458687.293091, accuracy 79.230 %
+KL loss  1461124.6 iteration kl_multiplier  0.55765563  iter  221183
+Tensor type  CP
+Tensor layer rank 1e-6 154
+Tensor layer rank 1e-8 154
+Tensor layer rank 1e-10 154
+Finished training it 222208/306969 of epoch 0, 33.98 ms/it, loss 1467411.157349, accuracy 78.933 %
+KL loss  1470661.9 iteration kl_multiplier  0.5609915  iter  222207
+Tensor type  CP
+Tensor layer rank 1e-6 147
+Tensor layer rank 1e-8 147
+Tensor layer rank 1e-10 147
+Finished training it 223232/306969 of epoch 0, 34.06 ms/it, loss 1476334.609375, accuracy 79.195 %
+KL loss  1483169.0 iteration kl_multiplier  0.56432736  iter  223231
+Tensor type  CP
+Tensor layer rank 1e-6 161
+Tensor layer rank 1e-8 161
+Tensor layer rank 1e-10 161
+Finished training it 224256/306969 of epoch 0, 34.11 ms/it, loss 1484882.996948, accuracy 79.117 %
+KL loss  1489552.0 iteration kl_multiplier  0.5676632  iter  224255
+Tensor type  CP
+Tensor layer rank 1e-6 157
+Tensor layer rank 1e-8 157
+Tensor layer rank 1e-10 157
+Finished training it 225280/306969 of epoch 0, 33.91 ms/it, loss 1493464.196655, accuracy 79.086 %
+KL loss  1499279.0 iteration kl_multiplier  0.570999  iter  225279
+Tensor type  CP
+Tensor layer rank 1e-6 144
+Tensor layer rank 1e-8 144
+Tensor layer rank 1e-10 144
+Saving model to saved_models/CP_warmup_50000_Adam_0.001
+Testing at - 225280/306969 of epoch 0, loss 0.456803, accuracy 78.610 %, best 0.000 %
+Finished training it 226304/306969 of epoch 0, 33.84 ms/it, loss 1502286.686646, accuracy 79.115 %
+KL loss  1509345.1 iteration kl_multiplier  0.57433486  iter  226303
+Tensor type  CP
+Tensor layer rank 1e-6 167
+Tensor layer rank 1e-8 167
+Tensor layer rank 1e-10 167
+Finished training it 227328/306969 of epoch 0, 33.82 ms/it, loss 1510877.680908, accuracy 79.087 %
+KL loss  1516553.0 iteration kl_multiplier  0.5776707  iter  227327
+Tensor type  CP
+Tensor layer rank 1e-6 150
+Tensor layer rank 1e-8 150
+Tensor layer rank 1e-10 150
+Finished training it 228352/306969 of epoch 0, 33.83 ms/it, loss 1519981.918823, accuracy 78.877 %
+KL loss  1526511.6 iteration kl_multiplier  0.5810065  iter  228351
+Tensor type  CP
+Tensor layer rank 1e-6 153
+Tensor layer rank 1e-8 153
+Tensor layer rank 1e-10 153
+Finished training it 229376/306969 of epoch 0, 33.93 ms/it, loss 1528559.652832, accuracy 78.924 %
+KL loss  1531828.1 iteration kl_multiplier  0.5843424  iter  229375
+Tensor type  CP
+Tensor layer rank 1e-6 151
+Tensor layer rank 1e-8 151
+Tensor layer rank 1e-10 151
+Finished training it 230400/306969 of epoch 0, 33.92 ms/it, loss 1537372.334839, accuracy 79.070 %
+KL loss  1543759.4 iteration kl_multiplier  0.58767825  iter  230399
+Tensor type  CP
+Tensor layer rank 1e-6 154
+Tensor layer rank 1e-8 154
+Tensor layer rank 1e-10 154
+Finished training it 231424/306969 of epoch 0, 33.95 ms/it, loss 1546042.107422, accuracy 79.131 %
+KL loss  1548243.4 iteration kl_multiplier  0.5910141  iter  231423
+Tensor type  CP
+Tensor layer rank 1e-6 145
+Tensor layer rank 1e-8 145
+Tensor layer rank 1e-10 145
+Finished training it 232448/306969 of epoch 0, 33.84 ms/it, loss 1554647.436401, accuracy 79.257 %
+KL loss  1561478.2 iteration kl_multiplier  0.5943499  iter  232447
+Tensor type  CP
+Tensor layer rank 1e-6 161
+Tensor layer rank 1e-8 161
+Tensor layer rank 1e-10 161
+Finished training it 233472/306969 of epoch 0, 33.89 ms/it, loss 1563566.768799, accuracy 79.033 %
+KL loss  1567263.2 iteration kl_multiplier  0.59768575  iter  233471
+Tensor type  CP
+Tensor layer rank 1e-6 152
+Tensor layer rank 1e-8 152
+Tensor layer rank 1e-10 152
+Finished training it 234496/306969 of epoch 0, 33.90 ms/it, loss 1572279.406250, accuracy 79.307 %
+KL loss  1578466.5 iteration kl_multiplier  0.6010216  iter  234495
+Tensor type  CP
+Tensor layer rank 1e-6 165
+Tensor layer rank 1e-8 165
+Tensor layer rank 1e-10 165
+Finished training it 235520/306969 of epoch 0, 34.00 ms/it, loss 1581174.452515, accuracy 79.043 %
+KL loss  1584071.1 iteration kl_multiplier  0.6043574  iter  235519
+Tensor type  CP
+Tensor layer rank 1e-6 142
+Tensor layer rank 1e-8 142
+Tensor layer rank 1e-10 142
+Saving model to saved_models/CP_warmup_50000_Adam_0.001
+Testing at - 235520/306969 of epoch 0, loss 0.455447, accuracy 78.673 %, best 0.000 %
+Finished training it 236544/306969 of epoch 0, 35.79 ms/it, loss 1590060.290649, accuracy 78.874 %
+KL loss  1598293.9 iteration kl_multiplier  0.6076933  iter  236543
+Tensor type  CP
+Tensor layer rank 1e-6 161
+Tensor layer rank 1e-8 161
+Tensor layer rank 1e-10 161
+Finished training it 237568/306969 of epoch 0, 33.92 ms/it, loss 1598558.139038, accuracy 78.947 %
+KL loss  1605719.5 iteration kl_multiplier  0.61102915  iter  237567
+Tensor type  CP
+Tensor layer rank 1e-6 169
+Tensor layer rank 1e-8 169
+Tensor layer rank 1e-10 169
+Finished training it 238592/306969 of epoch 0, 33.90 ms/it, loss 1606721.419800, accuracy 79.019 %
+KL loss  1612413.1 iteration kl_multiplier  0.614365  iter  238591
+Tensor type  CP
+Tensor layer rank 1e-6 146
+Tensor layer rank 1e-8 146
+Tensor layer rank 1e-10 146
+Finished training it 239616/306969 of epoch 0, 33.87 ms/it, loss 1616115.592285, accuracy 79.042 %
+KL loss  1619916.2 iteration kl_multiplier  0.6177008  iter  239615
+Tensor type  CP
+Tensor layer rank 1e-6 146
+Tensor layer rank 1e-8 146
+Tensor layer rank 1e-10 146
+Finished training it 240640/306969 of epoch 0, 33.98 ms/it, loss 1624668.610229, accuracy 79.040 %
+KL loss  1631795.9 iteration kl_multiplier  0.62103665  iter  240639
+Tensor type  CP
+Tensor layer rank 1e-6 155
+Tensor layer rank 1e-8 155
+Tensor layer rank 1e-10 155
+Finished training it 241664/306969 of epoch 0, 33.98 ms/it, loss 1633555.119507, accuracy 78.976 %
+KL loss  1638274.4 iteration kl_multiplier  0.6243725  iter  241663
+Tensor type  CP
+Tensor layer rank 1e-6 153
+Tensor layer rank 1e-8 153
+Tensor layer rank 1e-10 153
+Finished training it 242688/306969 of epoch 0, 33.97 ms/it, loss 1642796.865967, accuracy 79.110 %
+KL loss  1643841.8 iteration kl_multiplier  0.6277083  iter  242687
+Tensor type  CP
+Tensor layer rank 1e-6 156
+Tensor layer rank 1e-8 156
+Tensor layer rank 1e-10 156
+Finished training it 243712/306969 of epoch 0, 35.82 ms/it, loss 1651064.157471, accuracy 79.195 %
+KL loss  1653881.5 iteration kl_multiplier  0.63104415  iter  243711
+Tensor type  CP
+Tensor layer rank 1e-6 145
+Tensor layer rank 1e-8 145
+Tensor layer rank 1e-10 145
+Finished training it 244736/306969 of epoch 0, 46.19 ms/it, loss 1660282.580322, accuracy 79.052 %
+KL loss  1664091.1 iteration kl_multiplier  0.63438004  iter  244735
+Tensor type  CP
+Tensor layer rank 1e-6 161
+Tensor layer rank 1e-8 161
+Tensor layer rank 1e-10 161
+Finished training it 245760/306969 of epoch 0, 46.80 ms/it, loss 1668444.112061, accuracy 79.084 %
+KL loss  1677543.0 iteration kl_multiplier  0.6377159  iter  245759
+Tensor type  CP
+Tensor layer rank 1e-6 162
+Tensor layer rank 1e-8 162
+Tensor layer rank 1e-10 162
+Saving model to saved_models/CP_warmup_50000_Adam_0.001
+Testing at - 245760/306969 of epoch 0, loss 0.456388, accuracy 78.690 %, best 0.000 %
+Finished training it 246784/306969 of epoch 0, 43.31 ms/it, loss 1677271.997437, accuracy 79.182 %
+KL loss  1683254.0 iteration kl_multiplier  0.6410517  iter  246783
+Tensor type  CP
+Tensor layer rank 1e-6 164
+Tensor layer rank 1e-8 164
+Tensor layer rank 1e-10 164
+Finished training it 247808/306969 of epoch 0, 36.43 ms/it, loss 1686405.269409, accuracy 79.119 %
+KL loss  1688381.2 iteration kl_multiplier  0.64438754  iter  247807
+Tensor type  CP
+Tensor layer rank 1e-6 147
+Tensor layer rank 1e-8 147
+Tensor layer rank 1e-10 147
+Finished training it 248832/306969 of epoch 0, 32.75 ms/it, loss 1695104.792114, accuracy 79.030 %
+KL loss  1700774.2 iteration kl_multiplier  0.6477234  iter  248831
+Tensor type  CP
+Tensor layer rank 1e-6 155
+Tensor layer rank 1e-8 155
+Tensor layer rank 1e-10 155
+Finished training it 249856/306969 of epoch 0, 32.80 ms/it, loss 1703817.542480, accuracy 79.005 %
+KL loss  1701535.4 iteration kl_multiplier  0.6510592  iter  249855
+Tensor type  CP
+Tensor layer rank 1e-6 151
+Tensor layer rank 1e-8 151
+Tensor layer rank 1e-10 151
+Finished training it 250880/306969 of epoch 0, 32.81 ms/it, loss 1712415.194946, accuracy 79.111 %
+KL loss  1719746.9 iteration kl_multiplier  0.65439504  iter  250879
+Tensor type  CP
+Tensor layer rank 1e-6 154
+Tensor layer rank 1e-8 154
+Tensor layer rank 1e-10 154
+Finished training it 251904/306969 of epoch 0, 32.74 ms/it, loss 1721229.353149, accuracy 79.187 %
+KL loss  1725748.0 iteration kl_multiplier  0.65773094  iter  251903
+Tensor type  CP
+Tensor layer rank 1e-6 154
+Tensor layer rank 1e-8 154
+Tensor layer rank 1e-10 154
+Finished training it 252928/306969 of epoch 0, 32.72 ms/it, loss 1729757.763916, accuracy 79.150 %
+KL loss  1735008.2 iteration kl_multiplier  0.6610668  iter  252927
+Tensor type  CP
+Tensor layer rank 1e-6 167
+Tensor layer rank 1e-8 167
+Tensor layer rank 1e-10 167
+Finished training it 253952/306969 of epoch 0, 32.78 ms/it, loss 1738477.230225, accuracy 79.082 %
+KL loss  1744644.1 iteration kl_multiplier  0.6644026  iter  253951
+Tensor type  CP
+Tensor layer rank 1e-6 155
+Tensor layer rank 1e-8 155
+Tensor layer rank 1e-10 155
+Finished training it 254976/306969 of epoch 0, 39.91 ms/it, loss 1747395.544922, accuracy 79.282 %
+KL loss  1747814.0 iteration kl_multiplier  0.66773844  iter  254975
+Tensor type  CP
+Tensor layer rank 1e-6 139
+Tensor layer rank 1e-8 139
+Tensor layer rank 1e-10 139
+Finished training it 256000/306969 of epoch 0, 40.87 ms/it, loss 1755816.345215, accuracy 79.055 %
+KL loss  1760627.8 iteration kl_multiplier  0.6710743  iter  255999
+Tensor type  CP
+Tensor layer rank 1e-6 149
+Tensor layer rank 1e-8 149
+Tensor layer rank 1e-10 149
+Saving model to saved_models/CP_warmup_50000_Adam_0.001
+Testing at - 256000/306969 of epoch 0, loss 0.459772, accuracy 78.596 %, best 0.000 %
+Finished training it 257024/306969 of epoch 0, 43.37 ms/it, loss 1764656.690796, accuracy 79.336 %
+KL loss  1771898.1 iteration kl_multiplier  0.6744101  iter  257023
+Tensor type  CP
+Tensor layer rank 1e-6 167
+Tensor layer rank 1e-8 167
+Tensor layer rank 1e-10 167
+Finished training it 258048/306969 of epoch 0, 43.25 ms/it, loss 1773247.058472, accuracy 79.289 %
+KL loss  1777577.0 iteration kl_multiplier  0.67774594  iter  258047
+Tensor type  CP
+Tensor layer rank 1e-6 157
+Tensor layer rank 1e-8 157
+Tensor layer rank 1e-10 157
+Finished training it 259072/306969 of epoch 0, 43.17 ms/it, loss 1782295.468384, accuracy 79.049 %
+KL loss  1791480.2 iteration kl_multiplier  0.68108183  iter  259071
+Tensor type  CP
+Tensor layer rank 1e-6 173
+Tensor layer rank 1e-8 173
+Tensor layer rank 1e-10 173
+Finished training it 260096/306969 of epoch 0, 43.31 ms/it, loss 1791057.453613, accuracy 79.201 %
+KL loss  1794522.2 iteration kl_multiplier  0.68441767  iter  260095
+Tensor type  CP
+Tensor layer rank 1e-6 150
+Tensor layer rank 1e-8 150
+Tensor layer rank 1e-10 150
+Finished training it 261120/306969 of epoch 0, 43.22 ms/it, loss 1799957.222900, accuracy 79.202 %
+KL loss  1803509.2 iteration kl_multiplier  0.6877535  iter  261119
+Tensor type  CP
+Tensor layer rank 1e-6 152
+Tensor layer rank 1e-8 152
+Tensor layer rank 1e-10 152
+Finished training it 262144/306969 of epoch 0, 43.31 ms/it, loss 1808947.957275, accuracy 79.127 %
+KL loss  1814115.9 iteration kl_multiplier  0.69108933  iter  262143
+Tensor type  CP
+Tensor layer rank 1e-6 146
+Tensor layer rank 1e-8 146
+Tensor layer rank 1e-10 146
+Finished training it 263168/306969 of epoch 0, 43.16 ms/it, loss 1817754.641479, accuracy 79.186 %
+KL loss  1823878.4 iteration kl_multiplier  0.69442517  iter  263167
+Tensor type  CP
+Tensor layer rank 1e-6 148
+Tensor layer rank 1e-8 148
+Tensor layer rank 1e-10 148
+Finished training it 264192/306969 of epoch 0, 43.18 ms/it, loss 1826449.292358, accuracy 79.015 %
+KL loss  1827361.6 iteration kl_multiplier  0.697761  iter  264191
+Tensor type  CP
+Tensor layer rank 1e-6 136
+Tensor layer rank 1e-8 136
+Tensor layer rank 1e-10 136
+Finished training it 265216/306969 of epoch 0, 43.28 ms/it, loss 1835233.614868, accuracy 79.136 %
+KL loss  1843365.0 iteration kl_multiplier  0.70109683  iter  265215
+Tensor type  CP
+Tensor layer rank 1e-6 164
+Tensor layer rank 1e-8 164
+Tensor layer rank 1e-10 164
+Finished training it 266240/306969 of epoch 0, 43.30 ms/it, loss 1843607.463745, accuracy 79.068 %
+KL loss  1846120.8 iteration kl_multiplier  0.70443267  iter  266239
+Tensor type  CP
+Tensor layer rank 1e-6 139
+Tensor layer rank 1e-8 139
+Tensor layer rank 1e-10 139
+Saving model to saved_models/CP_warmup_50000_Adam_0.001
+Testing at - 266240/306969 of epoch 0, loss 0.456162, accuracy 78.542 %, best 0.000 %
+Finished training it 267264/306969 of epoch 0, 39.96 ms/it, loss 1852028.508789, accuracy 78.936 %
+KL loss  1854834.0 iteration kl_multiplier  0.70776856  iter  267263
+Tensor type  CP
+Tensor layer rank 1e-6 159
+Tensor layer rank 1e-8 159
+Tensor layer rank 1e-10 159
+Finished training it 268288/306969 of epoch 0, 39.91 ms/it, loss 1861342.872559, accuracy 78.979 %
+KL loss  1864231.2 iteration kl_multiplier  0.7111044  iter  268287
+Tensor type  CP
+Tensor layer rank 1e-6 150
+Tensor layer rank 1e-8 150
+Tensor layer rank 1e-10 150
+Finished training it 269312/306969 of epoch 0, 39.84 ms/it, loss 1870145.446289, accuracy 79.151 %
+KL loss  1871987.8 iteration kl_multiplier  0.7144402  iter  269311
+Tensor type  CP
+Tensor layer rank 1e-6 147
+Tensor layer rank 1e-8 147
+Tensor layer rank 1e-10 147
+Finished training it 270336/306969 of epoch 0, 39.88 ms/it, loss 1878725.677368, accuracy 78.938 %
+KL loss  1880992.6 iteration kl_multiplier  0.71777606  iter  270335
+Tensor type  CP
+Tensor layer rank 1e-6 141
+Tensor layer rank 1e-8 141
+Tensor layer rank 1e-10 141
+Finished training it 271360/306969 of epoch 0, 39.94 ms/it, loss 1887577.270874, accuracy 79.002 %
+KL loss  1890531.2 iteration kl_multiplier  0.7211119  iter  271359
+Tensor type  CP
+Tensor layer rank 1e-6 147
+Tensor layer rank 1e-8 147
+Tensor layer rank 1e-10 147
+Finished training it 272384/306969 of epoch 0, 39.85 ms/it, loss 1895819.614868, accuracy 79.245 %
+KL loss  1900638.0 iteration kl_multiplier  0.7244477  iter  272383
+Tensor type  CP
+Tensor layer rank 1e-6 141
+Tensor layer rank 1e-8 141
+Tensor layer rank 1e-10 141
+Finished training it 273408/306969 of epoch 0, 39.83 ms/it, loss 1905169.454468, accuracy 79.270 %
+KL loss  1906517.2 iteration kl_multiplier  0.72778356  iter  273407
+Tensor type  CP
+Tensor layer rank 1e-6 145
+Tensor layer rank 1e-8 145
+Tensor layer rank 1e-10 145
+Finished training it 274432/306969 of epoch 0, 39.84 ms/it, loss 1913447.118896, accuracy 79.352 %
+KL loss  1920664.8 iteration kl_multiplier  0.73111945  iter  274431
+Tensor type  CP
+Tensor layer rank 1e-6 165
+Tensor layer rank 1e-8 165
+Tensor layer rank 1e-10 165
+Finished training it 275456/306969 of epoch 0, 39.87 ms/it, loss 1921955.812378, accuracy 79.298 %
+KL loss  1927326.0 iteration kl_multiplier  0.7344553  iter  275455
+Tensor type  CP
+Tensor layer rank 1e-6 153
+Tensor layer rank 1e-8 153
+Tensor layer rank 1e-10 153
+Finished training it 276480/306969 of epoch 0, 39.90 ms/it, loss 1931283.799683, accuracy 79.170 %
+KL loss  1934478.5 iteration kl_multiplier  0.7377911  iter  276479
+Tensor type  CP
+Tensor layer rank 1e-6 149
+Tensor layer rank 1e-8 149
+Tensor layer rank 1e-10 149
+Saving model to saved_models/CP_warmup_50000_Adam_0.001
+Testing at - 276480/306969 of epoch 0, loss 0.454640, accuracy 78.726 %, best 0.000 %
+Finished training it 277504/306969 of epoch 0, 43.01 ms/it, loss 1940152.883667, accuracy 78.988 %
+KL loss  1948591.5 iteration kl_multiplier  0.74112695  iter  277503
+Tensor type  CP
+Tensor layer rank 1e-6 168
+Tensor layer rank 1e-8 168
+Tensor layer rank 1e-10 168
+Finished training it 278528/306969 of epoch 0, 43.09 ms/it, loss 1948850.951782, accuracy 79.004 %
+KL loss  1951762.1 iteration kl_multiplier  0.7444628  iter  278527
+Tensor type  CP
+Tensor layer rank 1e-6 156
+Tensor layer rank 1e-8 156
+Tensor layer rank 1e-10 156
+Finished training it 279552/306969 of epoch 0, 43.03 ms/it, loss 1957166.488770, accuracy 78.960 %
+KL loss  1968305.8 iteration kl_multiplier  0.7477986  iter  279551
+Tensor type  CP
+Tensor layer rank 1e-6 158
+Tensor layer rank 1e-8 158
+Tensor layer rank 1e-10 158
+Finished training it 280576/306969 of epoch 0, 42.87 ms/it, loss 1966249.582642, accuracy 79.200 %
+KL loss  1966379.2 iteration kl_multiplier  0.75113446  iter  280575
+Tensor type  CP
+Tensor layer rank 1e-6 148
+Tensor layer rank 1e-8 148
+Tensor layer rank 1e-10 148
+Finished training it 281600/306969 of epoch 0, 42.87 ms/it, loss 1974824.687988, accuracy 79.207 %
+KL loss  1982507.0 iteration kl_multiplier  0.75447035  iter  281599
+Tensor type  CP
+Tensor layer rank 1e-6 172
+Tensor layer rank 1e-8 172
+Tensor layer rank 1e-10 172
+Finished training it 282624/306969 of epoch 0, 42.93 ms/it, loss 1983801.374634, accuracy 78.829 %
+KL loss  1986484.8 iteration kl_multiplier  0.7578062  iter  282623
+Tensor type  CP
+Tensor layer rank 1e-6 145
+Tensor layer rank 1e-8 145
+Tensor layer rank 1e-10 145
+Finished training it 283648/306969 of epoch 0, 42.94 ms/it, loss 1992343.538452, accuracy 78.919 %
+KL loss  1998631.0 iteration kl_multiplier  0.761142  iter  283647
+Tensor type  CP
+Tensor layer rank 1e-6 159
+Tensor layer rank 1e-8 159
+Tensor layer rank 1e-10 159
+Finished training it 284672/306969 of epoch 0, 43.02 ms/it, loss 2001148.132202, accuracy 79.269 %
+KL loss  2002054.0 iteration kl_multiplier  0.76447785  iter  284671
+Tensor type  CP
+Tensor layer rank 1e-6 147
+Tensor layer rank 1e-8 147
+Tensor layer rank 1e-10 147
+Finished training it 285696/306969 of epoch 0, 42.96 ms/it, loss 2010001.713745, accuracy 79.050 %
+KL loss  2013649.9 iteration kl_multiplier  0.7678137  iter  285695
+Tensor type  CP
+Tensor layer rank 1e-6 147
+Tensor layer rank 1e-8 147
+Tensor layer rank 1e-10 147
+Finished training it 286720/306969 of epoch 0, 43.04 ms/it, loss 2018388.421143, accuracy 79.324 %
+KL loss  2024066.4 iteration kl_multiplier  0.7711495  iter  286719
+Tensor type  CP
+Tensor layer rank 1e-6 146
+Tensor layer rank 1e-8 146
+Tensor layer rank 1e-10 146
+Saving model to saved_models/CP_warmup_50000_Adam_0.001
+Testing at - 286720/306969 of epoch 0, loss 0.457726, accuracy 78.382 %, best 0.000 %
+Finished training it 287744/306969 of epoch 0, 47.84 ms/it, loss 2026719.802124, accuracy 79.121 %
+KL loss  2027489.0 iteration kl_multiplier  0.77448535  iter  287743
+Tensor type  CP
+Tensor layer rank 1e-6 150
+Tensor layer rank 1e-8 150
+Tensor layer rank 1e-10 150
+Finished training it 288768/306969 of epoch 0, 47.82 ms/it, loss 2036158.361328, accuracy 79.024 %
+KL loss  2044945.5 iteration kl_multiplier  0.77782124  iter  288767
+Tensor type  CP
+Tensor layer rank 1e-6 165
+Tensor layer rank 1e-8 165
+Tensor layer rank 1e-10 165
+Finished training it 289792/306969 of epoch 0, 44.65 ms/it, loss 2044917.361206, accuracy 79.108 %
+KL loss  2050297.8 iteration kl_multiplier  0.7811571  iter  289791
+Tensor type  CP
+Tensor layer rank 1e-6 156
+Tensor layer rank 1e-8 156
+Tensor layer rank 1e-10 156
+Finished training it 290816/306969 of epoch 0, 44.57 ms/it, loss 2053532.428345, accuracy 79.257 %
+KL loss  2054559.6 iteration kl_multiplier  0.7844929  iter  290815
+Tensor type  CP
+Tensor layer rank 1e-6 142
+Tensor layer rank 1e-8 142
+Tensor layer rank 1e-10 142
+Finished training it 291840/306969 of epoch 0, 44.45 ms/it, loss 2062612.356934, accuracy 78.956 %
+KL loss  2064283.2 iteration kl_multiplier  0.78782874  iter  291839
+Tensor type  CP
+Tensor layer rank 1e-6 138
+Tensor layer rank 1e-8 138
+Tensor layer rank 1e-10 138
+Finished training it 292864/306969 of epoch 0, 44.56 ms/it, loss 2071093.920898, accuracy 79.112 %
+KL loss  2081960.9 iteration kl_multiplier  0.7911646  iter  292863
+Tensor type  CP
+Tensor layer rank 1e-6 165
+Tensor layer rank 1e-8 165
+Tensor layer rank 1e-10 165
+Finished training it 293888/306969 of epoch 0, 44.51 ms/it, loss 2079889.221436, accuracy 79.108 %
+KL loss  2081076.5 iteration kl_multiplier  0.7945004  iter  293887
+Tensor type  CP
+Tensor layer rank 1e-6 147
+Tensor layer rank 1e-8 147
+Tensor layer rank 1e-10 147
+Finished training it 294912/306969 of epoch 0, 44.45 ms/it, loss 2088636.068359, accuracy 79.138 %
+KL loss  2094329.4 iteration kl_multiplier  0.79783624  iter  294911
+Tensor type  CP
+Tensor layer rank 1e-6 155
+Tensor layer rank 1e-8 155
+Tensor layer rank 1e-10 155
+Finished training it 295936/306969 of epoch 0, 44.53 ms/it, loss 2097281.747314, accuracy 79.100 %
+KL loss  2102124.0 iteration kl_multiplier  0.8011721  iter  295935
+Tensor type  CP
+Tensor layer rank 1e-6 164
+Tensor layer rank 1e-8 164
+Tensor layer rank 1e-10 164
+Finished training it 296960/306969 of epoch 0, 44.53 ms/it, loss 2106064.462280, accuracy 79.351 %
+KL loss  2115274.2 iteration kl_multiplier  0.804508  iter  296959
+Tensor type  CP
+Tensor layer rank 1e-6 165
+Tensor layer rank 1e-8 165
+Tensor layer rank 1e-10 165
+Saving model to saved_models/CP_warmup_50000_Adam_0.001
+Testing at - 296960/306969 of epoch 0, loss 0.460200, accuracy 78.697 %, best 0.000 %
+Finished training it 297984/306969 of epoch 0, 33.93 ms/it, loss 2114065.605225, accuracy 78.882 %
+KL loss  2115637.0 iteration kl_multiplier  0.8078438  iter  297983
+Tensor type  CP
+Tensor layer rank 1e-6 148
+Tensor layer rank 1e-8 148
+Tensor layer rank 1e-10 148
+Finished training it 299008/306969 of epoch 0, 33.86 ms/it, loss 2123778.916992, accuracy 79.073 %
+KL loss  2127298.0 iteration kl_multiplier  0.81117964  iter  299007
+Tensor type  CP
+Tensor layer rank 1e-6 155
+Tensor layer rank 1e-8 155
+Tensor layer rank 1e-10 155
+Finished training it 300032/306969 of epoch 0, 33.76 ms/it, loss 2132160.555908, accuracy 79.057 %
+KL loss  2132667.5 iteration kl_multiplier  0.8145155  iter  300031
+Tensor type  CP
+Tensor layer rank 1e-6 147
+Tensor layer rank 1e-8 147
+Tensor layer rank 1e-10 147
+Finished training it 301056/306969 of epoch 0, 33.85 ms/it, loss 2141548.180664, accuracy 79.005 %
+KL loss  2151586.8 iteration kl_multiplier  0.8178513  iter  301055
+Tensor type  CP
+Tensor layer rank 1e-6 172
+Tensor layer rank 1e-8 172
+Tensor layer rank 1e-10 172
+Finished training it 302080/306969 of epoch 0, 33.89 ms/it, loss 2150083.989502, accuracy 79.304 %
+KL loss  2155292.8 iteration kl_multiplier  0.82118714  iter  302079
+Tensor type  CP
+Tensor layer rank 1e-6 154
+Tensor layer rank 1e-8 154
+Tensor layer rank 1e-10 154
+Finished training it 303104/306969 of epoch 0, 33.94 ms/it, loss 2158993.442627, accuracy 79.206 %
+KL loss  2162112.0 iteration kl_multiplier  0.824523  iter  303103
+Tensor type  CP
+Tensor layer rank 1e-6 154
+Tensor layer rank 1e-8 154
+Tensor layer rank 1e-10 154
+Finished training it 304128/306969 of epoch 0, 33.93 ms/it, loss 2167559.792480, accuracy 79.030 %
+KL loss  2172015.2 iteration kl_multiplier  0.82785887  iter  304127
+Tensor type  CP
+Tensor layer rank 1e-6 157
+Tensor layer rank 1e-8 157
+Tensor layer rank 1e-10 157
+Finished training it 305152/306969 of epoch 0, 34.05 ms/it, loss 2176130.948975, accuracy 79.098 %
+KL loss  2183281.8 iteration kl_multiplier  0.8311947  iter  305151
+Tensor type  CP
+Tensor layer rank 1e-6 149
+Tensor layer rank 1e-8 149
+Tensor layer rank 1e-10 149
+Finished training it 306176/306969 of epoch 0, 33.93 ms/it, loss 2185413.298096, accuracy 79.087 %
+KL loss  2193230.0 iteration kl_multiplier  0.83453053  iter  306175
+Tensor type  CP
+Tensor layer rank 1e-6 161
+Tensor layer rank 1e-8 161
+Tensor layer rank 1e-10 161
+Finished training it 306969/306969 of epoch 0, 33.79 ms/it, loss 2192347.106399, accuracy 79.193 %
+KL loss  2189350.5 iteration kl_multiplier  0.83711386  iter  306968
+Tensor type  CP
+Tensor layer rank 1e-6 138
+Tensor layer rank 1e-8 138
+Tensor layer rank 1e-10 138
+Saving model to saved_models/CP_warmup_50000_Adam_0.001
+Testing at - 306969/306969 of epoch 0, loss 0.454085, accuracy 78.725 %, best 0.000 %
+done

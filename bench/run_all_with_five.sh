@@ -1,7 +1,7 @@
 #!/bin/bash
-for tensor_type in  "TensorTrainMatrix" "Tucker"
+for tensor_type in "CP" "TensorTrain" "TensorTrainMatrix" "Tucker"
 do for optimizer in "Adam"
-do for no_kl_steps in 50000 500000;
+do for no_kl_steps in 50000;
 do for lr in 0.005;
 do
 	name="${tensor_type}_warmup_${no_kl_steps}_${optimizer}_${lr}"
