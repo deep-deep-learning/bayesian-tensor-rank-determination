@@ -15,7 +15,6 @@
 #    ii) Criteo Terabyte Dataset
 #    https://labs.criteo.com/2013/12/download-terabyte-click-logs
 
-
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 # others
@@ -28,7 +27,6 @@ import data_utils
 # numpy
 import numpy as np
 from numpy import random as ra
-
 
 # pytorch
 import torch
@@ -45,18 +43,15 @@ import data_loader_terabyte
 #            "total": randomizes total dataset
 # split (bool) : to split into train, test, validation data-sets
 class CriteoDataset(Dataset):
-
-    def __init__(
-            self,
-            dataset,
-            max_ind_range,
-            sub_sample_rate,
-            randomize,
-            split="train",
-            raw_path="",
-            pro_data="",
-            memory_map=False
-    ):
+    def __init__(self,
+                 dataset,
+                 max_ind_range,
+                 sub_sample_rate,
+                 randomize,
+                 split="train",
+                 raw_path="",
+                 pro_data="",
+                 memory_map=False):
         # dataset
         # tar_fea = 1   # single target
         den_fea = 13  # 13 dense  features
@@ -70,20 +65,19 @@ class CriteoDataset(Dataset):
             days = 24
             out_file = "terabyte_processed"
         else:
-            raise(ValueError("Data set option is not supported"))
+            raise (ValueError("Data set option is not supported"))
         self.max_ind_range = max_ind_range
         self.memory_map = memory_map
 
         # split the datafile into path and filename
         lstr = raw_path.split("/")
         self.d_path = "/".join(lstr[0:-1]) + "/"
-        self.d_file = lstr[-1].split(".")[0] if dataset == "kaggle" else lstr[-1]
+        self.d_file = lstr[-1].split(
+            ".")[0] if dataset == "kaggle" else lstr[-1]
         self.npzfile = self.d_path + (
-            (self.d_file + "_day") if dataset == "kaggle" else self.d_file
-        )
+            (self.d_file + "_day") if dataset == "kaggle" else self.d_file)
         self.trafile = self.d_path + (
-            (self.d_file + "_fea") if dataset == "kaggle" else "fea"
-        )
+            (self.d_file + "_fea") if dataset == "kaggle" else "fea")
 
         # check if pre-processed data is available
         data_ready = True
@@ -103,17 +97,10 @@ class CriteoDataset(Dataset):
             file = str(pro_data)
         else:
             print("Reading raw data=%s" % (str(raw_path)))
-            file = data_utils.getCriteoAdData(
-                raw_path,
-                out_file,
-                max_ind_range,
-                sub_sample_rate,
-                days,
-                split,
-                randomize,
-                dataset == "kaggle",
-                memory_map
-            )
+            file = data_utils.getCriteoAdData(raw_path, out_file,
+                                              max_ind_range, sub_sample_rate,
+                                              days, split, randomize,
+                                              dataset == "kaggle", memory_map)
 
         # get a number of samples per day
         total_file = self.d_path + self.d_file + "_day_count.npz"
@@ -139,8 +126,8 @@ class CriteoDataset(Dataset):
                 self.test_size = int(np.ceil(num_samples / 2.))
                 self.val_size = num_samples - self.test_size
             else:
-                sys.exit("ERROR: dataset split is neither none, nor train or test.")
-
+                sys.exit(
+                    "ERROR: dataset split is neither none, nor train or test.")
             '''
             # text
             print("text")
@@ -181,26 +168,25 @@ class CriteoDataset(Dataset):
                 self.counts = data["counts"]
             self.m_den = den_fea  # X_int.shape[1]
             self.n_emb = len(self.counts)
-            print("Sparse features= %d, Dense features= %d" % (self.n_emb, self.m_den))
+            print("Sparse features= %d, Dense features= %d" %
+                  (self.n_emb, self.m_den))
 
             # Load the test data
             # Only a single day is used for testing
             if self.split == 'test' or self.split == 'val':
                 # only a single day is used for testing
-                fi = self.npzfile + "_{0}_reordered.npz".format(
-                    self.day
-                )
+                fi = self.npzfile + "_{0}_reordered.npz".format(self.day)
                 with np.load(fi) as data:
                     self.X_int = data["X_int"]  # continuous  feature
                     self.X_cat = data["X_cat"]  # categorical feature
-                    self.y = data["y"]          # target
+                    self.y = data["y"]  # target
 
         else:
             # load and preprocess data
             with np.load(file) as data:
                 X_int = data["X_int"]  # continuous  feature
                 X_cat = data["X_cat"]  # categorical feature
-                y = data["y"]          # target
+                y = data["y"]  # target
                 self.counts = data["counts"]
             self.m_den = X_int.shape[1]  # den_fea
             self.n_emb = len(self.counts)
@@ -259,9 +245,8 @@ class CriteoDataset(Dataset):
 
         if isinstance(index, slice):
             return [
-                self[idx] for idx in range(
-                    index.start or 0, index.stop or len(self), index.step or 1
-                )
+                self[idx] for idx in range(index.start or 0, index.stop
+                                           or len(self), index.step or 1)
             ]
 
         if self.memory_map:
@@ -270,14 +255,12 @@ class CriteoDataset(Dataset):
                 if index == self.offset_per_file[self.day]:
                     # print("day_boundary switch", index)
                     self.day_boundary = self.offset_per_file[self.day]
-                    fi = self.npzfile + "_{0}_reordered.npz".format(
-                        self.day
-                    )
+                    fi = self.npzfile + "_{0}_reordered.npz".format(self.day)
                     # print('Loading file: ', fi)
                     with np.load(fi) as data:
                         self.X_int = data["X_int"]  # continuous  feature
                         self.X_cat = data["X_cat"]  # categorical feature
-                        self.y = data["y"]          # target
+                        self.y = data["y"]  # target
                     self.day = (self.day + 1) % self.max_day_range
 
                 i = index - self.day_boundary
@@ -285,7 +268,8 @@ class CriteoDataset(Dataset):
                 # only a single day is used for testing
                 i = index + (0 if self.split == 'test' else self.test_size)
             else:
-                sys.exit("ERROR: dataset split is neither none, nor train or test.")
+                sys.exit(
+                    "ERROR: dataset split is neither none, nor train or test.")
         else:
             i = index
 
@@ -315,7 +299,9 @@ class CriteoDataset(Dataset):
             elif self.split == 'val':
                 return self.val_size
             else:
-                sys.exit("ERROR: dataset split is neither none, nor train nor test.")
+                sys.exit(
+                    "ERROR: dataset split is neither none, nor train nor test."
+                )
         else:
             return len(self.y)
 
@@ -337,34 +323,23 @@ def collate_wrapper_criteo(list_of_tuples):
 
 
 def ensure_dataset_preprocessed(args, d_path):
-    _ = CriteoDataset(
-        args.data_set,
-        args.max_ind_range,
-        args.data_sub_sample_rate,
-        args.data_randomize,
-        "train",
-        args.raw_data_file,
-        args.processed_data_file,
-        args.memory_map
-    )
+    _ = CriteoDataset(args.data_set, args.max_ind_range,
+                      args.data_sub_sample_rate, args.data_randomize, "train",
+                      args.raw_data_file, args.processed_data_file,
+                      args.memory_map)
 
-    _ = CriteoDataset(
-        args.data_set,
-        args.max_ind_range,
-        args.data_sub_sample_rate,
-        args.data_randomize,
-        "test",
-        args.raw_data_file,
-        args.processed_data_file,
-        args.memory_map
-    )
+    _ = CriteoDataset(args.data_set, args.max_ind_range,
+                      args.data_sub_sample_rate, args.data_randomize, "test",
+                      args.raw_data_file, args.processed_data_file,
+                      args.memory_map)
 
     for split in ['train', 'val', 'test']:
         print('Running preprocessing for split =', split)
 
-        train_files = ['{}_{}_reordered.npz'.format(args.raw_data_file, day)
-                       for
-                       day in range(0, 23)]
+        train_files = [
+            '{}_{}_reordered.npz'.format(args.raw_data_file, day)
+            for day in range(0, 23)
+        ]
 
         test_valid_file = args.raw_data_file + '_23_reordered.npz'
 
@@ -390,17 +365,15 @@ def make_criteo_data_and_loaders(args):
             # val_file = d_path + "_val.bin"
             counts_file = args.raw_data_file + '_fea_count.npz'
 
-            if any(not path.exists(p) for p in [train_file,
-                                                test_file,
-                                                counts_file]):
+            if any(not path.exists(p)
+                   for p in [train_file, test_file, counts_file]):
                 ensure_dataset_preprocessed(args, d_path)
 
             train_data = data_loader_terabyte.CriteoBinDataset(
                 data_file=train_file,
                 counts_file=counts_file,
                 batch_size=args.mini_batch_size,
-                max_ind_range=args.max_ind_range
-            )
+                max_ind_range=args.max_ind_range)
 
             train_loader = torch.utils.data.DataLoader(
                 train_data,
@@ -411,15 +384,14 @@ def make_criteo_data_and_loaders(args):
                 collate_fn=None,
                 pin_memory=False,
                 drop_last=False,
-                sampler=RandomSampler(train_data) if args.mlperf_bin_shuffle else None
-            )
+                sampler=RandomSampler(train_data)
+                if args.mlperf_bin_shuffle else None)
 
             test_data = data_loader_terabyte.CriteoBinDataset(
                 data_file=test_file,
                 counts_file=counts_file,
                 batch_size=args.test_mini_batch_size,
-                max_ind_range=args.max_ind_range
-            )
+                max_ind_range=args.max_ind_range)
 
             test_loader = torch.utils.data.DataLoader(
                 test_data,
@@ -434,27 +406,19 @@ def make_criteo_data_and_loaders(args):
         else:
             data_filename = args.raw_data_file.split("/")[-1]
 
-            train_data = CriteoDataset(
-                args.data_set,
-                args.max_ind_range,
-                args.data_sub_sample_rate,
-                args.data_randomize,
-                "train",
-                args.raw_data_file,
-                args.processed_data_file,
-                args.memory_map
-            )
+            train_data = CriteoDataset(args.data_set, args.max_ind_range,
+                                       args.data_sub_sample_rate,
+                                       args.data_randomize, "train",
+                                       args.raw_data_file,
+                                       args.processed_data_file,
+                                       args.memory_map)
 
-            test_data = CriteoDataset(
-                args.data_set,
-                args.max_ind_range,
-                args.data_sub_sample_rate,
-                args.data_randomize,
-                "test",
-                args.raw_data_file,
-                args.processed_data_file,
-                args.memory_map
-            )
+            test_data = CriteoDataset(args.data_set, args.max_ind_range,
+                                      args.data_sub_sample_rate,
+                                      args.data_randomize, "test",
+                                      args.raw_data_file,
+                                      args.processed_data_file,
+                                      args.memory_map)
 
             train_loader = data_loader_terabyte.DataLoader(
                 data_directory=data_directory,
@@ -462,8 +426,7 @@ def make_criteo_data_and_loaders(args):
                 days=list(range(23)),
                 batch_size=args.mini_batch_size,
                 max_ind_range=args.max_ind_range,
-                split="train"
-            )
+                split="train")
 
             test_loader = data_loader_terabyte.DataLoader(
                 data_directory=data_directory,
@@ -471,30 +434,19 @@ def make_criteo_data_and_loaders(args):
                 days=[23],
                 batch_size=args.test_mini_batch_size,
                 max_ind_range=args.max_ind_range,
-                split="test"
-            )
+                split="test")
     else:
-        train_data = CriteoDataset(
-            args.data_set,
-            args.max_ind_range,
-            args.data_sub_sample_rate,
-            args.data_randomize,
-            "train",
-            args.raw_data_file,
-            args.processed_data_file,
-            args.memory_map
-        )
+        train_data = CriteoDataset(args.data_set, args.max_ind_range,
+                                   args.data_sub_sample_rate,
+                                   args.data_randomize, "train",
+                                   args.raw_data_file,
+                                   args.processed_data_file, args.memory_map)
 
-        test_data = CriteoDataset(
-            args.data_set,
-            args.max_ind_range,
-            args.data_sub_sample_rate,
-            args.data_randomize,
-            "test",
-            args.raw_data_file,
-            args.processed_data_file,
-            args.memory_map
-        )
+        test_data = CriteoDataset(args.data_set, args.max_ind_range,
+                                  args.data_sub_sample_rate,
+                                  args.data_randomize, "test",
+                                  args.raw_data_file, args.processed_data_file,
+                                  args.memory_map)
 
         train_loader = torch.utils.data.DataLoader(
             train_data,
@@ -521,24 +473,21 @@ def make_criteo_data_and_loaders(args):
 
 # uniform ditribution (input data)
 class RandomDataset(Dataset):
-
-    def __init__(
-            self,
-            m_den,
-            ln_emb,
-            data_size,
-            num_batches,
-            mini_batch_size,
-            num_indices_per_lookup,
-            num_indices_per_lookup_fixed,
-            num_targets=1,
-            round_targets=False,
-            data_generation="random",
-            trace_file="",
-            enable_padding=False,
-            reset_seed_on_access=False,
-            rand_seed=0
-    ):
+    def __init__(self,
+                 m_den,
+                 ln_emb,
+                 data_size,
+                 num_batches,
+                 mini_batch_size,
+                 num_indices_per_lookup,
+                 num_indices_per_lookup_fixed,
+                 num_targets=1,
+                 round_targets=False,
+                 data_generation="random",
+                 trace_file="",
+                 enable_padding=False,
+                 reset_seed_on_access=False,
+                 rand_seed=0):
         # compute batch size
         nbatches = int(np.ceil((data_size * 1.0) / mini_batch_size))
         if num_batches != 0:
@@ -570,9 +519,8 @@ class RandomDataset(Dataset):
 
         if isinstance(index, slice):
             return [
-                self[idx] for idx in range(
-                    index.start or 0, index.stop or len(self), index.step or 1
-                )
+                self[idx] for idx in range(index.start or 0, index.stop
+                                           or len(self), index.step or 1)
             ]
 
         # WARNING: reset seed on access to first element
@@ -581,34 +529,26 @@ class RandomDataset(Dataset):
             self.reset_numpy_seed(self.rand_seed)
 
         # number of data points in a batch
-        n = min(self.mini_batch_size, self.data_size - (index * self.mini_batch_size))
+        n = min(self.mini_batch_size,
+                self.data_size - (index * self.mini_batch_size))
 
         # generate a batch of dense and sparse features
         if self.data_generation == "random":
             (X, lS_o, lS_i) = generate_uniform_input_batch(
-                self.m_den,
-                self.ln_emb,
-                n,
-                self.num_indices_per_lookup,
-                self.num_indices_per_lookup_fixed
-            )
+                self.m_den, self.ln_emb, n, self.num_indices_per_lookup,
+                self.num_indices_per_lookup_fixed)
         elif self.data_generation == "synthetic":
             (X, lS_o, lS_i) = generate_synthetic_input_batch(
-                self.m_den,
-                self.ln_emb,
-                n,
-                self.num_indices_per_lookup,
-                self.num_indices_per_lookup_fixed,
-                self.trace_file,
-                self.enable_padding
-            )
+                self.m_den, self.ln_emb, n, self.num_indices_per_lookup,
+                self.num_indices_per_lookup_fixed, self.trace_file,
+                self.enable_padding)
         else:
-            sys.exit(
-                "ERROR: --data-generation=" + self.data_generation + " is not supported"
-            )
+            sys.exit("ERROR: --data-generation=" + self.data_generation +
+                     " is not supported")
 
         # generate a batch of target (probability of a click)
-        T = generate_random_output_batch(n, self.num_targets, self.round_targets)
+        T = generate_random_output_batch(n, self.num_targets,
+                                         self.round_targets)
 
         return (X, lS_o, lS_i, T)
 
@@ -621,10 +561,7 @@ class RandomDataset(Dataset):
 def collate_wrapper_random(list_of_tuples):
     # where each tuple is (X, lS_o, lS_i, T)
     (X, lS_o, lS_i, T) = list_of_tuples[0]
-    return (X,
-            torch.stack(lS_o),
-            lS_i,
-            T)
+    return (X, torch.stack(lS_o), lS_i, T)
 
 
 def make_random_data_and_loader(args, ln_emb, m_den):
@@ -658,18 +595,18 @@ def make_random_data_and_loader(args, ln_emb, m_den):
 
 
 def generate_random_data(
-    m_den,
-    ln_emb,
-    data_size,
-    num_batches,
-    mini_batch_size,
-    num_indices_per_lookup,
-    num_indices_per_lookup_fixed,
-    num_targets=1,
-    round_targets=False,
-    data_generation="random",
-    trace_file="",
-    enable_padding=False,
+        m_den,
+        ln_emb,
+        data_size,
+        num_batches,
+        mini_batch_size,
+        num_indices_per_lookup,
+        num_indices_per_lookup_fixed,
+        num_targets=1,
+        round_targets=False,
+        data_generation="random",
+        trace_file="",
+        enable_padding=False,
 ):
     nbatches = int(np.ceil((data_size * 1.0) / mini_batch_size))
     if num_batches != 0:
@@ -688,27 +625,18 @@ def generate_random_data(
 
         # generate a batch of dense and sparse features
         if data_generation == "random":
-            (Xt, lS_emb_offsets, lS_emb_indices) = generate_uniform_input_batch(
-                m_den,
-                ln_emb,
-                n,
-                num_indices_per_lookup,
-                num_indices_per_lookup_fixed
-            )
+            (Xt, lS_emb_offsets,
+             lS_emb_indices) = generate_uniform_input_batch(
+                 m_den, ln_emb, n, num_indices_per_lookup,
+                 num_indices_per_lookup_fixed)
         elif data_generation == "synthetic":
-            (Xt, lS_emb_offsets, lS_emb_indices) = generate_synthetic_input_batch(
-                m_den,
-                ln_emb,
-                n,
-                num_indices_per_lookup,
-                num_indices_per_lookup_fixed,
-                trace_file,
-                enable_padding
-            )
+            (Xt, lS_emb_offsets,
+             lS_emb_indices) = generate_synthetic_input_batch(
+                 m_den, ln_emb, n, num_indices_per_lookup,
+                 num_indices_per_lookup_fixed, trace_file, enable_padding)
         else:
-            sys.exit(
-                "ERROR: --data-generation=" + data_generation + " is not supported"
-            )
+            sys.exit("ERROR: --data-generation=" + data_generation +
+                     " is not supported")
         # dense feature
         lX.append(Xt)
         # sparse feature (sparse indices)
@@ -725,7 +653,8 @@ def generate_random_data(
 def generate_random_output_batch(n, num_targets, round_targets=False):
     # target (probability of a click)
     if round_targets:
-        P = np.round(ra.rand(n, num_targets).astype(np.float32)).astype(np.float32)
+        P = np.round(ra.rand(n, num_targets).astype(np.float32)).astype(
+            np.float32)
     else:
         P = ra.rand(n, num_targets).astype(np.float32)
 
@@ -734,11 +663,11 @@ def generate_random_output_batch(n, num_targets, round_targets=False):
 
 # uniform ditribution (input data)
 def generate_uniform_input_batch(
-    m_den,
-    ln_emb,
-    n,
-    num_indices_per_lookup,
-    num_indices_per_lookup_fixed,
+        m_den,
+        ln_emb,
+        n,
+        num_indices_per_lookup,
+        num_indices_per_lookup_fixed,
 ):
     # dense feature
     Xt = torch.tensor(ra.rand(n, m_den).astype(np.float32))
@@ -760,8 +689,8 @@ def generate_uniform_input_batch(
                 # random between [1,num_indices_per_lookup])
                 r = ra.random(1)
                 sparse_group_size = np.int64(
-                    np.round(max([1.0], r * min(size, num_indices_per_lookup)))
-                )
+                    np.round(max([1.0],
+                                 r * min(size, num_indices_per_lookup))))
             # sparse indices to be used per embedding
             r = ra.random(sparse_group_size)
             sparse_group = np.unique(np.round(r * (size - 1)).astype(np.int64))
@@ -780,13 +709,13 @@ def generate_uniform_input_batch(
 
 # synthetic distribution (input data)
 def generate_synthetic_input_batch(
-    m_den,
-    ln_emb,
-    n,
-    num_indices_per_lookup,
-    num_indices_per_lookup_fixed,
-    trace_file,
-    enable_padding=False,
+        m_den,
+        ln_emb,
+        n,
+        num_indices_per_lookup,
+        num_indices_per_lookup_fixed,
+        trace_file,
+        enable_padding=False,
 ):
     # dense feature
     Xt = torch.tensor(ra.rand(n, m_den).astype(np.float32))
@@ -808,13 +737,12 @@ def generate_synthetic_input_batch(
                 # random between [1,num_indices_per_lookup])
                 r = ra.random(1)
                 sparse_group_size = np.int64(
-                    max(1, np.round(r * min(size, num_indices_per_lookup))[0])
-                )
+                    max(1,
+                        np.round(r * min(size, num_indices_per_lookup))[0]))
             # sparse indices to be used per embedding
             file_path = trace_file
             line_accesses, list_sd, cumm_sd = read_dist_from_file(
-                file_path.replace("j", str(i))
-            )
+                file_path.replace("j", str(i)))
             # debug prints
             # print("input")
             # print(line_accesses); print(list_sd); print(cumm_sd);
@@ -824,9 +752,8 @@ def generate_synthetic_input_batch(
             #     line_accesses, list_sd, cumm_sd, sparse_group_size, enable_padding
             # )
             # approach 2: lru
-            r = trace_generate_lru(
-                line_accesses, list_sd, cumm_sd, sparse_group_size, enable_padding
-            )
+            r = trace_generate_lru(line_accesses, list_sd, cumm_sd,
+                                   sparse_group_size, enable_padding)
             # WARNING: if the distribution in the file is not consistent
             # with embedding table dimensions, below mod guards against out
             # of range access
@@ -834,10 +761,8 @@ def generate_synthetic_input_batch(
             minsg = np.min(sparse_group)
             maxsg = np.max(sparse_group)
             if (minsg < 0) or (size <= maxsg):
-                print(
-                    "WARNING: distribution is inconsistent with embedding "
-                    + "table size (using mod to recover and continue)"
-                )
+                print("WARNING: distribution is inconsistent with embedding " +
+                      "table size (using mod to recover and continue)")
                 sparse_group = np.mod(sparse_group, size).astype(np.int64)
             # sparse_group = np.unique(np.array(np.mod(r, size-1)).astype(np.int64))
             # reset sparse_group_size in case some index duplicates were removed
@@ -853,7 +778,11 @@ def generate_synthetic_input_batch(
     return (Xt, lS_emb_offsets, lS_emb_indices)
 
 
-def generate_stack_distance(cumm_val, cumm_dist, max_i, i, enable_padding=False):
+def generate_stack_distance(cumm_val,
+                            cumm_dist,
+                            max_i,
+                            i,
+                            enable_padding=False):
     u = ra.rand(1)
     if i < max_i:
         # only generate stack distances up to the number of new references seen so far
@@ -863,7 +792,8 @@ def generate_stack_distance(cumm_val, cumm_dist, max_i, i, enable_padding=False)
     elif enable_padding:
         # WARNING: disable generation of new references (once all have been seen)
         fi = cumm_dist[0]
-        u = (1.0 - fi) * u + fi  # remap distribution support to exclude first value
+        u = (1.0 -
+             fi) * u + fi  # remap distribution support to exclude first value
 
     for (j, f) in enumerate(cumm_dist):
         if u <= f:
@@ -874,26 +804,31 @@ def generate_stack_distance(cumm_val, cumm_dist, max_i, i, enable_padding=False)
 cache_line_size = 1
 
 
-def trace_generate_lru(
-    line_accesses, list_sd, cumm_sd, out_trace_len, enable_padding=False
-):
+def trace_generate_lru(line_accesses,
+                       list_sd,
+                       cumm_sd,
+                       out_trace_len,
+                       enable_padding=False):
     max_sd = list_sd[-1]
     l = len(line_accesses)
     i = 0
     ztrace = []
     for _ in range(out_trace_len):
-        sd = generate_stack_distance(list_sd, cumm_sd, max_sd, i, enable_padding)
+        sd = generate_stack_distance(list_sd, cumm_sd, max_sd, i,
+                                     enable_padding)
         mem_ref_within_line = 0  # floor(ra.rand(1)*cache_line_size) #0
 
         # generate memory reference
         if sd == 0:  # new reference #
             line_ref = line_accesses.pop(0)
             line_accesses.append(line_ref)
-            mem_ref = np.uint64(line_ref * cache_line_size + mem_ref_within_line)
+            mem_ref = np.uint64(line_ref * cache_line_size +
+                                mem_ref_within_line)
             i += 1
         else:  # existing reference #
             line_ref = line_accesses[l - sd]
-            mem_ref = np.uint64(line_ref * cache_line_size + mem_ref_within_line)
+            mem_ref = np.uint64(line_ref * cache_line_size +
+                                mem_ref_within_line)
             line_accesses.pop(l - sd)
             line_accesses.append(line_ref)
         # save generated memory reference
@@ -902,25 +837,30 @@ def trace_generate_lru(
     return ztrace
 
 
-def trace_generate_rand(
-    line_accesses, list_sd, cumm_sd, out_trace_len, enable_padding=False
-):
+def trace_generate_rand(line_accesses,
+                        list_sd,
+                        cumm_sd,
+                        out_trace_len,
+                        enable_padding=False):
     max_sd = list_sd[-1]
     l = len(line_accesses)  # !!!Unique,
     i = 0
     ztrace = []
     for _ in range(out_trace_len):
-        sd = generate_stack_distance(list_sd, cumm_sd, max_sd, i, enable_padding)
+        sd = generate_stack_distance(list_sd, cumm_sd, max_sd, i,
+                                     enable_padding)
         mem_ref_within_line = 0  # floor(ra.rand(1)*cache_line_size) #0
         # generate memory reference
         if sd == 0:  # new reference #
             line_ref = line_accesses.pop(0)
             line_accesses.append(line_ref)
-            mem_ref = np.uint64(line_ref * cache_line_size + mem_ref_within_line)
+            mem_ref = np.uint64(line_ref * cache_line_size +
+                                mem_ref_within_line)
             i += 1
         else:  # existing reference #
             line_ref = line_accesses[l - sd]
-            mem_ref = np.uint64(line_ref * cache_line_size + mem_ref_within_line)
+            mem_ref = np.uint64(line_ref * cache_line_size +
+                                mem_ref_within_line)
         ztrace.append(mem_ref)
 
     return ztrace
@@ -997,7 +937,7 @@ def write_trace_to_file(file_path, trace):
         else:
             with open(file_path, "w+") as f:
                 s = str(trace)
-                f.write(s[1 : len(s) - 1])
+                f.write(s[1:len(s) - 1])
     except Exception:
         print("ERROR: no output trace file has been provided")
 
@@ -1022,13 +962,13 @@ def write_dist_to_file(file_path, unique_accesses, list_sd, cumm_sd):
         with open(file_path, "w") as f:
             # unique_acesses
             s = str(unique_accesses)
-            f.write(s[1 : len(s) - 1] + "\n")
+            f.write(s[1:len(s) - 1] + "\n")
             # list_sd
             s = str(list_sd)
-            f.write(s[1 : len(s) - 1] + "\n")
+            f.write(s[1:len(s) - 1] + "\n")
             # cumm_sd
             s = str(cumm_sd)
-            f.write(s[1 : len(s) - 1] + "\n")
+            f.write(s[1:len(s) - 1] + "\n")
     except Exception:
         print("Wrong file or file path")
 
@@ -1039,14 +979,15 @@ if __name__ == "__main__":
     import argparse
 
     ### parse arguments ###
-    parser = argparse.ArgumentParser(description="Generate Synthetic Distributions")
+    parser = argparse.ArgumentParser(
+        description="Generate Synthetic Distributions")
     parser.add_argument("--trace-file", type=str, default="./input/trace.log")
     parser.add_argument("--trace-file-binary-type", type=bool, default=False)
     parser.add_argument("--trace-enable-padding", type=bool, default=False)
     parser.add_argument("--dist-file", type=str, default="./input/dist.log")
-    parser.add_argument(
-        "--synthetic-file", type=str, default="./input/trace_synthetic.log"
-    )
+    parser.add_argument("--synthetic-file",
+                        type=str,
+                        default="./input/trace_synthetic.log")
     parser.add_argument("--numpy-rand-seed", type=int, default=123)
     parser.add_argument("--print-precision", type=int, default=5)
     args = parser.parse_args()
@@ -1060,9 +1001,8 @@ if __name__ == "__main__":
     # print(trace)
 
     ### profile trace ###
-    (_, stack_distances, line_accesses) = trace_profile(
-        trace, args.trace_enable_padding
-    )
+    (_, stack_distances,
+     line_accesses) = trace_profile(trace, args.trace_enable_padding)
     stack_distances.reverse()
     line_accesses.reverse()
     # print(line_accesses)
@@ -1071,15 +1011,13 @@ if __name__ == "__main__":
     ### compute probability distribution ###
     # count items
     l = len(stack_distances)
-    dc = sorted(
-        collections.Counter(stack_distances).items(), key=operator.itemgetter(0)
-    )
+    dc = sorted(collections.Counter(stack_distances).items(),
+                key=operator.itemgetter(0))
 
     # create a distribution
     list_sd = list(map(lambda tuple_x_k: tuple_x_k[0], dc))  # x = tuple_x_k[0]
-    dist_sd = list(
-        map(lambda tuple_x_k: tuple_x_k[1] / float(l), dc)
-    )  # k = tuple_x_k[1]
+    dist_sd = list(map(lambda tuple_x_k: tuple_x_k[1] / float(l),
+                       dc))  # k = tuple_x_k[1]
     cumm_sd = []  # np.cumsum(dc).tolist() #prefixsum
     for i, (_, k) in enumerate(dc):
         if i == 0:
@@ -1093,9 +1031,8 @@ if __name__ == "__main__":
 
     ### generate correspondinf synthetic ###
     # line_accesses, list_sd, cumm_sd = read_dist_from_file(args.dist_file)
-    synthetic_trace = trace_generate_lru(
-        line_accesses, list_sd, cumm_sd, len(trace), args.trace_enable_padding
-    )
+    synthetic_trace = trace_generate_lru(line_accesses, list_sd, cumm_sd,
+                                         len(trace), args.trace_enable_padding)
     # synthetic_trace = trace_generate_rand(
     #     line_accesses, list_sd, cumm_sd, len(trace), args.trace_enable_padding
     # )

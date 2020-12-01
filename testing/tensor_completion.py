@@ -9,36 +9,44 @@ import torch
 import torchvision
 import torchvision.transforms as transforms
 
-transform = transforms.Compose(
-    [transforms.ToTensor(),
-     transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
+transform = transforms.Compose([
+    transforms.ToTensor(),
+    transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
+])
 
-trainset = torchvision.datasets.CIFAR10(root='./data', train=True,
-                                        download=True, transform=transform)
-trainloader = torch.utils.data.DataLoader(trainset, batch_size=4,
-                                          shuffle=True, num_workers=2)
+trainset = torchvision.datasets.CIFAR10(root='./data',
+                                        train=True,
+                                        download=True,
+                                        transform=transform)
+trainloader = torch.utils.data.DataLoader(trainset,
+                                          batch_size=4,
+                                          shuffle=True,
+                                          num_workers=2)
 
-testset = torchvision.datasets.CIFAR10(root='./data', train=False,
-                                       download=True, transform=transform)
-testloader = torch.utils.data.DataLoader(testset, batch_size=4,
-                                         shuffle=False, num_workers=2)
+testset = torchvision.datasets.CIFAR10(root='./data',
+                                       train=False,
+                                       download=True,
+                                       transform=transform)
+testloader = torch.utils.data.DataLoader(testset,
+                                         batch_size=4,
+                                         shuffle=False,
+                                         num_workers=2)
 
-classes = ('plane', 'car', 'bird', 'cat',
-           'deer', 'dog', 'frog', 'horse', 'ship', 'truck')
+classes = ('plane', 'car', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse',
+           'ship', 'truck')
 
 import matplotlib.pyplot as plt
 import numpy as np
 
-
 PATH = 'saved_models/'
-TRAINING= False
+TRAINING = False
 MODEL_NAME = 'CP'
 
 # functions to show an image
 
 
 def imshow(img):
-    img = img / 2 + 0.5     # unnormalize
+    img = img / 2 + 0.5  # unnormalize
     npimg = img.numpy()
     plt.imshow(np.transpose(npimg, (1, 2, 0)))
     plt.show()
@@ -52,7 +60,6 @@ images, labels = dataiter.next()
 imshow(torchvision.utils.make_grid(images))
 # print labels
 print(' '.join('%5s' % classes[labels[j]] for j in range(4)))
-
 
 #%%import torch.nn.functional as F
 
@@ -79,10 +86,8 @@ class Net(nn.Module):
 
 net = Net()
 
-
 criterion = nn.CrossEntropyLoss()
 optimizer = optim.SGD(net.parameters(), lr=0.001, momentum=0.9)
-
 
 #%%
 
@@ -106,16 +111,15 @@ if TRAINING:
 
             # print statistics
             running_loss += loss.item()
-            if i % 2000 == 1999:    # print every 2000 mini-batches
+            if i % 2000 == 1999:  # print every 2000 mini-batches
                 print('[%d, %5d] loss: %.3f' %
-                    (epoch + 1, i + 1, running_loss / 2000))
+                      (epoch + 1, i + 1, running_loss / 2000))
                 running_loss = 0.0
 
-
     print('Finished Training')
-    torch.save(net.state_dict(), PATH+MODEL_NAME)
+    torch.save(net.state_dict(), PATH + MODEL_NAME)
 else:
-    net.load_state_dict(torch.load(PATH+MODEL_NAME), strict=False)
+    net.load_state_dict(torch.load(PATH + MODEL_NAME), strict=False)
 
 correct = 0
 total = 0
@@ -127,25 +131,21 @@ with torch.no_grad():
         total += labels.size(0)
         correct += (predicted == labels).sum().item()
 
-print('Accuracy of the network on the 10000 test images: %d %%' % (
-    100 * correct / total))
+print('Accuracy of the network on the 10000 test images: %d %%' %
+      (100 * correct / total))
 
 #%%
 
 #%%
-
-
 
 model = TheModelClass()
-model.load_state_dict(torch.load(PATH+model_name))
+model.load_state_dict(torch.load(PATH + model_name))
 model.eval()
-
-
 
 #%%
 
 import os
-import torch 
+import torch
 import tensorly as tl
 tl.set_backend('pytorch')
 import tensorly.random, tensorly.decomposition
@@ -153,43 +153,52 @@ import torch.distributions as td
 Parameter = torch.nn.Parameter
 import numpy as np
 
+os.environ['CUDA_VISIBLE_DEVICES'] = '1'
 
-os.environ['CUDA_VISIBLE_DEVICES']='1'
-
-from torch_bayesian_tensor_layers.low_rank_tensors import TensorTrainMatrix,Tucker,TensorTrain,CP
-
+from torch_bayesian_tensor_layers.low_rank_tensors import TensorTrainMatrix, Tucker, TensorTrain, CP
 
 max_rank = 5
 true_rank = 2
 EM_STEPSIZE = 1.0
 
+dims = [10, 10, 10]
 
-dims = [10,10,10]
+tensor = Tucker(dims=dims,
+                max_rank=max_rank,
+                prior_type='log_uniform',
+                em_stepsize=EM_STEPSIZE,
+                learned_scale=False)
 
-tensor = Tucker(dims=dims,max_rank=max_rank,prior_type='log_uniform',em_stepsize=EM_STEPSIZE,learned_scale=False)
-
-true_tensor = Tucker(dims=dims,max_rank=true_rank,prior_type='log_uniform',em_stepsize=EM_STEPSIZE)
-
+true_tensor = Tucker(dims=dims,
+                     max_rank=true_rank,
+                     prior_type='log_uniform',
+                     em_stepsize=EM_STEPSIZE)
 
 #%%
 full = true_tensor.get_full().clone().detach()
 #full = tl.tucker_to_tensor(tl.random.random_tucker(shape=dims,rank=true_rank))
 
 import torch.distributions as td
-log_likelihood_dist = td.Normal(0.0,0.001)
-
+log_likelihood_dist = td.Normal(0.0, 0.001)
 
 tensor.sample_full = tensor.get_full
 
+
 def log_likelihood():
-    return torch.mean(torch.stack([-torch.mean(log_likelihood_dist.log_prob(full-tensor.sample_full())) for _ in range(5)]))
+    return torch.mean(
+        torch.stack([
+            -torch.mean(
+                log_likelihood_dist.log_prob(full - tensor.sample_full()))
+            for _ in range(5)
+        ]))
 
 
 def mse():
-    return torch.norm(full-tensor.get_full())/torch.norm(full)
+    return torch.norm(full - tensor.get_full()) / torch.norm(full)
+
 
 def kl_loss():
-    return log_likelihood()+tensor.get_kl_divergence_to_prior()
+    return log_likelihood() + tensor.get_kl_divergence_to_prior()
 
 
 loss = kl_loss
@@ -199,23 +208,16 @@ loss = kl_loss
 
 from allennlp.training.optimizers import DenseSparseAdam
 
-
 tensor.trainable_variables[0].name
 
-tmp_params = [(None,x) for x in tensor.parameters()]
+tmp_params = [(None, x) for x in tensor.parameters()]
 
-
-optimizer = DenseSparseAdam(tmp_params,lr=1e-3)
+optimizer = DenseSparseAdam(tmp_params, lr=1e-3)
 
 #optimizer = torch.optim.Adam(tensor.trainable_variables,lr=1e-2)
 
-
-
-
-
 #%%
 
-
 for i in range(10000):
 
     optimizer.zero_grad()
@@ -228,13 +230,13 @@ for i in range(10000):
 
     tensor.update_rank_parameters()
 
-    if i%1000==0:
-        print('Loss ',loss())
-        print('RMSE ',mse())
-        print('Rank ',tensor.estimate_rank())
+    if i % 1000 == 0:
+        print('Loss ', loss())
+        print('RMSE ', mse())
+        print('Rank ', tensor.estimate_rank())
         print(tensor.rank_parameters)
 
-optimizer = DenseSparseAdam(tmp_params,lr=1e-4)
+optimizer = DenseSparseAdam(tmp_params, lr=1e-4)
 
 for i in range(10000):
 
@@ -248,10 +250,10 @@ for i in range(10000):
 
     tensor.update_rank_parameters()
 
-    if i%1000==0:
-        print('Loss ',loss())
-        print('RMSE ',mse())
-        print('Rank ',tensor.estimate_rank())
+    if i % 1000 == 0:
+        print('Loss ', loss())
+        print('RMSE ', mse())
+        print('Rank ', tensor.estimate_rank())
         print(tensor.rank_parameters)
 
 #%%
@@ -262,13 +264,11 @@ print(tensor.factor_distributions[1].stddev)
 print(tensor)
 #%%
 
-print(tensor.factor_prior_distributions[-1].stddev[:,0,0])
+print(tensor.factor_prior_distributions[-1].stddev[:, 0, 0])
 print(tensor.rank_parameters[1])
-
 
 #%%
 tensor.update_rank_parameters()
-
 
 #%%
 import torch
@@ -277,16 +277,17 @@ import torch.distributions as td
 mean = 0.0
 std = torch.nn.Parameter(torch.tensor(1.0))
 
-dist = td.Normal(mean,1.0)
+dist = td.Normal(mean, 1.0)
 
 dist.rsample()
 
+
 def loss():
-    return std*torch.norm(torch.relu(std)*dist.sample([100]))
+    return std * torch.norm(torch.relu(std) * dist.sample([100]))
+
 
 # %%
-optimizer = torch.optim.Adam([std],1e-2)
-
+optimizer = torch.optim.Adam([std], 1e-2)
 
 #%%
 
@@ -297,7 +298,7 @@ for _ in range(100):
     loss_value.backward()
     optimizer.step()
 
-    print('std',std.data.numpy())
+    print('std', std.data.numpy())
     print(loss())
 
 #%%
@@ -308,8 +309,8 @@ loss()
 i = 0
 j = 2
 print(tensor.rank_parameters[i])
-print(tensor.factor_prior_distributions[j].stddev[:,8,0])
+print(tensor.factor_prior_distributions[j].stddev[:, 8, 0])
 
 #%%
 
-print(tensor.factor_distributions[j].stddev[:,0,3,0])
+print(tensor.factor_distributions[j].stddev[:, 0, 3, 0])
