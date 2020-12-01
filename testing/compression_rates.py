@@ -1,5 +1,41 @@
+#%%
 import numpy as np
 
+def get_tucker_params(tucker_dims,tucker_rank):
+
+    if type(tucker_rank)!=list:
+        tucker_rank = len(tucker_dims)*[tucker_rank]
+
+    tucker_dims = dims[0]+[np.prod(dims[1])]
+    tucker_params = np.prod(tucker_rank)+sum([x*y for x,y in zip(tucker_rank,tucker_dims)])
+
+    return tucker_params
+def get_cp_params(cp_dims,cp_rank):
+
+    cp_params = cp_rank*sum(cp_dims)
+    return cp_params
+
+def get_ttm_params(ttm_dims,ttm_rank):
+
+    if type(ttm_rank)!=list:
+        ttm_rank = [1]+(len(ttm_dims[0])-1)*[ttm_rank]+[1]
+    print(ttm_rank)
+    print(ttm_dims)
+    order = len(ttm_dims[0])
+    ranks = [[ttm_rank[i],ttm_rank[i+1]] for i in range(order)]
+    print(ranks)
+    ttm_params = sum([np.prod(x)*np.prod(y) for x,y in zip(zip(*ttm_dims),ranks)])
+    return ttm_params
+
+def get_tt_params(tt_dims,tt_rank):
+
+    if type(tt_rank)!=list:
+        tt_rank = [1]+(len(tt_dims)-1)*[tt_rank]+[1]
+
+    order = len(tt_dims)
+    ranks = [[tt_rank[i],tt_rank[i+1]] for i in range(order)]
+    tt_params = sum([np.prod([x]+y) for x,y in zip(tt_dims,ranks)])
+    return tt_params
 
 dims = [[125,220,250],[2,2,4]]
 
@@ -26,10 +62,6 @@ ii = 0
 
 dims = [shape0[ii],shape1]
 
-ttm_rank = 16
-cp_rank = 335
-tt_rank = 25
-tucker_rank = 22
 """
 def get_ttm_params(shape,rank)
 
@@ -41,46 +73,29 @@ print(dim_pairs,ranks)
 print("TTM_params", ttm_params)
 """
 
-def get_tt_params(tt_dims,tt_rank):
+ttm_dims = dims
+ttm_rank = max_ranks['TensorTrainMatrix'][ii]
+ttm_params = get_ttm_params(ttm_dims,ttm_rank) 
+print("TTM params",ttm_params)
 
-    if type(tt_rank)!=list:
-        tt_rank = [1]+(len(tt_dims)-1)*[tt_rank]+[1]
-
-    print(tt_rank,tt_dims)
-    order = len(tt_dims)
-    ranks = [[tt_rank[i],tt_rank[i+1]] for i in range(order)]
-    print(ranks)
-    tt_params = sum([np.prod([x]+y) for x,y in zip(tt_dims,ranks)])
-    return tt_params
     
 tt_dims = dims[0]+[np.prod(dims[1])]
-tt_rank = max_ranks['TensorTrain'][3]
- 
+tt_rank = max_ranks['TensorTrain'][ii]
+tt_params = get_tt_params(tt_dims,tt_rank) 
+print("TT params",tt_params)
 
-print("TT_params ",get_tt_params(tt_dims,tt_rank))
+
+cp_dims = tt_dims
+cp_rank = max_ranks['CP'][ii]
+cp_params = get_cp_params(cp_dims,cp_rank) 
+print("CP_params ",cp_params)
 
 
-"""
+tucker_dims = tt_dims
+tucker_rank = max_ranks['Tucker'][ii]
+tucker_params = get_tucker_params(tucker_dims,tucker_rank) 
+print("Tucker_params ",tucker_params)
 
-def get_cp_params(shape,rank)
-
-cp_params = 0.0
-while cp_params<ttm_params:
-    cp_dims = dims[0]+[np.prod(dims[1])]
-    cp_params = cp_rank*sum(cp_dims)
-    print("CP_params ",cp_params," cp rank ",cp_rank)
-    cp_rank+=1
-
-def get_tucker_params(shape,rank)
-
-tucker_params = 0.0
-while tucker_params<ttm_params:
-    tucker_dims = dims[0]+[np.prod(dims[1])]
-    tucker_params = (tucker_rank**len(tucker_dims))+tucker_rank*sum(tucker_dims)
-    print("Tucker params ",tucker_params," tucker rank ",tucker_rank)
-    tucker_rank+=1
-
-print("CP ",cp_rank,"\nTTM ",ttm_rank,"\nTT ",tt_rank,"\nTucker ",tucker_rank)"""
 
 
 print("baseline parameters",sum(baseline_params))
