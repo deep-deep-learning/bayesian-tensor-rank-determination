@@ -198,7 +198,7 @@ class DLRM_Net(nn.Module):
 
     def create_emb(self, m, ln):
 
-        tensorized_embedding_layers = [2]#,3,11,15,20]
+        tensorized_embedding_layers = [2,3,11,15,20]
 
         emb_l = nn.ModuleList()
         for i in range(0, ln.size):
@@ -1019,8 +1019,12 @@ if __name__ == "__main__":
 
             for j, (X, lS_o, lS_i, T) in enumerate(train_ld):
                 
-                iter_kl_multiplier = args.kl_multiplier*torch.clamp(torch.tensor(((j-args.no_kl_steps)/len(train_ld))),0.0,1.0)
-
+                if k==0:
+                    print("First epoch curve")
+                    iter_kl_multiplier = args.kl_multiplier*torch.clamp(torch.tensor(((j-args.no_kl_steps)/len(train_ld))),0.0,1.0)
+                else:
+                    print("Second epoch curve")
+                    iter_kl_multiplier = args.kl_multiplier*torch.clamp(torch.tensor(((len(train_ld)-args.no_kl_steps)/len(train_ld))),0.0,1.0)
 #                if j>249:
 #                    break
 
