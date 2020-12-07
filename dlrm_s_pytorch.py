@@ -92,15 +92,18 @@ from torch.optim.lr_scheduler import _LRScheduler
 
 exc = getattr(builtins, "IOError", "FileNotFoundError")
 
+
 class LRPolicyScheduler(_LRScheduler):
-    def __init__(self, optimizer, num_warmup_steps, decay_start_step, num_decay_steps):
+    def __init__(self, optimizer, num_warmup_steps, decay_start_step,
+                 num_decay_steps):
         self.num_warmup_steps = num_warmup_steps
         self.decay_start_step = decay_start_step
         self.decay_end_step = decay_start_step + num_decay_steps
         self.num_decay_steps = num_decay_steps
 
         if self.decay_start_step < self.num_warmup_steps:
-            sys.exit("Learning rate warmup must finish before the decay starts")
+            sys.exit(
+                "Learning rate warmup must finish before the decay starts")
 
         super(LRPolicyScheduler, self).__init__(optimizer)
 
@@ -108,13 +111,15 @@ class LRPolicyScheduler(_LRScheduler):
         step_count = self._step_count
         if step_count < self.num_warmup_steps:
             # warmup
-            scale = 1.0 - (self.num_warmup_steps - step_count) / self.num_warmup_steps
+            scale = 1.0 - (self.num_warmup_steps -
+                           step_count) / self.num_warmup_steps
             lr = [base_lr * scale for base_lr in self.base_lrs]
             self.last_lr = lr
         elif self.decay_start_step <= step_count and step_count < self.decay_end_step:
             # decay
             decayed_steps = step_count - self.decay_start_step
-            scale = ((self.num_decay_steps - decayed_steps) / self.num_decay_steps) ** 2
+            scale = ((self.num_decay_steps - decayed_steps) /
+                     self.num_decay_steps)**2
             min_lr = 0.0000001
             lr = [max(min_lr, base_lr * scale) for base_lr in self.base_lrs]
             self.last_lr = lr
@@ -127,6 +132,7 @@ class LRPolicyScheduler(_LRScheduler):
                 # do not adjust
                 lr = self.base_lrs
         return lr
+
 
 ### define dlrm in PyTorch ###
 class DLRM_Net(nn.Module):
@@ -176,16 +182,20 @@ class DLRM_Net(nn.Module):
             n = ln[i]
             # construct embedding operator
             if self.qr_flag and n > self.qr_threshold:
-                EE = QREmbeddingBag(n, m, self.qr_collisions,
-                    operation=self.qr_operation, mode="sum", sparse=True)
+                EE = QREmbeddingBag(n,
+                                    m,
+                                    self.qr_collisions,
+                                    operation=self.qr_operation,
+                                    mode="sum",
+                                    sparse=True)
             elif self.md_flag:
                 base = max(m)
                 _m = m[i] if n > self.md_threshold else base
                 EE = PrEmbeddingBag(n, _m, base)
                 # use np initialization as below for consistency...
-                W = np.random.uniform(
-                    low=-np.sqrt(1 / n), high=np.sqrt(1 / n), size=(n, _m)
-                ).astype(np.float32)
+                W = np.random.uniform(low=-np.sqrt(1 / n),
+                                      high=np.sqrt(1 / n),
+                                      size=(n, _m)).astype(np.float32)
                 EE.embs.weight.data = torch.tensor(W, requires_grad=True)
 
             else:
@@ -193,9 +203,9 @@ class DLRM_Net(nn.Module):
 
                 # initialize embeddings
                 # nn.init.uniform_(EE.weight, a=-np.sqrt(1 / n), b=np.sqrt(1 / n))
-                W = np.random.uniform(
-                    low=-np.sqrt(1 / n), high=np.sqrt(1 / n), size=(n, m)
-                ).astype(np.float32)
+                W = np.random.uniform(low=-np.sqrt(1 / n),
+                                      high=np.sqrt(1 / n),
+                                      size=(n, m)).astype(np.float32)
                 # approach 1
                 EE.weight.data = torch.tensor(W, requires_grad=True)
                 # approach 2
@@ -208,34 +218,30 @@ class DLRM_Net(nn.Module):
         return emb_l
 
     def __init__(
-        self,
-        m_spa=None,
-        ln_emb=None,
-        ln_bot=None,
-        ln_top=None,
-        arch_interaction_op=None,
-        arch_interaction_itself=False,
-        sigmoid_bot=-1,
-        sigmoid_top=-1,
-        sync_dense_params=True,
-        loss_threshold=0.0,
-        ndevices=-1,
-        qr_flag=False,
-        qr_operation="mult",
-        qr_collisions=0,
-        qr_threshold=200,
-        md_flag=False,
-        md_threshold=200,
+            self,
+            m_spa=None,
+            ln_emb=None,
+            ln_bot=None,
+            ln_top=None,
+            arch_interaction_op=None,
+            arch_interaction_itself=False,
+            sigmoid_bot=-1,
+            sigmoid_top=-1,
+            sync_dense_params=True,
+            loss_threshold=0.0,
+            ndevices=-1,
+            qr_flag=False,
+            qr_operation="mult",
+            qr_collisions=0,
+            qr_threshold=200,
+            md_flag=False,
+            md_threshold=200,
     ):
         super(DLRM_Net, self).__init__()
 
-        if (
-            (m_spa is not None)
-            and (ln_emb is not None)
-            and (ln_bot is not None)
-            and (ln_top is not None)
-            and (arch_interaction_op is not None)
-        ):
+        if ((m_spa is not None) and (ln_emb is not None)
+                and (ln_bot is not None) and (ln_top is not None)
+                and (arch_interaction_op is not None)):
 
             # save arguments
             self.ndevices = ndevices
@@ -264,9 +270,8 @@ class DLRM_Net(nn.Module):
 
     def save_embeddings(self):
 
-        for k,emb in enumerate(self.emb_l):
-            torch.save(emb.weight.T, 'weights/emb%s.pt'%k)
-            
+        for k, emb in enumerate(self.emb_l):
+            torch.save(emb.weight.T, 'weights/emb%s.pt' % k)
 
     def apply_mlp(self, x, layers):
         # approach 1: use ModuleList
@@ -317,8 +322,10 @@ class DLRM_Net(nn.Module):
             # li, lj = torch.tril_indices(ni, nj, offset=offset)
             # approach 2: custom
             offset = 1 if self.arch_interaction_itself else 0
-            li = torch.tensor([i for i in range(ni) for j in range(i + offset)])
-            lj = torch.tensor([j for i in range(nj) for j in range(i + offset)])
+            li = torch.tensor(
+                [i for i in range(ni) for j in range(i + offset)])
+            lj = torch.tensor(
+                [j for i in range(nj) for j in range(i + offset)])
             Zflat = Z[:, li, lj]
             # concatenate dense features and interactions
             R = torch.cat([x] + [Zflat], dim=1)
@@ -326,11 +333,8 @@ class DLRM_Net(nn.Module):
             # concatenation features (into a row vector)
             R = torch.cat([x] + ly, dim=1)
         else:
-            sys.exit(
-                "ERROR: --arch-interaction-op="
-                + self.arch_interaction_op
-                + " is not supported"
-            )
+            sys.exit("ERROR: --arch-interaction-op=" +
+                     self.arch_interaction_op + " is not supported")
 
         return R
 
@@ -361,7 +365,9 @@ class DLRM_Net(nn.Module):
 
         # clamp output if needed
         if 0.0 < self.loss_threshold and self.loss_threshold < 1.0:
-            z = torch.clamp(p, min=self.loss_threshold, max=(1.0 - self.loss_threshold))
+            z = torch.clamp(p,
+                            min=self.loss_threshold,
+                            max=(1.0 - self.loss_threshold))
         else:
             z = p
 
@@ -400,7 +406,9 @@ class DLRM_Net(nn.Module):
         dense_x = scatter(dense_x, device_ids, dim=0)
         # distribute sparse features (model parallelism)
         if (len(self.emb_l) != len(lS_o)) or (len(self.emb_l) != len(lS_i)):
-            sys.exit("ERROR: corrupted model input detected in parallel_forward call")
+            sys.exit(
+                "ERROR: corrupted model input detected in parallel_forward call"
+            )
 
         t_list = []
         i_list = []
@@ -434,7 +442,9 @@ class DLRM_Net(nn.Module):
         # Therefore, matching the distribution of output of bottom mlp, so that both
         # could be used for subsequent interactions on each device.
         if len(self.emb_l) != len(ly):
-            sys.exit("ERROR: corrupted intermediate result in parallel_forward call")
+            sys.exit(
+                "ERROR: corrupted intermediate result in parallel_forward call"
+            )
 
         t_list = []
         for k, _ in enumerate(self.emb_l):
@@ -467,9 +477,9 @@ class DLRM_Net(nn.Module):
 
         # clamp output if needed
         if 0.0 < self.loss_threshold and self.loss_threshold < 1.0:
-            z0 = torch.clamp(
-                p0, min=self.loss_threshold, max=(1.0 - self.loss_threshold)
-            )
+            z0 = torch.clamp(p0,
+                             min=self.loss_threshold,
+                             max=(1.0 - self.loss_threshold))
         else:
             z0 = p0
 
@@ -483,11 +493,9 @@ if __name__ == "__main__":
 
     #sys.argv = ['python dlrm_s_pytorch.py','--arch-sparse-feature-size=16','--arch-mlp-bot=13-512-256-64-16','--arch-mlp-top=512-256-1', '--data-generation=dataset', '--data-set=kaggle', '--raw-data-file=./input/train.txt', '--processed-data-file=./input/kaggleAdDisplayChallenge_processed.npz', '--loss-function=bce', '--round-targets=True', '--learning-rate=0.1', '--mini-batch-size=128', '--print-freq=1024','--test-num-workers=16', '--test-freq=10240', '--memory-map', '--use-gpu']
 
-
     ### parse arguments ###
     parser = argparse.ArgumentParser(
-        description="Train Deep Learning Recommendation Model (DLRM)"
-    )
+        description="Train Deep Learning Recommendation Model (DLRM)")
     # model related parameters
     parser.add_argument("--arch-sparse-feature-size", type=int, default=2)
     parser.add_argument("--arch-embedding-size", type=str, default="4-3-2")
@@ -495,7 +503,9 @@ if __name__ == "__main__":
     parser.add_argument("--arch-mlp-bot", type=str, default="4-3-2")
     parser.add_argument("--arch-mlp-top", type=str, default="4-2-1")
     parser.add_argument("--arch-interaction-op", type=str, default="dot")
-    parser.add_argument("--arch-interaction-itself", action="store_true", default=False)
+    parser.add_argument("--arch-interaction-itself",
+                        action="store_true",
+                        default=False)
     # embedding table options
     parser.add_argument("--md-flag", action="store_true", default=False)
     parser.add_argument("--md-threshold", type=int, default=200)
@@ -507,26 +517,36 @@ if __name__ == "__main__":
     parser.add_argument("--qr-collisions", type=int, default=4)
     # activations and loss
     parser.add_argument("--activation-function", type=str, default="relu")
-    parser.add_argument("--loss-function", type=str, default="mse")  # or bce or wbce
-    parser.add_argument("--loss-weights", type=str, default="1.0-1.0")  # for wbce
+    parser.add_argument("--loss-function", type=str,
+                        default="mse")  # or bce or wbce
+    parser.add_argument("--loss-weights", type=str,
+                        default="1.0-1.0")  # for wbce
     parser.add_argument("--loss-threshold", type=float, default=0.0)  # 1.0e-7
     parser.add_argument("--round-targets", type=bool, default=False)
     # data
     parser.add_argument("--data-size", type=int, default=1)
     parser.add_argument("--num-batches", type=int, default=0)
-    parser.add_argument(
-        "--data-generation", type=str, default="random"
-    )  # synthetic or dataset
-    parser.add_argument("--data-trace-file", type=str, default="./input/dist_emb_j.log")
-    parser.add_argument("--data-set", type=str, default="kaggle")  # or terabyte
+    parser.add_argument("--data-generation", type=str,
+                        default="random")  # synthetic or dataset
+    parser.add_argument("--data-trace-file",
+                        type=str,
+                        default="./input/dist_emb_j.log")
+    parser.add_argument("--data-set", type=str,
+                        default="kaggle")  # or terabyte
     parser.add_argument("--raw-data-file", type=str, default="")
     parser.add_argument("--processed-data-file", type=str, default="")
-    parser.add_argument("--data-randomize", type=str, default="total")  # or day or none
-    parser.add_argument("--data-trace-enable-padding", type=bool, default=False)
+    parser.add_argument("--data-randomize", type=str,
+                        default="total")  # or day or none
+    parser.add_argument("--data-trace-enable-padding",
+                        type=bool,
+                        default=False)
     parser.add_argument("--max-ind-range", type=int, default=-1)
-    parser.add_argument("--data-sub-sample-rate", type=float, default=0.0)  # in [0, 1]
+    parser.add_argument("--data-sub-sample-rate", type=float,
+                        default=0.0)  # in [0, 1]
     parser.add_argument("--num-indices-per-lookup", type=int, default=10)
-    parser.add_argument("--num-indices-per-lookup-fixed", type=bool, default=False)
+    parser.add_argument("--num-indices-per-lookup-fixed",
+                        type=bool,
+                        default=False)
     parser.add_argument("--num-workers", type=int, default=0)
     parser.add_argument("--memory-map", action="store_true", default=False)
     # training
@@ -549,8 +569,12 @@ if __name__ == "__main__":
     parser.add_argument("--test-num-workers", type=int, default=-1)
     parser.add_argument("--print-time", action="store_true", default=False)
     parser.add_argument("--debug-mode", action="store_true", default=False)
-    parser.add_argument("--enable-profiling", action="store_true", default=False)
-    parser.add_argument("--plot-compute-graph", action="store_true", default=False)
+    parser.add_argument("--enable-profiling",
+                        action="store_true",
+                        default=False)
+    parser.add_argument("--plot-compute-graph",
+                        action="store_true",
+                        default=False)
     # store/load model
     parser.add_argument("--save-model", type=str, default="")
     parser.add_argument("--load-model", type=str, default="")
@@ -560,8 +584,12 @@ if __name__ == "__main__":
     parser.add_argument("--mlperf-acc-threshold", type=float, default=0.0)
     # stop at target AUC Terabyte (no subsampling) 0.8025
     parser.add_argument("--mlperf-auc-threshold", type=float, default=0.0)
-    parser.add_argument("--mlperf-bin-loader", action='store_true', default=False)
-    parser.add_argument("--mlperf-bin-shuffle", action='store_true', default=False)
+    parser.add_argument("--mlperf-bin-loader",
+                        action='store_true',
+                        default=False)
+    parser.add_argument("--mlperf-bin-shuffle",
+                        action='store_true',
+                        default=False)
     # LR policy
     parser.add_argument("--lr-num-warmup-steps", type=int, default=0)
     parser.add_argument("--lr-decay-start-step", type=int, default=0)
@@ -609,17 +637,20 @@ if __name__ == "__main__":
         ln_emb = train_data.counts
         # enforce maximum limit on number of vectors per embedding
         if args.max_ind_range > 0:
-            ln_emb = np.array(list(map(
-                lambda x: x if x < args.max_ind_range else args.max_ind_range,
-                ln_emb
-            )))
+            ln_emb = np.array(
+                list(
+                    map(
+                        lambda x: x
+                        if x < args.max_ind_range else args.max_ind_range,
+                        ln_emb)))
         m_den = train_data.m_den
         ln_bot[0] = m_den
     else:
         # input and target at random
         ln_emb = np.fromstring(args.arch_embedding_size, dtype=int, sep="-")
         m_den = ln_bot[0]
-        train_data, train_ld = dp.make_random_data_and_loader(args, ln_emb, m_den)
+        train_data, train_ld = dp.make_random_data_and_loader(
+            args, ln_emb, m_den)
         nbatches = args.num_batches if args.num_batches > 0 else len(train_ld)
 
     ### parse command line arguments ###
@@ -637,53 +668,35 @@ if __name__ == "__main__":
     elif args.arch_interaction_op == "cat":
         num_int = num_fea * m_den_out
     else:
-        sys.exit(
-            "ERROR: --arch-interaction-op="
-            + args.arch_interaction_op
-            + " is not supported"
-        )
+        sys.exit("ERROR: --arch-interaction-op=" + args.arch_interaction_op +
+                 " is not supported")
     arch_mlp_top_adjusted = str(num_int) + "-" + args.arch_mlp_top
     ln_top = np.fromstring(arch_mlp_top_adjusted, dtype=int, sep="-")
 
     # sanity check: feature sizes and mlp dimensions must match
     if m_den != ln_bot[0]:
-        sys.exit(
-            "ERROR: arch-dense-feature-size "
-            + str(m_den)
-            + " does not match first dim of bottom mlp "
-            + str(ln_bot[0])
-        )
+        sys.exit("ERROR: arch-dense-feature-size " + str(m_den) +
+                 " does not match first dim of bottom mlp " + str(ln_bot[0]))
     if args.qr_flag:
         if args.qr_operation == "concat" and 2 * m_spa != m_den_out:
             sys.exit(
-                "ERROR: 2 arch-sparse-feature-size "
-                + str(2 * m_spa)
-                + " does not match last dim of bottom mlp "
-                + str(m_den_out)
-                + " (note that the last dim of bottom mlp must be 2x the embedding dim)"
+                "ERROR: 2 arch-sparse-feature-size " + str(2 * m_spa) +
+                " does not match last dim of bottom mlp " + str(m_den_out) +
+                " (note that the last dim of bottom mlp must be 2x the embedding dim)"
             )
         if args.qr_operation != "concat" and m_spa != m_den_out:
-            sys.exit(
-                "ERROR: arch-sparse-feature-size "
-                + str(m_spa)
-                + " does not match last dim of bottom mlp "
-                + str(m_den_out)
-            )
+            sys.exit("ERROR: arch-sparse-feature-size " + str(m_spa) +
+                     " does not match last dim of bottom mlp " +
+                     str(m_den_out))
     else:
         if m_spa != m_den_out:
-            sys.exit(
-                "ERROR: arch-sparse-feature-size "
-                + str(m_spa)
-                + " does not match last dim of bottom mlp "
-                + str(m_den_out)
-            )
+            sys.exit("ERROR: arch-sparse-feature-size " + str(m_spa) +
+                     " does not match last dim of bottom mlp " +
+                     str(m_den_out))
     if num_int != ln_top[0]:
-        sys.exit(
-            "ERROR: # of feature interactions "
-            + str(num_int)
-            + " does not match first dimension of top mlp "
-            + str(ln_top[0])
-        )
+        sys.exit("ERROR: # of feature interactions " + str(num_int) +
+                 " does not match first dimension of top mlp " +
+                 str(ln_top[0]))
 
     # assign mixed dimensions if applicable
     if args.md_flag:
@@ -691,25 +704,18 @@ if __name__ == "__main__":
             torch.tensor(ln_emb),
             args.md_temperature,  # alpha
             d0=m_spa,
-            round_dim=args.md_round_dims
-        ).tolist()
+            round_dim=args.md_round_dims).tolist()
 
     # test prints (model arch)
     if args.debug_mode:
         print("model arch:")
-        print(
-            "mlp top arch "
-            + str(ln_top.size - 1)
-            + " layers, with input to output dimensions:"
-        )
+        print("mlp top arch " + str(ln_top.size - 1) +
+              " layers, with input to output dimensions:")
         print(ln_top)
         print("# of interactions")
         print(num_int)
-        print(
-            "mlp bot arch "
-            + str(ln_bot.size - 1)
-            + " layers, with input to output dimensions:"
-        )
+        print("mlp bot arch " + str(ln_bot.size - 1) +
+              " layers, with input to output dimensions:")
         print(ln_bot)
         print("# of features (sparse and dense)")
         print(num_fea)
@@ -717,13 +723,8 @@ if __name__ == "__main__":
         print(m_den)
         print("sparse feature size")
         print(m_spa)
-        print(
-            "# of embeddings (= # of sparse features) "
-            + str(ln_emb.size)
-            + ", with dimensions "
-            + str(m_spa)
-            + "x:"
-        )
+        print("# of embeddings (= # of sparse features) " + str(ln_emb.size) +
+              ", with dimensions " + str(m_spa) + "x:")
         print(ln_emb)
 
         print("data (inputs and targets):")
@@ -735,14 +736,11 @@ if __name__ == "__main__":
             print("mini-batch: %d" % j)
             print(X.detach().cpu().numpy())
             # transform offsets to lengths when printing
-            print(
-                [
-                    np.diff(
-                        S_o.detach().cpu().tolist() + list(lS_i[i].shape)
-                    ).tolist()
-                    for i, S_o in enumerate(lS_o)
-                ]
-            )
+            print([
+                np.diff(S_o.detach().cpu().tolist() +
+                        list(lS_i[i].shape)).tolist()
+                for i, S_o in enumerate(lS_o)
+            ])
             print([S_i.detach().cpu().tolist() for S_i in lS_i])
             print(T.detach().cpu().numpy())
 
@@ -772,7 +770,6 @@ if __name__ == "__main__":
         md_threshold=args.md_threshold,
     )
 
-
     # test prints
     if args.debug_mode:
         print("initial parameters (weights and bias):")
@@ -794,19 +791,21 @@ if __name__ == "__main__":
     elif args.loss_function == "bce":
         loss_fn = torch.nn.BCELoss(reduction="mean")
     elif args.loss_function == "wbce":
-        loss_ws = torch.tensor(np.fromstring(args.loss_weights, dtype=float, sep="-"))
+        loss_ws = torch.tensor(
+            np.fromstring(args.loss_weights, dtype=float, sep="-"))
         loss_fn = torch.nn.BCELoss(reduction="none")
     else:
-        sys.exit("ERROR: --loss-function=" + args.loss_function + " is not supported")
+        sys.exit("ERROR: --loss-function=" + args.loss_function +
+                 " is not supported")
 
     if not args.inference_only:
         # specify the optimizer algorithm
         optimizer = torch.optim.SGD(dlrm.parameters(), lr=args.learning_rate)
         #%%
 
-
         #%%
-        lr_scheduler = LRPolicyScheduler(optimizer, args.lr_num_warmup_steps, args.lr_decay_start_step,
+        lr_scheduler = LRPolicyScheduler(optimizer, args.lr_num_warmup_steps,
+                                         args.lr_decay_start_step,
                                          args.lr_num_decay_steps)
 
     ### main loop ###
@@ -823,11 +822,7 @@ if __name__ == "__main__":
                 else lS_i.to(device)
             lS_o = [S_o.to(device) for S_o in lS_o] if isinstance(lS_o, list) \
                 else lS_o.to(device)
-            return dlrm(
-                X.to(device),
-                lS_o,
-                lS_i
-            )
+            return dlrm(X.to(device), lS_o, lS_i)
         else:
             return dlrm(X, lS_o, lS_i)
 
@@ -839,7 +834,8 @@ if __name__ == "__main__":
                 return loss_fn(Z, T)
         elif args.loss_function == "wbce":
             if use_gpu:
-                loss_ws_ = loss_ws[T.data.view(-1).long()].view_as(T).to(device)
+                loss_ws_ = loss_ws[T.data.view(-1).long()].view_as(T).to(
+                    device)
                 loss_fn_ = loss_fn(Z, T.to(device))
             else:
                 loss_ws_ = loss_ws[T.data.view(-1).long()].view_as(T)
@@ -881,7 +877,8 @@ if __name__ == "__main__":
                 )
         else:
             # when targeting inference on CPU
-            ld_model = torch.load(args.load_model, map_location=torch.device('cpu'))
+            ld_model = torch.load(args.load_model,
+                                  map_location=torch.device('cpu'))
         dlrm.load_state_dict(ld_model["state_dict"])
         ld_j = ld_model["iter"]
         ld_k = ld_model["epoch"]
@@ -905,21 +902,12 @@ if __name__ == "__main__":
             args.print_freq = ld_nbatches
             args.test_freq = 0
 
-        print(
-            "Saved at: epoch = {:d}/{:d}, batch = {:d}/{:d}, ntbatch = {:d}".format(
-                ld_k, ld_nepochs, ld_j, ld_nbatches, ld_nbatches_test
-            )
-        )
-        print(
-            "Training state: loss = {:.6f}, accuracy = {:3.3f} %".format(
-                ld_gL, ld_gA * 100
-            )
-        )
-        print(
-            "Testing state: loss = {:.6f}, accuracy = {:3.3f} %".format(
-                ld_gL_test, ld_gA_test * 100
-            )
-        )
+        print("Saved at: epoch = {:d}/{:d}, batch = {:d}/{:d}, ntbatch = {:d}".
+              format(ld_k, ld_nepochs, ld_j, ld_nbatches, ld_nbatches_test))
+        print("Training state: loss = {:.6f}, accuracy = {:3.3f} %".format(
+            ld_gL, ld_gA * 100))
+        print("Testing state: loss = {:.6f}, accuracy = {:3.3f} %".format(
+            ld_gL_test, ld_gA_test * 100))
 
     #dlrm.save_embeddings()
     print('****************************************')
@@ -927,7 +915,8 @@ if __name__ == "__main__":
     print(sum(p.numel() for p in dlrm.parameters()))
     print('******************************************')
     print("time/loss/accuracy (if enabled):")
-    with torch.autograd.profiler.profile(args.enable_profiling, use_gpu) as prof:
+    with torch.autograd.profiler.profile(args.enable_profiling,
+                                         use_gpu) as prof:
         while k < args.nepochs:
 
             if k < skip_upto_epoch:
@@ -983,7 +972,8 @@ if __name__ == "__main__":
                 L = E.detach().cpu().numpy()  # numpy array
                 S = Z.detach().cpu().numpy()  # numpy array
                 T = T.detach().cpu().numpy()  # numpy array
-                mbs = T.shape[0]  # = args.mini_batch_size except maybe for last
+                mbs = T.shape[
+                    0]  # = args.mini_batch_size except maybe for last
                 A = np.sum((np.round(S, 0) == T).astype(np.uint8))
 
                 if not args.inference_only:
@@ -1011,12 +1001,12 @@ if __name__ == "__main__":
                 total_iter += 1
                 total_samp += mbs
 
-                should_print = ((j + 1) % args.print_freq == 0) or (j + 1 == nbatches)
-                should_test = (
-                    (args.test_freq > 0)
-                    and (args.data_generation == "dataset")
-                    and (((j + 1) % args.test_freq == 0) or (j + 1 == nbatches))
-                )
+                should_print = ((j + 1) %
+                                args.print_freq == 0) or (j + 1 == nbatches)
+                should_test = ((args.test_freq > 0)
+                               and (args.data_generation == "dataset")
+                               and (((j + 1) % args.test_freq == 0) or
+                                    (j + 1 == nbatches)))
 
                 # print time, loss and accuracy
                 if should_print or should_test:
@@ -1031,11 +1021,9 @@ if __name__ == "__main__":
 
                     str_run_type = "inference" if args.inference_only else "training"
                     print(
-                        "Finished {} it {}/{} of epoch {}, {:.2f} ms/it, ".format(
-                            str_run_type, j + 1, nbatches, k, gT
-                        )
-                        + "loss {:.6f}, accuracy {:3.3f} %".format(gL, gA * 100)
-                    )
+                        "Finished {} it {}/{} of epoch {}, {:.2f} ms/it, ".
+                        format(str_run_type, j + 1, nbatches, k, gT) +
+                        "loss {:.6f}, accuracy {:3.3f} %".format(gL, gA * 100))
                     # Uncomment the line below to print out the total time with overhead
                     # print("Accumulated time so far: {}" \
                     # .format(time_wrap(use_gpu) - accum_time_begin))
@@ -1057,7 +1045,8 @@ if __name__ == "__main__":
                         scores = []
                         targets = []
 
-                    for i, (X_test, lS_o_test, lS_i_test, T_test) in enumerate(test_ld):
+                    for i, (X_test, lS_o_test, lS_i_test,
+                            T_test) in enumerate(test_ld):
                         # early exit if nbatches was set by the user and was exceeded
                         if nbatches > 0 and i >= nbatches:
                             break
@@ -1065,24 +1054,32 @@ if __name__ == "__main__":
                         t1_test = time_wrap(use_gpu)
 
                         # forward pass
-                        Z_test = dlrm_wrap(
-                            X_test, lS_o_test, lS_i_test, use_gpu, device
-                        )
+                        Z_test = dlrm_wrap(X_test, lS_o_test, lS_i_test,
+                                           use_gpu, device)
                         if args.mlperf_logging:
-                            S_test = Z_test.detach().cpu().numpy()  # numpy array
-                            T_test = T_test.detach().cpu().numpy()  # numpy array
+                            S_test = Z_test.detach().cpu().numpy(
+                            )  # numpy array
+                            T_test = T_test.detach().cpu().numpy(
+                            )  # numpy array
                             scores.append(S_test)
                             targets.append(T_test)
                         else:
                             # loss
-                            E_test = loss_fn_wrap(Z_test, T_test, use_gpu, device)
+                            E_test = loss_fn_wrap(Z_test, T_test, use_gpu,
+                                                  device)
 
                             # compute loss and accuracy
-                            L_test = E_test.detach().cpu().numpy()  # numpy array
-                            S_test = Z_test.detach().cpu().numpy()  # numpy array
-                            T_test = T_test.detach().cpu().numpy()  # numpy array
-                            mbs_test = T_test.shape[0]  # = mini_batch_size except last
-                            A_test = np.sum((np.round(S_test, 0) == T_test).astype(np.uint8))
+                            L_test = E_test.detach().cpu().numpy(
+                            )  # numpy array
+                            S_test = Z_test.detach().cpu().numpy(
+                            )  # numpy array
+                            T_test = T_test.detach().cpu().numpy(
+                            )  # numpy array
+                            mbs_test = T_test.shape[
+                                0]  # = mini_batch_size except last
+                            A_test = np.sum(
+                                (np.round(S_test,
+                                          0) == T_test).astype(np.uint8))
                             test_accu += A_test
                             test_loss += L_test * mbs_test
                             test_samp += mbs_test
@@ -1094,29 +1091,27 @@ if __name__ == "__main__":
                         targets = np.concatenate(targets, axis=0)
 
                         metrics = {
-                            'loss' : sklearn.metrics.log_loss,
-                            'recall' : lambda y_true, y_score:
-                            sklearn.metrics.recall_score(
-                                y_true=y_true,
-                                y_pred=np.round(y_score)
-                            ),
-                            'precision' : lambda y_true, y_score:
-                            sklearn.metrics.precision_score(
-                                y_true=y_true,
-                                y_pred=np.round(y_score)
-                            ),
-                            'f1' : lambda y_true, y_score:
-                            sklearn.metrics.f1_score(
-                                y_true=y_true,
-                                y_pred=np.round(y_score)
-                            ),
-                            'ap' : sklearn.metrics.average_precision_score,
-                            'roc_auc' : sklearn.metrics.roc_auc_score,
-                            'accuracy' : lambda y_true, y_score:
-                            sklearn.metrics.accuracy_score(
-                                y_true=y_true,
-                                y_pred=np.round(y_score)
-                            ),
+                            'loss':
+                            sklearn.metrics.log_loss,
+                            'recall':
+                            lambda y_true, y_score: sklearn.metrics.
+                            recall_score(y_true=y_true,
+                                         y_pred=np.round(y_score)),
+                            'precision':
+                            lambda y_true, y_score: sklearn.metrics.
+                            precision_score(y_true=y_true,
+                                            y_pred=np.round(y_score)),
+                            'f1':
+                            lambda y_true, y_score: sklearn.metrics.f1_score(
+                                y_true=y_true, y_pred=np.round(y_score)),
+                            'ap':
+                            sklearn.metrics.average_precision_score,
+                            'roc_auc':
+                            sklearn.metrics.roc_auc_score,
+                            'accuracy':
+                            lambda y_true, y_score: sklearn.metrics.
+                            accuracy_score(y_true=y_true,
+                                           y_pred=np.round(y_score)),
                             # 'pre_curve' : sklearn.metrics.precision_recall_curve,
                             # 'roc_curve' :  sklearn.metrics.roc_curve,
                         }
@@ -1131,9 +1126,7 @@ if __name__ == "__main__":
                             #     print(", ", end="")
                             # metric_compute_start = time_wrap(False)
                             validation_results[metric_name] = metric_function(
-                                targets,
-                                scores
-                            )
+                                targets, scores)
                             # metric_compute_end = time_wrap(False)
                             # met_time = metric_compute_end - metric_compute_start
                             # print("{} {:.4f}".format(metric_name, 1000 * (met_time)),
@@ -1175,50 +1168,42 @@ if __name__ == "__main__":
                             best_auc_test = validation_results['roc_auc']
 
                         print(
-                            "Testing at - {}/{} of epoch {},".format(j + 1, nbatches, k)
-                            + " loss {:.6f}, recall {:.4f}, precision {:.4f},".format(
-                                validation_results['loss'],
-                                validation_results['recall'],
-                                validation_results['precision']
-                            )
-                            + " f1 {:.4f}, ap {:.4f},".format(
+                            "Testing at - {}/{} of epoch {},".format(
+                                j + 1, nbatches, k) +
+                            " loss {:.6f}, recall {:.4f}, precision {:.4f},".
+                            format(validation_results['loss'],
+                                   validation_results['recall'],
+                                   validation_results['precision']) +
+                            " f1 {:.4f}, ap {:.4f},".format(
                                 validation_results['f1'],
                                 validation_results['ap'],
-                            )
-                            + " auc {:.4f}, best auc {:.4f},".format(
-                                validation_results['roc_auc'],
-                                best_auc_test
-                            )
-                            + " accuracy {:3.3f} %, best accuracy {:3.3f} %".format(
-                                validation_results['accuracy'] * 100,
-                                best_gA_test * 100
-                            )
-                        )
+                            ) + " auc {:.4f}, best auc {:.4f},".format(
+                                validation_results['roc_auc'], best_auc_test) +
+                            " accuracy {:3.3f} %, best accuracy {:3.3f} %".
+                            format(validation_results['accuracy'] *
+                                   100, best_gA_test * 100))
                     else:
                         print(
-                            "Testing at - {}/{} of epoch {},".format(j + 1, nbatches, 0)
-                            + " loss {:.6f}, accuracy {:3.3f} %, best {:3.3f} %".format(
-                                gL_test, gA_test * 100, best_gA_test * 100
-                            )
-                        )
+                            "Testing at - {}/{} of epoch {},".format(
+                                j + 1, nbatches, 0) +
+                            " loss {:.6f}, accuracy {:3.3f} %, best {:3.3f} %".
+                            format(gL_test, gA_test * 100, best_gA_test * 100))
                     # Uncomment the line below to print out the total time with overhead
                     # print("Total test time for this group: {}" \
                     # .format(time_wrap(use_gpu) - accum_test_time_begin))
 
-                    if (args.mlperf_logging
-                        and (args.mlperf_acc_threshold > 0)
-                        and (best_gA_test > args.mlperf_acc_threshold)):
-                        print("MLPerf testing accuracy threshold "
-                              + str(args.mlperf_acc_threshold)
-                              + " reached, stop training")
+                    if (args.mlperf_logging and (args.mlperf_acc_threshold > 0)
+                            and (best_gA_test > args.mlperf_acc_threshold)):
+                        print("MLPerf testing accuracy threshold " +
+                              str(args.mlperf_acc_threshold) +
+                              " reached, stop training")
                         break
 
-                    if (args.mlperf_logging
-                        and (args.mlperf_auc_threshold > 0)
-                        and (best_auc_test > args.mlperf_auc_threshold)):
-                        print("MLPerf testing auc threshold "
-                              + str(args.mlperf_auc_threshold)
-                              + " reached, stop training")
+                    if (args.mlperf_logging and (args.mlperf_auc_threshold > 0)
+                            and (best_auc_test > args.mlperf_auc_threshold)):
+                        print("MLPerf testing auc threshold " +
+                              str(args.mlperf_auc_threshold) +
+                              " reached, stop training")
                         break
 
             k += 1  # nepochs
@@ -1233,10 +1218,9 @@ if __name__ == "__main__":
     # plot compute graph
     if args.plot_compute_graph:
         sys.exit(
-            "ERROR: Please install pytorchviz package in order to use the"
-            + " visualization. Then, uncomment its import above as well as"
-            + " three lines below and run the code again."
-        )
+            "ERROR: Please install pytorchviz package in order to use the" +
+            " visualization. Then, uncomment its import above as well as" +
+            " three lines below and run the code again.")
         # V = Z.mean() if args.inference_only else E
         # dot = make_dot(V, params=dict(dlrm.named_parameters()))
         # dot.render('dlrm_s_pytorch_graph') # write .pdf file
@@ -1250,9 +1234,10 @@ if __name__ == "__main__":
     # export the model in onnx
     if args.save_onnx:
         dlrm_pytorch_onnx_file = "dlrm_s_pytorch.onnx"
-        torch.onnx.export(
-            dlrm, (X_onnx, lS_o_onnx, lS_i_onnx), dlrm_pytorch_onnx_file, verbose=True, use_external_data_format=True
-        )
+        torch.onnx.export(dlrm, (X_onnx, lS_o_onnx, lS_i_onnx),
+                          dlrm_pytorch_onnx_file,
+                          verbose=True,
+                          use_external_data_format=True)
         # recover the model back
         dlrm_pytorch_onnx = onnx.load("dlrm_s_pytorch.onnx")
         # check the onnx model

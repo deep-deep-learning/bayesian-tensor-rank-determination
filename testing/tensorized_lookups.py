@@ -1,32 +1,33 @@
 #%%
 
-import tensorly as tl   
+import tensorly as tl
 from torch_bayesian_tensor_layers.layers import TensorizedEmbedding
 import torch
 import random
 import numpy as np
 
-
-from emb_utils import get_cum_prod,tensorized_lookup
+from emb_utils import get_cum_prod, tensorized_lookup
 
 import sys
 tensor_type = 'TensorTrainMatrix'
 
-shape = [[100,10,13],[4,2,8]]
+shape = [[100, 10, 13], [4, 2, 8]]
 
 n = np.prod(shape[0])
 r = np.prod(shape[1])
 
-layer = TensorizedEmbedding(tensor_type=tensor_type,shape=shape)
+layer = TensorizedEmbedding(tensor_type=tensor_type, shape=shape)
 factors = layer.tensor.factors
 batch_size = 10
-x_list = [random.randint(0,n-1) for _ in range(batch_size)]
+x_list = [random.randint(0, n - 1) for _ in range(batch_size)]
 x = torch.tensor(x_list)
 xshape = list(x.shape)
-xshape_new = xshape + [n, ]
+xshape_new = xshape + [
+    n,
+]
 x = x.view(-1)
 idx = x
-full = layer.tensor.get_full() 
+full = layer.tensor.get_full()
 rows = layer.forward(idx)
 
 dims = layer.shape[0]
@@ -36,13 +37,12 @@ rem = idx
 
 cum_prod = get_cum_prod(shape)
 
-gathered_rows = tensorized_lookup(idx,factors,cum_prod,shape,tensor_type)
+gathered_rows = tensorized_lookup(idx, factors, cum_prod, shape, tensor_type)
 
-rel_err =  torch.norm(rows-gathered_rows)/torch.norm(rows)
+rel_err = torch.norm(rows - gathered_rows) / torch.norm(rows)
 
 print(rel_err.item())
-assert(rel_err<1e-6)
-
+assert (rel_err < 1e-6)
 """
 
 tmp_factors[0]
