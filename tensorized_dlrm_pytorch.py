@@ -1020,10 +1020,8 @@ if __name__ == "__main__":
             for j, (X, lS_o, lS_i, T) in enumerate(train_ld):
                 
                 if k==0:
-                    print("First epoch curve")
                     iter_kl_multiplier = args.kl_multiplier*torch.clamp(torch.tensor(((j-args.no_kl_steps)/len(train_ld))),0.0,1.0)
                 else:
-                    print("Second epoch curve")
                     iter_kl_multiplier = args.kl_multiplier*torch.clamp(torch.tensor(((len(train_ld)-args.no_kl_steps)/len(train_ld))),0.0,1.0)
 #                if j>249:
 #                    break

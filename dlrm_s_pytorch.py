@@ -1258,4 +1258,4 @@ if __name__ == "__main__":
         # check the onnx model
         onnx.checker.check_model(dlrm_pytorch_onnx)
 
-    dlrm.save_embeddings()
+    #dlrm.save_embeddings()

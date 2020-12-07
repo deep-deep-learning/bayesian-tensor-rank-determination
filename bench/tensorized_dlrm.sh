@@ -20,7 +20,7 @@ echo "run pytorch ..."
 # WARNING: the following parameters will be set based on the data set
 # --arch-embedding-size=... (sparse feature sizes)
 # --arch-mlp-bot=... (the input to the first layer of bottom mlp)
-$dlrm_pt_bin  --nepochs=2 --arch-sparse-feature-size=128 --arch-mlp-bot="13-512-256-256-128" --arch-mlp-top="512-256-1" --data-generation=dataset --data-set=kaggle --raw-data-file=./input/train.txt --processed-data-file=./input/kaggleAdDisplayChallenge_processed.npz --loss-function=bce --round-targets=True --learning-rate=0.1 --print-time $dlrm_extra_option --test-num-workers=16 --memory-map  --mini-batch-size=256 2>&1 | tee run_kaggle_pt.log
+$dlrm_pt_bin  --nepochs=2 --arch-sparse-feature-size=128 --arch-mlp-bot="13-512-256-256-128" --arch-mlp-top="512-256-1" --data-generation=dataset --data-set=kaggle --raw-data-file=./input/train.txt --processed-data-file=./input/kaggleAdDisplayChallenge_processed.npz --loss-function=bce --round-targets=True --print-time $dlrm_extra_option --test-num-workers=16 --memory-map  --mini-batch-size=512 2>&1 | tee run_kaggle_pt.log
 
 echo "done"
 
