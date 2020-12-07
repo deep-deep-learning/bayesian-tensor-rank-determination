@@ -299,9 +299,8 @@ class TensorTrain(LowRankTensor):
     def get_full(self):
 
         if hasattr(self,"masks"):
-            raise NotImplementedError
-            factors = [torch.multiply(x,y) for x,y in zip(self.factors,self.masks)]+[torch.multiply(torch.expand_dims(torch.expand_dims(self.masks[-1],axis=-1),axis=-1),self.factors[-1])]
-            return tl.mps_to_tensor(factors)
+            factors = [x*y for x,y in zip(self.factors,self.masks)]+[self.masks[-1].view([-1,1,1])*self.factors[-1]]
+            return tl.tt_to_tensor(factors)
         else:
             return tl.tt_to_tensor(self.factors)
 
@@ -431,8 +430,7 @@ class TensorTrain(LowRankTensor):
         factors = [x.rsample() for x in self.factor_distributions]
 
         if hasattr(self,"masks"):
-            raise NotImplementedError
-            factors = [tf.multiply(x,y) for x,y in zip(factors,self.masks)]+[tf.multiply(tf.expand_dims(tf.expand_dims(self.masks[-1],axis=-1),axis=-1),factors[-1])]
+            factors = [x*y for x,y in zip(factors,self.masks)]+[self.masks[-1].view([-1,1,1])*factors[-1]]
         
         return tl.tt_to_tensor(factors)
         
@@ -485,8 +483,7 @@ class TensorTrain(LowRankTensor):
         return [int(sum(torch.square(x) > threshold)) for x in self.rank_parameters]
 
     def prune_ranks(self, threshold=1e-5):
-        raise NotImplementedError
-        self.masks =[tf.cast(tf.math.greater(x,threshold),tf.float32) for x in self.rank_parameters]
+        self.masks =[torch.tensor(torch.square(x)>threshold,dtype = torch.float32).to(x.device) for x in self.rank_parameters]
 
     def get_kl_divergence_to_prior(self):
 
@@ -527,8 +524,7 @@ class Tucker(LowRankTensor):
         factors = list(self.factors)
 
         if hasattr(self,"masks"):
-            raise NotImplementedError
-            factors[0] = tf.multiply(tl.kruskal_to_tensor(([1.0],[tf.expand_dims(x,axis=1) for x in self.masks])),factors[0])
+            factors[1] = [x*factor for x,factor in zip(self.masks,self.factors[1])]
 
         return tl.tucker_to_tensor(factors)
 
@@ -550,8 +546,7 @@ class Tucker(LowRankTensor):
 
 
     def prune_ranks(self, threshold=1e-4):
-        raise NotImplementedError        
-        self.masks =[tf.cast(tf.math.greater(x,threshold),tf.float32) for x in self.rank_parameters]
+        self.masks =[torch.tensor(torch.square(x)>threshold,dtype = torch.float32).to(x.device) for x in self.rank_parameters]
 
     def _nn_init(self):
 
@@ -749,8 +744,7 @@ class TensorTrainMatrix(LowRankTensor):
     def full_from_factors(self,factors):
 
         if hasattr(self,'masks'):
-            raise NotImplementedError
-            factors = [tf.multiply(x,y) for x,y in zip(self.factors,self.masks)]+[tf.multiply(tf.expand_dims(tf.expand_dims(tf.expand_dims(self.masks[-1],axis=-1),axis=-1),axis=-1),self.factors[-1])]
+            factors = [x*y for x,y in zip(factors,self.masks)]+[self.masks[-1].view([-1,1,1,1])*factors[-1]]
 
         num_dims = len(self.dims1)
 
@@ -790,8 +784,11 @@ class TensorTrainMatrix(LowRankTensor):
         return [int(sum(torch.square(x) > threshold)) for x in self.rank_parameters]
 
     def prune_ranks(self, threshold=1e-5):
-        raise NotImplementedError
-        self.masks =[tf.cast(tf.math.greater(x,threshold),tf.float32) for x in self.rank_parameters]
+
+        self.masks = [
+            torch.tensor(torch.square(x)>threshold, dtype=torch.float32).to(x.device)
+            for x in self.rank_parameters
+        ]
 
     def _nn_init(self):
 

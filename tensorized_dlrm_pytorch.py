@@ -99,15 +99,21 @@ import os
 
 exc = getattr(builtins, "IOError", "FileNotFoundError")
 
+def prune_ranks(model):
+
+    print("Pruning tensor ranks")
+
+    for layer in model.emb_l:
+        if hasattr(layer, "tensor"):
+            print("pruning with rank cutoff 1e-7", layer.tensor.prune_ranks(threshold=1e-7))
+
 
 def print_ranks(model):
 
     for layer in model.emb_l:
         if hasattr(layer, "tensor"):
-            print('Tensor type ', layer.tensor.tensor_type)
-            print("Tensor layer rank 1e-6", layer.tensor.estimate_rank(1e-7))
-            print("Tensor layer rank 1e-8", layer.tensor.estimate_rank(1e-7))
-            print("Tensor layer rank 1e-10", layer.tensor.estimate_rank(1e-7))
+            print('Tensor type ', layer.tensor.tensor_type," rank ", layer.tensor.estimate_rank(1e-7))
+
 
 
 def get_kl_loss(model):
@@ -1005,6 +1011,11 @@ if __name__ == "__main__":
     with torch.autograd.profiler.profile(args.enable_profiling,
                                          use_gpu) as prof:
         while k < args.nepochs:
+
+            if k==0:
+                print_ranks(dlrm)
+                prune_ranks(dlrm)
+
 
             if k < skip_upto_epoch:
                 continue
