@@ -1018,8 +1018,8 @@ if __name__ == "__main__":
                                          use_gpu) as prof:
         while k < args.nepochs:
 
-            print_ranks(dlrm)
-            if k>0:
+            if k>=2:
+                print_ranks(dlrm)
                 prune_ranks(dlrm)
                 print_masks(dlrm)
                 args.kl_multiplier = 0.0

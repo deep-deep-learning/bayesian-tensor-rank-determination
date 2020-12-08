@@ -58,23 +58,14 @@ class TensorizedEmbedding(nn.Module):
 #        full = self.tensor.get_full()
 #        full = torch.reshape(full,[self.voc_quant,self.emb_quant])
 #        rows = full[x]
-
-        gathered_rows = tensorized_lookup(x,self.tensor.factors,self.cum_prod,self.shape,self.tensor_type)
+        if hasattr(self.tensor,"masks"):
+            rows = tensorized_lookup(x,self.tensor.get_masked_factors(),self.cum_prod,self.shape,self.tensor_type)
+        else:
+            rows = tensorized_lookup(x,self.tensor.factors,self.cum_prod,self.shape,self.tensor_type)
 #        rows = gather_rows(self.tensor, x_ind)
-        rows = gathered_rows
 
         rows = rows.view(x.shape[0], -1)
-        """
-        print("REL ERR *************************************")
-        print(torch.norm(gathered_rows-rows)/torch.norm(rows))
-        print("REL ERR *************************************")
-                 
-        if self.naive:
-            full = t3.naive_full(self.tt_matrix)
-        else:
-            full = self.tt_matrix.full()
-        rows = full[x]
-        """
+
         if self.padding_idx is not None:
             rows = torch.where(x.view(-1, 1) != self.padding_idx, rows, torch.zeros_like(rows))
 

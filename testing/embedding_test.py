@@ -101,7 +101,6 @@ tmp = trained_emb.tensor.get_full()
 print("Pruning norm difference ",torch.norm(tmp-full)/torch.norm(full))
 
 
-
 opt = torch.optim.Adam(lr=lr*1e-2,params = trained_emb.parameters())
 
 
