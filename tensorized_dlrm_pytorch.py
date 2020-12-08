@@ -1012,9 +1012,8 @@ if __name__ == "__main__":
                                          use_gpu) as prof:
         while k < args.nepochs:
 
-            if k==0:
-                print_ranks(dlrm)
-                prune_ranks(dlrm)
+            print_ranks(dlrm)
+            prune_ranks(dlrm)
 
 
             if k < skip_upto_epoch:
