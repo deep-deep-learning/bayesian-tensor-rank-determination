@@ -1,5 +1,5 @@
 run pytorch ...
-Namespace(activation_function='relu', arch_embedding_size='4-3-2', arch_interaction_itself=False, arch_interaction_op='dot', arch_mlp_bot='13-512-256-256-128', arch_mlp_top='512-256-1', arch_sparse_feature_size=128, data_generation='dataset', data_randomize='total', data_set='kaggle', data_size=1, data_sub_sample_rate=0.0, data_trace_enable_padding=False, data_trace_file='./input/dist_emb_j.log', debug_mode=False, enable_profiling=False, inference_only=False, kl_multiplier=0.001, learning_rate=0.005, load_model='', load_saved=0, loss_function='bce', loss_threshold=0.0, loss_weights='1.0-1.0', lr_decay_start_step=0, lr_num_decay_steps=0, lr_num_warmup_steps=0, max_ind_range=-1, md_flag=False, md_round_dims=False, md_temperature=0.3, md_threshold=200, memory_map=True, mini_batch_size=512, mlperf_acc_threshold=0.0, mlperf_auc_threshold=0.0, mlperf_bin_loader=False, mlperf_bin_shuffle=False, mlperf_logging=False, nepochs=2, no_kl_steps=50000, num_batches=0, num_indices_per_lookup=10, num_indices_per_lookup_fixed=False, num_workers=0, numpy_rand_seed=123, optimizer='Adam', plot_compute_graph=False, print_freq=1024, print_precision=5, print_time=True, processed_data_file='./input/kaggleAdDisplayChallenge_processed.npz', qr_collisions=4, qr_flag=False, qr_operation='mult', qr_threshold=200, raw_data_file='./input/train.txt', round_targets=True, save_model='saved_models/TensorTrainMatrix_warmup_50000__lr_0.005_kl_0.001', save_onnx=False, sync_dense_params=True, tensor_type='TensorTrainMatrix', test_freq=10240, test_mini_batch_size=-1, test_num_workers=16, use_gpu=1)
+Namespace(activation_function='relu', arch_embedding_size='4-3-2', arch_interaction_itself=False, arch_interaction_op='dot', arch_mlp_bot='13-512-256-256-128', arch_mlp_top='512-256-1', arch_sparse_feature_size=128, data_generation='dataset', data_randomize='total', data_set='kaggle', data_size=1, data_sub_sample_rate=0.0, data_trace_enable_padding=False, data_trace_file='./input/dist_emb_j.log', debug_mode=False, enable_profiling=False, inference_only=False, kl_multiplier=0.001, learning_rate=0.005, load_model='', load_saved=0, loss_function='bce', loss_threshold=0.0, loss_weights='1.0-1.0', lr_decay_start_step=0, lr_num_decay_steps=0, lr_num_warmup_steps=0, max_ind_range=-1, md_flag=False, md_round_dims=False, md_temperature=0.3, md_threshold=200, memory_map=True, mini_batch_size=512, mlperf_acc_threshold=0.0, mlperf_auc_threshold=0.0, mlperf_bin_loader=False, mlperf_bin_shuffle=False, mlperf_logging=False, nepochs=3, no_kl_steps=50000, num_batches=0, num_indices_per_lookup=10, num_indices_per_lookup_fixed=False, num_workers=0, numpy_rand_seed=123, optimizer='Adam', plot_compute_graph=False, print_freq=1024, print_precision=5, print_time=True, processed_data_file='./input/kaggleAdDisplayChallenge_processed.npz', qr_collisions=4, qr_flag=False, qr_operation='mult', qr_threshold=200, raw_data_file='./input/train.txt', round_targets=True, save_model='saved_models/TensorTrainMatrix_warmup_50000__lr_0.005_kl_0.001', save_onnx=False, sync_dense_params=True, tensor_type='TensorTrainMatrix', test_freq=10240, test_mini_batch_size=-1, test_num_workers=16, use_gpu=1)
 Using 1 GPU(s)...
 Reading pre-processed data=./input/kaggleAdDisplayChallenge_processed.npz
 Sparse features= 26, Dense features= 13
@@ -37,76 +37,70 @@ Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
-Pruning tensor ranks
-pruning with rank cutoff 1e-7 None
-pruning with rank cutoff 1e-7 None
-pruning with rank cutoff 1e-7 None
-pruning with rank cutoff 1e-7 None
-pruning with rank cutoff 1e-7 None
-Finished training it 1024/76743 of epoch 0, 39.19 ms/it, loss 0.481546, accuracy 77.493 %
+Finished training it 1024/76743 of epoch 0, 38.96 ms/it, loss 0.481920, accuracy 77.496 %
 KL loss  0.0 iteration kl_multiplier  0.0  iter  1023
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
-Finished training it 2048/76743 of epoch 0, 39.14 ms/it, loss 0.466992, accuracy 78.228 %
+Finished training it 2048/76743 of epoch 0, 38.95 ms/it, loss 0.467106, accuracy 78.205 %
 KL loss  0.0 iteration kl_multiplier  0.0  iter  2047
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
-Finished training it 3072/76743 of epoch 0, 39.00 ms/it, loss 0.464489, accuracy 78.358 %
+Finished training it 3072/76743 of epoch 0, 38.86 ms/it, loss 0.464612, accuracy 78.343 %
 KL loss  0.0 iteration kl_multiplier  0.0  iter  3071
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
-Finished training it 4096/76743 of epoch 0, 38.78 ms/it, loss 0.462879, accuracy 78.463 %
+Finished training it 4096/76743 of epoch 0, 39.00 ms/it, loss 0.462978, accuracy 78.476 %
 KL loss  0.0 iteration kl_multiplier  0.0  iter  4095
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
-Finished training it 5120/76743 of epoch 0, 38.87 ms/it, loss 0.461998, accuracy 78.485 %
+Finished training it 5120/76743 of epoch 0, 38.83 ms/it, loss 0.462149, accuracy 78.523 %
 KL loss  0.0 iteration kl_multiplier  0.0  iter  5119
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
-Finished training it 6144/76743 of epoch 0, 38.66 ms/it, loss 0.460180, accuracy 78.528 %
+Finished training it 6144/76743 of epoch 0, 38.97 ms/it, loss 0.461829, accuracy 78.548 %
 KL loss  0.0 iteration kl_multiplier  0.0  iter  6143
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
-Finished training it 7168/76743 of epoch 0, 39.02 ms/it, loss 0.460535, accuracy 78.643 %
+Finished training it 7168/76743 of epoch 0, 38.86 ms/it, loss 0.460664, accuracy 78.645 %
 KL loss  0.0 iteration kl_multiplier  0.0  iter  7167
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
-Finished training it 8192/76743 of epoch 0, 36.58 ms/it, loss 0.460176, accuracy 78.622 %
+Finished training it 8192/76743 of epoch 0, 38.91 ms/it, loss 0.461364, accuracy 78.592 %
 KL loss  0.0 iteration kl_multiplier  0.0  iter  8191
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
-Finished training it 9216/76743 of epoch 0, 36.20 ms/it, loss 0.459250, accuracy 78.675 %
+Finished training it 9216/76743 of epoch 0, 39.00 ms/it, loss 0.462562, accuracy 78.642 %
 KL loss  0.0 iteration kl_multiplier  0.0  iter  9215
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
-Finished training it 10240/76743 of epoch 0, 38.92 ms/it, loss 0.463761, accuracy 78.753 %
+Finished training it 10240/76743 of epoch 0, 37.66 ms/it, loss 0.458502, accuracy 78.755 %
 KL loss  0.0 iteration kl_multiplier  0.0  iter  10239
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
@@ -114,71 +108,71 @@ Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Saving model to saved_models/TensorTrainMatrix_warmup_50000__lr_0.005_kl_0.001
-Testing at - 10240/76743 of epoch 0, loss 0.461816, accuracy 78.330 %, best 0.000 %
-Finished training it 11264/76743 of epoch 0, 39.07 ms/it, loss 0.457054, accuracy 78.829 %
+Testing at - 10240/76743 of epoch 0, loss 0.473316, accuracy 78.336 %, best 0.000 %
+Finished training it 11264/76743 of epoch 0, 39.18 ms/it, loss 0.461822, accuracy 78.781 %
 KL loss  0.0 iteration kl_multiplier  0.0  iter  11263
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
-Finished training it 12288/76743 of epoch 0, 38.94 ms/it, loss 0.460568, accuracy 78.812 %
+Finished training it 12288/76743 of epoch 0, 38.81 ms/it, loss 0.458772, accuracy 78.857 %
 KL loss  0.0 iteration kl_multiplier  0.0  iter  12287
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
-Finished training it 13312/76743 of epoch 0, 38.78 ms/it, loss 0.459339, accuracy 78.758 %
+Finished training it 13312/76743 of epoch 0, 38.43 ms/it, loss 0.461169, accuracy 78.787 %
 KL loss  0.0 iteration kl_multiplier  0.0  iter  13311
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
-Finished training it 14336/76743 of epoch 0, 38.77 ms/it, loss 0.453919, accuracy 78.887 %
+Finished training it 14336/76743 of epoch 0, 39.05 ms/it, loss 0.456763, accuracy 78.880 %
 KL loss  0.0 iteration kl_multiplier  0.0  iter  14335
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
-Finished training it 15360/76743 of epoch 0, 38.81 ms/it, loss 0.456062, accuracy 78.851 %
+Finished training it 15360/76743 of epoch 0, 39.21 ms/it, loss 0.462731, accuracy 78.853 %
 KL loss  0.0 iteration kl_multiplier  0.0  iter  15359
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
-Finished training it 16384/76743 of epoch 0, 38.94 ms/it, loss 0.455023, accuracy 78.860 %
+Finished training it 16384/76743 of epoch 0, 39.12 ms/it, loss 0.463371, accuracy 78.877 %
 KL loss  0.0 iteration kl_multiplier  0.0  iter  16383
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
-Finished training it 17408/76743 of epoch 0, 38.72 ms/it, loss 0.458306, accuracy 78.707 %
+Finished training it 17408/76743 of epoch 0, 39.11 ms/it, loss 0.467670, accuracy 78.722 %
 KL loss  0.0 iteration kl_multiplier  0.0  iter  17407
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
-Finished training it 18432/76743 of epoch 0, 36.96 ms/it, loss 0.455725, accuracy 78.838 %
+Finished training it 18432/76743 of epoch 0, 38.99 ms/it, loss 0.462501, accuracy 78.761 %
 KL loss  0.0 iteration kl_multiplier  0.0  iter  18431
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
-Finished training it 19456/76743 of epoch 0, 35.78 ms/it, loss 0.470989, accuracy 78.789 %
+Finished training it 19456/76743 of epoch 0, 39.10 ms/it, loss 0.458172, accuracy 78.825 %
 KL loss  0.0 iteration kl_multiplier  0.0  iter  19455
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
-Finished training it 20480/76743 of epoch 0, 38.83 ms/it, loss 0.455751, accuracy 78.795 %
+Finished training it 20480/76743 of epoch 0, 39.11 ms/it, loss 0.458452, accuracy 78.831 %
 KL loss  0.0 iteration kl_multiplier  0.0  iter  20479
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
@@ -186,71 +180,71 @@ Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Saving model to saved_models/TensorTrainMatrix_warmup_50000__lr_0.005_kl_0.001
-Testing at - 20480/76743 of epoch 0, loss 0.460127, accuracy 78.395 %, best 0.000 %
-Finished training it 21504/76743 of epoch 0, 38.79 ms/it, loss 0.458283, accuracy 78.850 %
+Testing at - 20480/76743 of epoch 0, loss 0.460017, accuracy 78.427 %, best 0.000 %
+Finished training it 21504/76743 of epoch 0, 39.04 ms/it, loss 0.457363, accuracy 78.945 %
 KL loss  0.0 iteration kl_multiplier  0.0  iter  21503
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
-Finished training it 22528/76743 of epoch 0, 38.85 ms/it, loss 0.454681, accuracy 78.815 %
+Finished training it 22528/76743 of epoch 0, 39.01 ms/it, loss 0.455367, accuracy 78.827 %
 KL loss  0.0 iteration kl_multiplier  0.0  iter  22527
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
-Finished training it 23552/76743 of epoch 0, 38.88 ms/it, loss 0.461459, accuracy 78.932 %
+Finished training it 23552/76743 of epoch 0, 39.05 ms/it, loss 0.456386, accuracy 78.919 %
 KL loss  0.0 iteration kl_multiplier  0.0  iter  23551
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
-Finished training it 24576/76743 of epoch 0, 38.79 ms/it, loss 0.460461, accuracy 78.868 %
+Finished training it 24576/76743 of epoch 0, 39.13 ms/it, loss 0.459316, accuracy 78.894 %
 KL loss  0.0 iteration kl_multiplier  0.0  iter  24575
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
-Finished training it 25600/76743 of epoch 0, 38.76 ms/it, loss 0.463001, accuracy 78.922 %
+Finished training it 25600/76743 of epoch 0, 39.06 ms/it, loss 0.460350, accuracy 78.957 %
 KL loss  0.0 iteration kl_multiplier  0.0  iter  25599
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
-Finished training it 26624/76743 of epoch 0, 38.70 ms/it, loss 0.458496, accuracy 78.922 %
+Finished training it 26624/76743 of epoch 0, 38.94 ms/it, loss 0.460375, accuracy 78.943 %
 KL loss  0.0 iteration kl_multiplier  0.0  iter  26623
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
-Finished training it 27648/76743 of epoch 0, 38.66 ms/it, loss 0.466913, accuracy 78.904 %
+Finished training it 27648/76743 of epoch 0, 39.02 ms/it, loss 0.469414, accuracy 78.863 %
 KL loss  0.0 iteration kl_multiplier  0.0  iter  27647
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
-Finished training it 28672/76743 of epoch 0, 37.30 ms/it, loss 0.486361, accuracy 78.708 %
+Finished training it 28672/76743 of epoch 0, 38.93 ms/it, loss 0.466180, accuracy 78.726 %
 KL loss  0.0 iteration kl_multiplier  0.0  iter  28671
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
-Finished training it 29696/76743 of epoch 0, 35.31 ms/it, loss 0.463179, accuracy 78.769 %
+Finished training it 29696/76743 of epoch 0, 39.13 ms/it, loss 0.473578, accuracy 78.845 %
 KL loss  0.0 iteration kl_multiplier  0.0  iter  29695
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
-Finished training it 30720/76743 of epoch 0, 38.77 ms/it, loss 0.462533, accuracy 78.805 %
+Finished training it 30720/76743 of epoch 0, 38.97 ms/it, loss 0.471279, accuracy 78.834 %
 KL loss  0.0 iteration kl_multiplier  0.0  iter  30719
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
@@ -258,71 +252,71 @@ Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Saving model to saved_models/TensorTrainMatrix_warmup_50000__lr_0.005_kl_0.001
-Testing at - 30720/76743 of epoch 0, loss 0.480191, accuracy 78.116 %, best 0.000 %
-Finished training it 31744/76743 of epoch 0, 38.73 ms/it, loss 0.465407, accuracy 78.922 %
+Testing at - 30720/76743 of epoch 0, loss 0.465625, accuracy 78.269 %, best 0.000 %
+Finished training it 31744/76743 of epoch 0, 38.10 ms/it, loss 0.460293, accuracy 78.963 %
 KL loss  0.0 iteration kl_multiplier  0.0  iter  31743
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
-Finished training it 32768/76743 of epoch 0, 38.68 ms/it, loss 0.465893, accuracy 78.784 %
+Finished training it 32768/76743 of epoch 0, 38.95 ms/it, loss 0.463590, accuracy 78.818 %
 KL loss  0.0 iteration kl_multiplier  0.0  iter  32767
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
-Finished training it 33792/76743 of epoch 0, 38.89 ms/it, loss 0.460232, accuracy 78.873 %
+Finished training it 33792/76743 of epoch 0, 38.91 ms/it, loss 0.462021, accuracy 78.911 %
 KL loss  0.0 iteration kl_multiplier  0.0  iter  33791
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
-Finished training it 34816/76743 of epoch 0, 38.71 ms/it, loss 0.461345, accuracy 78.932 %
+Finished training it 34816/76743 of epoch 0, 39.06 ms/it, loss 0.460981, accuracy 78.934 %
 KL loss  0.0 iteration kl_multiplier  0.0  iter  34815
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
-Finished training it 35840/76743 of epoch 0, 38.78 ms/it, loss 0.465337, accuracy 79.008 %
+Finished training it 35840/76743 of epoch 0, 39.02 ms/it, loss 0.461644, accuracy 79.031 %
 KL loss  0.0 iteration kl_multiplier  0.0  iter  35839
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
-Finished training it 36864/76743 of epoch 0, 38.89 ms/it, loss 0.461633, accuracy 78.871 %
+Finished training it 36864/76743 of epoch 0, 38.94 ms/it, loss 0.466417, accuracy 78.828 %
 KL loss  0.0 iteration kl_multiplier  0.0  iter  36863
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
-Finished training it 37888/76743 of epoch 0, 38.82 ms/it, loss 0.459489, accuracy 78.965 %
+Finished training it 37888/76743 of epoch 0, 39.07 ms/it, loss 0.463059, accuracy 78.895 %
 KL loss  0.0 iteration kl_multiplier  0.0  iter  37887
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
-Finished training it 38912/76743 of epoch 0, 37.78 ms/it, loss 0.460083, accuracy 79.089 %
+Finished training it 38912/76743 of epoch 0, 39.07 ms/it, loss 0.466380, accuracy 79.095 %
 KL loss  0.0 iteration kl_multiplier  0.0  iter  38911
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
-Finished training it 39936/76743 of epoch 0, 34.96 ms/it, loss 0.466987, accuracy 79.019 %
+Finished training it 39936/76743 of epoch 0, 38.95 ms/it, loss 0.468849, accuracy 79.062 %
 KL loss  0.0 iteration kl_multiplier  0.0  iter  39935
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
-Finished training it 40960/76743 of epoch 0, 38.83 ms/it, loss 0.471971, accuracy 78.971 %
+Finished training it 40960/76743 of epoch 0, 38.93 ms/it, loss 0.466471, accuracy 79.008 %
 KL loss  0.0 iteration kl_multiplier  0.0  iter  40959
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
@@ -330,3 +324,1356 @@ Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Tensor type  TensorTrainMatrix  rank  [16, 16]
 Saving model to saved_models/TensorTrainMatrix_warmup_50000__lr_0.005_kl_0.001
+Testing at - 40960/76743 of epoch 0, loss 0.465739, accuracy 78.595 %, best 0.000 %
+Finished training it 41984/76743 of epoch 0, 37.36 ms/it, loss 0.456270, accuracy 78.855 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  41983
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Finished training it 43008/76743 of epoch 0, 39.11 ms/it, loss 0.458696, accuracy 78.910 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  43007
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Finished training it 44032/76743 of epoch 0, 39.12 ms/it, loss 0.462150, accuracy 78.959 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  44031
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Finished training it 45056/76743 of epoch 0, 39.02 ms/it, loss 0.456906, accuracy 79.027 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  45055
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Finished training it 46080/76743 of epoch 0, 39.11 ms/it, loss 0.457356, accuracy 78.975 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  46079
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Finished training it 47104/76743 of epoch 0, 39.08 ms/it, loss 0.455480, accuracy 79.025 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  47103
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Finished training it 48128/76743 of epoch 0, 38.88 ms/it, loss 0.453174, accuracy 78.961 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  48127
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Finished training it 49152/76743 of epoch 0, 39.06 ms/it, loss 0.457659, accuracy 78.912 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  49151
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Finished training it 50176/76743 of epoch 0, 38.97 ms/it, loss 5.857726, accuracy 79.013 %
+KL loss  62.11602 iteration kl_multiplier  2.2803383e-06  iter  50175
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Finished training it 51200/76743 of epoch 0, 39.17 ms/it, loss 167.945665, accuracy 78.972 %
+KL loss  278.38812 iteration kl_multiplier  1.5623576e-05  iter  51199
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Saving model to saved_models/TensorTrainMatrix_warmup_50000__lr_0.005_kl_0.001
+Testing at - 51200/76743 of epoch 0, loss 0.458035, accuracy 78.574 %, best 0.000 %
+Finished training it 52224/76743 of epoch 0, 35.26 ms/it, loss 392.666193, accuracy 78.922 %
+KL loss  505.56314 iteration kl_multiplier  2.8966811e-05  iter  52223
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 15]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Finished training it 53248/76743 of epoch 0, 39.00 ms/it, loss 619.068885, accuracy 78.918 %
+KL loss  731.3731 iteration kl_multiplier  4.231005e-05  iter  53247
+Tensor type  TensorTrainMatrix  rank  [16, 14]
+Tensor type  TensorTrainMatrix  rank  [16, 14]
+Tensor type  TensorTrainMatrix  rank  [16, 14]
+Tensor type  TensorTrainMatrix  rank  [16, 9]
+Tensor type  TensorTrainMatrix  rank  [16, 7]
+Finished training it 54272/76743 of epoch 0, 39.05 ms/it, loss 844.513207, accuracy 78.874 %
+KL loss  955.82886 iteration kl_multiplier  5.5653287e-05  iter  54271
+Tensor type  TensorTrainMatrix  rank  [16, 10]
+Tensor type  TensorTrainMatrix  rank  [16, 7]
+Tensor type  TensorTrainMatrix  rank  [16, 5]
+Tensor type  TensorTrainMatrix  rank  [16, 9]
+Tensor type  TensorTrainMatrix  rank  [16, 9]
+Finished training it 55296/76743 of epoch 0, 39.15 ms/it, loss 1069.867935, accuracy 78.885 %
+KL loss  1180.7805 iteration kl_multiplier  6.899652e-05  iter  55295
+Tensor type  TensorTrainMatrix  rank  [16, 6]
+Tensor type  TensorTrainMatrix  rank  [16, 6]
+Tensor type  TensorTrainMatrix  rank  [16, 5]
+Tensor type  TensorTrainMatrix  rank  [16, 4]
+Tensor type  TensorTrainMatrix  rank  [16, 5]
+Finished training it 56320/76743 of epoch 0, 38.95 ms/it, loss 1294.844418, accuracy 78.921 %
+KL loss  1404.0245 iteration kl_multiplier  8.233976e-05  iter  56319
+Tensor type  TensorTrainMatrix  rank  [16, 4]
+Tensor type  TensorTrainMatrix  rank  [16, 5]
+Tensor type  TensorTrainMatrix  rank  [16, 3]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 3]
+Finished training it 57344/76743 of epoch 0, 39.11 ms/it, loss 1520.319301, accuracy 78.932 %
+KL loss  1629.319 iteration kl_multiplier  9.5683e-05  iter  57343
+Tensor type  TensorTrainMatrix  rank  [16, 5]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 6]
+Tensor type  TensorTrainMatrix  rank  [16, 5]
+Finished training it 58368/76743 of epoch 0, 39.12 ms/it, loss 1745.521411, accuracy 78.995 %
+KL loss  1854.7952 iteration kl_multiplier  0.00010902624  iter  58367
+Tensor type  TensorTrainMatrix  rank  [16, 5]
+Tensor type  TensorTrainMatrix  rank  [16, 5]
+Tensor type  TensorTrainMatrix  rank  [16, 4]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 6]
+Finished training it 59392/76743 of epoch 0, 39.15 ms/it, loss 1970.374821, accuracy 78.963 %
+KL loss  2079.339 iteration kl_multiplier  0.00012236947  iter  59391
+Tensor type  TensorTrainMatrix  rank  [16, 4]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 5]
+Tensor type  TensorTrainMatrix  rank  [16, 3]
+Tensor type  TensorTrainMatrix  rank  [16, 3]
+Finished training it 60416/76743 of epoch 0, 39.01 ms/it, loss 2195.625562, accuracy 78.912 %
+KL loss  2311.3997 iteration kl_multiplier  0.0001357127  iter  60415
+Tensor type  TensorTrainMatrix  rank  [16, 4]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 5]
+Tensor type  TensorTrainMatrix  rank  [16, 4]
+Tensor type  TensorTrainMatrix  rank  [16, 4]
+Finished training it 61440/76743 of epoch 0, 39.13 ms/it, loss 2420.801810, accuracy 79.041 %
+KL loss  2526.6975 iteration kl_multiplier  0.00014905595  iter  61439
+Tensor type  TensorTrainMatrix  rank  [16, 3]
+Tensor type  TensorTrainMatrix  rank  [16, 3]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 3]
+Saving model to saved_models/TensorTrainMatrix_warmup_50000__lr_0.005_kl_0.001
+Testing at - 61440/76743 of epoch 0, loss 0.457431, accuracy 78.620 %, best 0.000 %
+Finished training it 62464/76743 of epoch 0, 33.93 ms/it, loss 2646.103299, accuracy 79.003 %
+KL loss  2748.4387 iteration kl_multiplier  0.00016239918  iter  62463
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 4]
+Tensor type  TensorTrainMatrix  rank  [16, 0]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Finished training it 63488/76743 of epoch 0, 39.02 ms/it, loss 2871.630105, accuracy 79.029 %
+KL loss  2983.422 iteration kl_multiplier  0.00017574243  iter  63487
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 4]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 3]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Finished training it 64512/76743 of epoch 0, 39.18 ms/it, loss 3097.146403, accuracy 79.124 %
+KL loss  3210.5515 iteration kl_multiplier  0.00018908565  iter  64511
+Tensor type  TensorTrainMatrix  rank  [16, 3]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 6]
+Tensor type  TensorTrainMatrix  rank  [16, 3]
+Tensor type  TensorTrainMatrix  rank  [16, 4]
+Finished training it 65536/76743 of epoch 0, 38.99 ms/it, loss 3321.947806, accuracy 79.105 %
+KL loss  3440.8484 iteration kl_multiplier  0.0002024289  iter  65535
+Tensor type  TensorTrainMatrix  rank  [16, 4]
+Tensor type  TensorTrainMatrix  rank  [16, 3]
+Tensor type  TensorTrainMatrix  rank  [16, 4]
+Tensor type  TensorTrainMatrix  rank  [16, 4]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Finished training it 66560/76743 of epoch 0, 38.97 ms/it, loss 3547.169397, accuracy 79.074 %
+KL loss  3659.8816 iteration kl_multiplier  0.00021577213  iter  66559
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 3]
+Tensor type  TensorTrainMatrix  rank  [16, 3]
+Tensor type  TensorTrainMatrix  rank  [16, 6]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Finished training it 67584/76743 of epoch 0, 39.18 ms/it, loss 3772.634489, accuracy 78.950 %
+KL loss  3887.7449 iteration kl_multiplier  0.00022911537  iter  67583
+Tensor type  TensorTrainMatrix  rank  [16, 7]
+Tensor type  TensorTrainMatrix  rank  [16, 4]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 4]
+Tensor type  TensorTrainMatrix  rank  [16, 3]
+Finished training it 68608/76743 of epoch 0, 39.07 ms/it, loss 3997.831108, accuracy 79.083 %
+KL loss  4116.3984 iteration kl_multiplier  0.00024245861  iter  68607
+Tensor type  TensorTrainMatrix  rank  [16, 3]
+Tensor type  TensorTrainMatrix  rank  [16, 3]
+Tensor type  TensorTrainMatrix  rank  [16, 5]
+Tensor type  TensorTrainMatrix  rank  [16, 5]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Finished training it 69632/76743 of epoch 0, 39.01 ms/it, loss 4222.880627, accuracy 79.004 %
+KL loss  4333.513 iteration kl_multiplier  0.00025580183  iter  69631
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 4]
+Tensor type  TensorTrainMatrix  rank  [16, 5]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Finished training it 70656/76743 of epoch 0, 38.98 ms/it, loss 4448.174848, accuracy 78.946 %
+KL loss  4555.181 iteration kl_multiplier  0.0002691451  iter  70655
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 4]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Finished training it 71680/76743 of epoch 0, 38.80 ms/it, loss 4674.190500, accuracy 79.095 %
+KL loss  4776.5527 iteration kl_multiplier  0.00028248833  iter  71679
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 5]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Saving model to saved_models/TensorTrainMatrix_warmup_50000__lr_0.005_kl_0.001
+Testing at - 71680/76743 of epoch 0, loss 0.456298, accuracy 78.664 %, best 0.000 %
+Finished training it 72704/76743 of epoch 0, 34.06 ms/it, loss 4898.545766, accuracy 79.030 %
+KL loss  5002.417 iteration kl_multiplier  0.00029583153  iter  72703
+Tensor type  TensorTrainMatrix  rank  [16, 3]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 3]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Finished training it 73728/76743 of epoch 0, 38.75 ms/it, loss 5123.928743, accuracy 78.987 %
+KL loss  5226.273 iteration kl_multiplier  0.0003091748  iter  73727
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 3]
+Tensor type  TensorTrainMatrix  rank  [16, 3]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Finished training it 74752/76743 of epoch 0, 39.08 ms/it, loss 5348.643400, accuracy 79.042 %
+KL loss  5463.205 iteration kl_multiplier  0.00032251803  iter  74751
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 4]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 5]
+Finished training it 75776/76743 of epoch 0, 39.04 ms/it, loss 5574.285940, accuracy 79.059 %
+KL loss  5691.99 iteration kl_multiplier  0.0003358613  iter  75775
+Tensor type  TensorTrainMatrix  rank  [16, 3]
+Tensor type  TensorTrainMatrix  rank  [16, 5]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Finished training it 76743/76743 of epoch 0, 38.94 ms/it, loss 5793.526166, accuracy 78.979 %
+KL loss  5926.6084 iteration kl_multiplier  0.00034846176  iter  76742
+Tensor type  TensorTrainMatrix  rank  [16, 4]
+Tensor type  TensorTrainMatrix  rank  [16, 5]
+Tensor type  TensorTrainMatrix  rank  [16, 5]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 4]
+Saving model to saved_models/TensorTrainMatrix_warmup_50000__lr_0.005_kl_0.001
+Testing at - 76743/76743 of epoch 0, loss 0.454935, accuracy 78.689 %, best 0.000 %
+Tensor type  TensorTrainMatrix  rank  [16, 3]
+Tensor type  TensorTrainMatrix  rank  [16, 5]
+Tensor type  TensorTrainMatrix  rank  [16, 7]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Finished training it 1024/76743 of epoch 1, 34.00 ms/it, loss 5896.454841, accuracy 79.306 %
+KL loss  5881.902 iteration kl_multiplier  0.0003484748  iter  1023
+Tensor type  TensorTrainMatrix  rank  [16, 4]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Finished training it 2048/76743 of epoch 1, 39.05 ms/it, loss 5892.194753, accuracy 79.367 %
+KL loss  5878.283 iteration kl_multiplier  0.0003484748  iter  2047
+Tensor type  TensorTrainMatrix  rank  [16, 0]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 0]
+Tensor type  TensorTrainMatrix  rank  [16, 3]
+Finished training it 3072/76743 of epoch 1, 39.27 ms/it, loss 5889.373870, accuracy 79.330 %
+KL loss  5885.055 iteration kl_multiplier  0.0003484748  iter  3071
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 3]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Finished training it 4096/76743 of epoch 1, 39.06 ms/it, loss 5887.211680, accuracy 79.339 %
+KL loss  5893.104 iteration kl_multiplier  0.0003484748  iter  4095
+Tensor type  TensorTrainMatrix  rank  [16, 3]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 5]
+Tensor type  TensorTrainMatrix  rank  [16, 0]
+Finished training it 5120/76743 of epoch 1, 39.08 ms/it, loss 5886.998361, accuracy 79.301 %
+KL loss  5899.649 iteration kl_multiplier  0.0003484748  iter  5119
+Tensor type  TensorTrainMatrix  rank  [16, 7]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 3]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 3]
+Finished training it 6144/76743 of epoch 1, 39.32 ms/it, loss 5886.146692, accuracy 79.275 %
+KL loss  5893.7544 iteration kl_multiplier  0.0003484748  iter  6143
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 3]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 4]
+Tensor type  TensorTrainMatrix  rank  [16, 4]
+Finished training it 7168/76743 of epoch 1, 39.21 ms/it, loss 5885.546643, accuracy 79.314 %
+KL loss  5881.6523 iteration kl_multiplier  0.0003484748  iter  7167
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 0]
+Tensor type  TensorTrainMatrix  rank  [16, 0]
+Tensor type  TensorTrainMatrix  rank  [16, 4]
+Finished training it 8192/76743 of epoch 1, 39.14 ms/it, loss 5885.289205, accuracy 79.248 %
+KL loss  5875.1953 iteration kl_multiplier  0.0003484748  iter  8191
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 0]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Finished training it 9216/76743 of epoch 1, 39.14 ms/it, loss 5884.671568, accuracy 79.319 %
+KL loss  5889.3003 iteration kl_multiplier  0.0003484748  iter  9215
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 3]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 4]
+Tensor type  TensorTrainMatrix  rank  [16, 4]
+Finished training it 10240/76743 of epoch 1, 39.26 ms/it, loss 5884.688045, accuracy 79.333 %
+KL loss  5882.768 iteration kl_multiplier  0.0003484748  iter  10239
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 3]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Saving model to saved_models/TensorTrainMatrix_warmup_50000__lr_0.005_kl_0.001
+Testing at - 10240/76743 of epoch 0, loss 0.456419, accuracy 78.628 %, best 0.000 %
+Finished training it 11264/76743 of epoch 1, 35.27 ms/it, loss 5884.594094, accuracy 79.321 %
+KL loss  5888.414 iteration kl_multiplier  0.0003484748  iter  11263
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 3]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 5]
+Finished training it 12288/76743 of epoch 1, 37.53 ms/it, loss 5884.242437, accuracy 79.324 %
+KL loss  5872.6577 iteration kl_multiplier  0.0003484748  iter  12287
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 0]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Finished training it 13312/76743 of epoch 1, 38.96 ms/it, loss 5884.534585, accuracy 79.264 %
+KL loss  5879.3555 iteration kl_multiplier  0.0003484748  iter  13311
+Tensor type  TensorTrainMatrix  rank  [16, 3]
+Tensor type  TensorTrainMatrix  rank  [16, 3]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 3]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Finished training it 14336/76743 of epoch 1, 38.83 ms/it, loss 5884.989687, accuracy 79.357 %
+KL loss  5889.8584 iteration kl_multiplier  0.0003484748  iter  14335
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 5]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 4]
+Finished training it 15360/76743 of epoch 1, 38.87 ms/it, loss 5884.636428, accuracy 79.343 %
+KL loss  5869.137 iteration kl_multiplier  0.0003484748  iter  15359
+Tensor type  TensorTrainMatrix  rank  [16, 0]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Finished training it 16384/76743 of epoch 1, 39.03 ms/it, loss 5884.932689, accuracy 79.373 %
+KL loss  5884.403 iteration kl_multiplier  0.0003484748  iter  16383
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 5]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Finished training it 17408/76743 of epoch 1, 38.87 ms/it, loss 5884.691828, accuracy 79.207 %
+KL loss  5860.73 iteration kl_multiplier  0.0003484748  iter  17407
+Tensor type  TensorTrainMatrix  rank  [16, 0]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Finished training it 18432/76743 of epoch 1, 38.90 ms/it, loss 5885.780491, accuracy 79.262 %
+KL loss  5884.6743 iteration kl_multiplier  0.0003484748  iter  18431
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 4]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Finished training it 19456/76743 of epoch 1, 39.01 ms/it, loss 5885.069646, accuracy 79.273 %
+KL loss  5888.419 iteration kl_multiplier  0.0003484748  iter  19455
+Tensor type  TensorTrainMatrix  rank  [16, 3]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 3]
+Tensor type  TensorTrainMatrix  rank  [16, 4]
+Finished training it 20480/76743 of epoch 1, 39.26 ms/it, loss 5885.488420, accuracy 79.263 %
+KL loss  5886.4316 iteration kl_multiplier  0.0003484748  iter  20479
+Tensor type  TensorTrainMatrix  rank  [16, 3]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 4]
+Saving model to saved_models/TensorTrainMatrix_warmup_50000__lr_0.005_kl_0.001
+Testing at - 20480/76743 of epoch 0, loss 0.456718, accuracy 78.644 %, best 0.000 %
+Finished training it 21504/76743 of epoch 1, 37.04 ms/it, loss 5885.251196, accuracy 79.345 %
+KL loss  5868.7715 iteration kl_multiplier  0.0003484748  iter  21503
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 0]
+Tensor type  TensorTrainMatrix  rank  [16, 0]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Finished training it 22528/76743 of epoch 1, 36.50 ms/it, loss 5885.699251, accuracy 79.251 %
+KL loss  5874.478 iteration kl_multiplier  0.0003484748  iter  22527
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 0]
+Finished training it 23552/76743 of epoch 1, 39.25 ms/it, loss 5884.685402, accuracy 79.362 %
+KL loss  5874.6675 iteration kl_multiplier  0.0003484748  iter  23551
+Tensor type  TensorTrainMatrix  rank  [16, 0]
+Tensor type  TensorTrainMatrix  rank  [16, 3]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 0]
+Finished training it 24576/76743 of epoch 1, 39.38 ms/it, loss 5885.008687, accuracy 79.319 %
+KL loss  5868.507 iteration kl_multiplier  0.0003484748  iter  24575
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 3]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Finished training it 25600/76743 of epoch 1, 39.21 ms/it, loss 5884.915572, accuracy 79.276 %
+KL loss  5879.8125 iteration kl_multiplier  0.0003484748  iter  25599
+Tensor type  TensorTrainMatrix  rank  [16, 3]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 3]
+Tensor type  TensorTrainMatrix  rank  [16, 0]
+Finished training it 26624/76743 of epoch 1, 39.23 ms/it, loss 5886.183311, accuracy 79.311 %
+KL loss  5877.0894 iteration kl_multiplier  0.0003484748  iter  26623
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Finished training it 27648/76743 of epoch 1, 39.23 ms/it, loss 5884.350896, accuracy 79.326 %
+KL loss  5895.2417 iteration kl_multiplier  0.0003484748  iter  27647
+Tensor type  TensorTrainMatrix  rank  [16, 3]
+Tensor type  TensorTrainMatrix  rank  [16, 3]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 4]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Finished training it 28672/76743 of epoch 1, 39.24 ms/it, loss 5884.993728, accuracy 79.175 %
+KL loss  5900.441 iteration kl_multiplier  0.0003484748  iter  28671
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 6]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Finished training it 29696/76743 of epoch 1, 39.27 ms/it, loss 5885.253319, accuracy 79.292 %
+KL loss  5871.885 iteration kl_multiplier  0.0003484748  iter  29695
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Finished training it 30720/76743 of epoch 1, 39.42 ms/it, loss 5885.335157, accuracy 79.205 %
+KL loss  5876.2036 iteration kl_multiplier  0.0003484748  iter  30719
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 3]
+Tensor type  TensorTrainMatrix  rank  [16, 4]
+Tensor type  TensorTrainMatrix  rank  [16, 3]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Saving model to saved_models/TensorTrainMatrix_warmup_50000__lr_0.005_kl_0.001
+Testing at - 30720/76743 of epoch 0, loss 0.456946, accuracy 78.585 %, best 0.000 %
+Finished training it 31744/76743 of epoch 1, 38.41 ms/it, loss 5884.977048, accuracy 79.284 %
+KL loss  5884.739 iteration kl_multiplier  0.0003484748  iter  31743
+Tensor type  TensorTrainMatrix  rank  [16, 3]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 4]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Finished training it 32768/76743 of epoch 1, 35.59 ms/it, loss 5885.029289, accuracy 79.193 %
+KL loss  5883.327 iteration kl_multiplier  0.0003484748  iter  32767
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 3]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 0]
+Finished training it 33792/76743 of epoch 1, 39.30 ms/it, loss 5885.164544, accuracy 79.230 %
+KL loss  5867.0327 iteration kl_multiplier  0.0003484748  iter  33791
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 3]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 0]
+Finished training it 34816/76743 of epoch 1, 39.44 ms/it, loss 5884.564134, accuracy 79.285 %
+KL loss  5871.194 iteration kl_multiplier  0.0003484748  iter  34815
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 0]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Finished training it 35840/76743 of epoch 1, 39.56 ms/it, loss 5884.924512, accuracy 79.335 %
+KL loss  5877.0137 iteration kl_multiplier  0.0003484748  iter  35839
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 3]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Finished training it 36864/76743 of epoch 1, 39.43 ms/it, loss 5885.102392, accuracy 79.186 %
+KL loss  5884.136 iteration kl_multiplier  0.0003484748  iter  36863
+Tensor type  TensorTrainMatrix  rank  [16, 3]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 4]
+Tensor type  TensorTrainMatrix  rank  [16, 0]
+Tensor type  TensorTrainMatrix  rank  [16, 4]
+Finished training it 37888/76743 of epoch 1, 39.26 ms/it, loss 5884.882569, accuracy 79.235 %
+KL loss  5885.5107 iteration kl_multiplier  0.0003484748  iter  37887
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 0]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 3]
+Finished training it 38912/76743 of epoch 1, 39.43 ms/it, loss 5885.828871, accuracy 79.378 %
+KL loss  5901.8335 iteration kl_multiplier  0.0003484748  iter  38911
+Tensor type  TensorTrainMatrix  rank  [16, 5]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Finished training it 39936/76743 of epoch 1, 39.59 ms/it, loss 5884.866354, accuracy 79.348 %
+KL loss  5865.443 iteration kl_multiplier  0.0003484748  iter  39935
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 0]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 4]
+Finished training it 40960/76743 of epoch 1, 39.48 ms/it, loss 5885.742124, accuracy 79.300 %
+KL loss  5904.0454 iteration kl_multiplier  0.0003484748  iter  40959
+Tensor type  TensorTrainMatrix  rank  [16, 3]
+Tensor type  TensorTrainMatrix  rank  [16, 0]
+Tensor type  TensorTrainMatrix  rank  [16, 3]
+Tensor type  TensorTrainMatrix  rank  [16, 5]
+Tensor type  TensorTrainMatrix  rank  [16, 4]
+Saving model to saved_models/TensorTrainMatrix_warmup_50000__lr_0.005_kl_0.001
+Testing at - 40960/76743 of epoch 0, loss 0.456419, accuracy 78.657 %, best 0.000 %
+Finished training it 41984/76743 of epoch 1, 39.43 ms/it, loss 5885.153778, accuracy 79.219 %
+KL loss  5870.555 iteration kl_multiplier  0.0003484748  iter  41983
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 3]
+Finished training it 43008/76743 of epoch 1, 34.18 ms/it, loss 5885.152689, accuracy 79.181 %
+KL loss  5902.095 iteration kl_multiplier  0.0003484748  iter  43007
+Tensor type  TensorTrainMatrix  rank  [16, 3]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 3]
+Tensor type  TensorTrainMatrix  rank  [16, 3]
+Finished training it 44032/76743 of epoch 1, 39.53 ms/it, loss 5884.096105, accuracy 79.258 %
+KL loss  5884.797 iteration kl_multiplier  0.0003484748  iter  44031
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 4]
+Tensor type  TensorTrainMatrix  rank  [16, 6]
+Tensor type  TensorTrainMatrix  rank  [16, 0]
+Finished training it 45056/76743 of epoch 1, 39.51 ms/it, loss 5884.771410, accuracy 79.339 %
+KL loss  5879.055 iteration kl_multiplier  0.0003484748  iter  45055
+Tensor type  TensorTrainMatrix  rank  [16, 3]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 3]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 0]
+Finished training it 46080/76743 of epoch 1, 39.53 ms/it, loss 5885.928699, accuracy 79.198 %
+KL loss  5889.438 iteration kl_multiplier  0.0003484748  iter  46079
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 3]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 3]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Finished training it 47104/76743 of epoch 1, 39.48 ms/it, loss 5885.205277, accuracy 79.300 %
+KL loss  5885.8804 iteration kl_multiplier  0.0003484748  iter  47103
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 0]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Finished training it 48128/76743 of epoch 1, 39.38 ms/it, loss 5883.626757, accuracy 79.287 %
+KL loss  5869.6733 iteration kl_multiplier  0.0003484748  iter  48127
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 0]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Finished training it 49152/76743 of epoch 1, 39.40 ms/it, loss 5884.706271, accuracy 79.172 %
+KL loss  5895.1196 iteration kl_multiplier  0.0003484748  iter  49151
+Tensor type  TensorTrainMatrix  rank  [16, 4]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 6]
+Tensor type  TensorTrainMatrix  rank  [16, 3]
+Tensor type  TensorTrainMatrix  rank  [16, 4]
+Finished training it 50176/76743 of epoch 1, 39.31 ms/it, loss 5884.989665, accuracy 79.280 %
+KL loss  5889.4927 iteration kl_multiplier  0.0003484748  iter  50175
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 4]
+Tensor type  TensorTrainMatrix  rank  [16, 5]
+Finished training it 51200/76743 of epoch 1, 39.58 ms/it, loss 5884.707670, accuracy 79.319 %
+KL loss  5876.465 iteration kl_multiplier  0.0003484748  iter  51199
+Tensor type  TensorTrainMatrix  rank  [16, 4]
+Tensor type  TensorTrainMatrix  rank  [16, 0]
+Tensor type  TensorTrainMatrix  rank  [16, 0]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Saving model to saved_models/TensorTrainMatrix_warmup_50000__lr_0.005_kl_0.001
+Testing at - 51200/76743 of epoch 0, loss 0.455445, accuracy 78.685 %, best 0.000 %
+Finished training it 52224/76743 of epoch 1, 39.33 ms/it, loss 5885.259172, accuracy 79.327 %
+KL loss  5892.691 iteration kl_multiplier  0.0003484748  iter  52223
+Tensor type  TensorTrainMatrix  rank  [16, 4]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 3]
+Finished training it 53248/76743 of epoch 1, 34.10 ms/it, loss 5885.852235, accuracy 79.297 %
+KL loss  5885.152 iteration kl_multiplier  0.0003484748  iter  53247
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Finished training it 54272/76743 of epoch 1, 39.32 ms/it, loss 5885.286516, accuracy 79.299 %
+KL loss  5875.7227 iteration kl_multiplier  0.0003484748  iter  54271
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 3]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Finished training it 55296/76743 of epoch 1, 39.42 ms/it, loss 5885.933958, accuracy 79.312 %
+KL loss  5887.2803 iteration kl_multiplier  0.0003484748  iter  55295
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 3]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 3]
+Finished training it 56320/76743 of epoch 1, 39.40 ms/it, loss 5885.703959, accuracy 79.340 %
+KL loss  5871.973 iteration kl_multiplier  0.0003484748  iter  56319
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 0]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Finished training it 57344/76743 of epoch 1, 39.09 ms/it, loss 5883.609352, accuracy 79.313 %
+KL loss  5877.082 iteration kl_multiplier  0.0003484748  iter  57343
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 3]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 0]
+Tensor type  TensorTrainMatrix  rank  [16, 3]
+Finished training it 58368/76743 of epoch 1, 39.42 ms/it, loss 5884.597119, accuracy 79.365 %
+KL loss  5880.639 iteration kl_multiplier  0.0003484748  iter  58367
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 3]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Finished training it 59392/76743 of epoch 1, 39.49 ms/it, loss 5884.773979, accuracy 79.303 %
+KL loss  5869.327 iteration kl_multiplier  0.0003484748  iter  59391
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 3]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 0]
+Finished training it 60416/76743 of epoch 1, 39.06 ms/it, loss 5886.340644, accuracy 79.293 %
+KL loss  5876.398 iteration kl_multiplier  0.0003484748  iter  60415
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 0]
+Tensor type  TensorTrainMatrix  rank  [16, 0]
+Tensor type  TensorTrainMatrix  rank  [16, 3]
+Tensor type  TensorTrainMatrix  rank  [16, 3]
+Finished training it 61440/76743 of epoch 1, 39.25 ms/it, loss 5884.417518, accuracy 79.393 %
+KL loss  5885.128 iteration kl_multiplier  0.0003484748  iter  61439
+Tensor type  TensorTrainMatrix  rank  [16, 3]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 5]
+Tensor type  TensorTrainMatrix  rank  [16, 0]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Saving model to saved_models/TensorTrainMatrix_warmup_50000__lr_0.005_kl_0.001
+Testing at - 61440/76743 of epoch 0, loss 0.456721, accuracy 78.705 %, best 0.000 %
+Finished training it 62464/76743 of epoch 1, 39.22 ms/it, loss 5885.748057, accuracy 79.387 %
+KL loss  5889.1636 iteration kl_multiplier  0.0003484748  iter  62463
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 5]
+Tensor type  TensorTrainMatrix  rank  [16, 4]
+Finished training it 63488/76743 of epoch 1, 34.40 ms/it, loss 5885.872909, accuracy 79.383 %
+KL loss  5875.43 iteration kl_multiplier  0.0003484748  iter  63487
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 4]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Finished training it 64512/76743 of epoch 1, 38.64 ms/it, loss 5885.615103, accuracy 79.491 %
+KL loss  5886.731 iteration kl_multiplier  0.0003484748  iter  64511
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 4]
+Tensor type  TensorTrainMatrix  rank  [16, 3]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Finished training it 65536/76743 of epoch 1, 39.49 ms/it, loss 5884.690851, accuracy 79.404 %
+KL loss  5878.9287 iteration kl_multiplier  0.0003484748  iter  65535
+Tensor type  TensorTrainMatrix  rank  [16, 0]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 5]
+Tensor type  TensorTrainMatrix  rank  [16, 3]
+Finished training it 66560/76743 of epoch 1, 39.40 ms/it, loss 5884.576603, accuracy 79.386 %
+KL loss  5886.7017 iteration kl_multiplier  0.0003484748  iter  66559
+Tensor type  TensorTrainMatrix  rank  [16, 3]
+Tensor type  TensorTrainMatrix  rank  [16, 3]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Finished training it 67584/76743 of epoch 1, 39.44 ms/it, loss 5885.814897, accuracy 79.307 %
+KL loss  5884.741 iteration kl_multiplier  0.0003484748  iter  67583
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 3]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 3]
+Finished training it 68608/76743 of epoch 1, 39.40 ms/it, loss 5884.505908, accuracy 79.449 %
+KL loss  5869.2197 iteration kl_multiplier  0.0003484748  iter  68607
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 0]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 0]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Finished training it 69632/76743 of epoch 1, 39.33 ms/it, loss 5884.604756, accuracy 79.308 %
+KL loss  5889.898 iteration kl_multiplier  0.0003484748  iter  69631
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 3]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 5]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Finished training it 70656/76743 of epoch 1, 39.39 ms/it, loss 5884.580714, accuracy 79.304 %
+KL loss  5896.101 iteration kl_multiplier  0.0003484748  iter  70655
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 3]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Finished training it 71680/76743 of epoch 1, 39.44 ms/it, loss 5884.761142, accuracy 79.420 %
+KL loss  5880.6553 iteration kl_multiplier  0.0003484748  iter  71679
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 3]
+Saving model to saved_models/TensorTrainMatrix_warmup_50000__lr_0.005_kl_0.001
+Testing at - 71680/76743 of epoch 0, loss 0.457948, accuracy 78.730 %, best 0.000 %
+Finished training it 72704/76743 of epoch 1, 39.33 ms/it, loss 5884.731528, accuracy 79.396 %
+KL loss  5879.661 iteration kl_multiplier  0.0003484748  iter  72703
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 0]
+Tensor type  TensorTrainMatrix  rank  [16, 3]
+Finished training it 73728/76743 of epoch 1, 35.43 ms/it, loss 5885.057758, accuracy 79.352 %
+KL loss  5889.6055 iteration kl_multiplier  0.0003484748  iter  73727
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 0]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 4]
+Finished training it 74752/76743 of epoch 1, 37.76 ms/it, loss 5885.031010, accuracy 79.379 %
+KL loss  5884.9175 iteration kl_multiplier  0.0003484748  iter  74751
+Tensor type  TensorTrainMatrix  rank  [16, 0]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 3]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Finished training it 75776/76743 of epoch 1, 39.46 ms/it, loss 5886.008420, accuracy 79.366 %
+KL loss  5866.473 iteration kl_multiplier  0.0003484748  iter  75775
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 0]
+Tensor type  TensorTrainMatrix  rank  [16, 3]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Finished training it 76743/76743 of epoch 1, 39.53 ms/it, loss 5885.723934, accuracy 79.284 %
+KL loss  5892.345 iteration kl_multiplier  0.0003484748  iter  76742
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 0]
+Tensor type  TensorTrainMatrix  rank  [16, 5]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Saving model to saved_models/TensorTrainMatrix_warmup_50000__lr_0.005_kl_0.001
+Testing at - 76743/76743 of epoch 0, loss 0.455002, accuracy 78.724 %, best 0.000 %
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Tensor type  TensorTrainMatrix  rank  [16, 0]
+Tensor type  TensorTrainMatrix  rank  [16, 3]
+Tensor type  TensorTrainMatrix  rank  [16, 2]
+Tensor type  TensorTrainMatrix  rank  [16, 1]
+Pruning tensor ranks
+pruning with rank cutoff 1e-7 None
+pruning with rank cutoff 1e-7 None
+pruning with rank cutoff 1e-7 None
+pruning with rank cutoff 1e-7 None
+pruning with rank cutoff 1e-7 None
+Finished training it 1024/76743 of epoch 2, 39.33 ms/it, loss 0.438578, accuracy 79.571 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  1023
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Finished training it 2048/76743 of epoch 2, 36.11 ms/it, loss 0.436295, accuracy 79.760 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  2047
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Finished training it 3072/76743 of epoch 2, 37.71 ms/it, loss 0.437514, accuracy 79.787 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  3071
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Finished training it 4096/76743 of epoch 2, 39.32 ms/it, loss 0.438399, accuracy 79.786 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  4095
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Finished training it 5120/76743 of epoch 2, 39.30 ms/it, loss 0.439234, accuracy 79.714 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  5119
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Finished training it 6144/76743 of epoch 2, 39.46 ms/it, loss 0.436535, accuracy 79.762 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  6143
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Finished training it 7168/76743 of epoch 2, 39.47 ms/it, loss 0.436580, accuracy 79.744 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  7167
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Finished training it 8192/76743 of epoch 2, 39.40 ms/it, loss 0.435967, accuracy 79.707 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  8191
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Finished training it 9216/76743 of epoch 2, 39.43 ms/it, loss 0.435819, accuracy 79.796 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  9215
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Finished training it 10240/76743 of epoch 2, 39.41 ms/it, loss 0.436355, accuracy 79.776 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  10239
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Saving model to saved_models/TensorTrainMatrix_warmup_50000__lr_0.005_kl_0.001
+Testing at - 10240/76743 of epoch 0, loss 0.459490, accuracy 78.495 %, best 0.000 %
+Finished training it 11264/76743 of epoch 2, 39.41 ms/it, loss 0.435564, accuracy 79.773 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  11263
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Finished training it 12288/76743 of epoch 2, 37.42 ms/it, loss 0.436192, accuracy 79.744 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  12287
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Finished training it 13312/76743 of epoch 2, 36.18 ms/it, loss 0.438148, accuracy 79.677 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  13311
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Finished training it 14336/76743 of epoch 2, 39.37 ms/it, loss 0.435715, accuracy 79.830 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  14335
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Finished training it 15360/76743 of epoch 2, 39.46 ms/it, loss 0.435697, accuracy 79.758 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  15359
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Finished training it 16384/76743 of epoch 2, 39.42 ms/it, loss 0.439464, accuracy 79.780 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  16383
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Finished training it 17408/76743 of epoch 2, 39.39 ms/it, loss 0.438426, accuracy 79.583 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  17407
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Finished training it 18432/76743 of epoch 2, 39.56 ms/it, loss 0.437117, accuracy 79.637 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  18431
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Finished training it 19456/76743 of epoch 2, 39.43 ms/it, loss 0.437578, accuracy 79.768 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  19455
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Finished training it 20480/76743 of epoch 2, 39.45 ms/it, loss 0.437798, accuracy 79.712 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  20479
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Saving model to saved_models/TensorTrainMatrix_warmup_50000__lr_0.005_kl_0.001
+Testing at - 20480/76743 of epoch 0, loss 0.458486, accuracy 78.565 %, best 0.000 %
+Finished training it 21504/76743 of epoch 2, 39.54 ms/it, loss 0.438381, accuracy 79.782 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  21503
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Finished training it 22528/76743 of epoch 2, 38.91 ms/it, loss 0.438020, accuracy 79.677 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  22527
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Finished training it 23552/76743 of epoch 2, 34.98 ms/it, loss 0.437575, accuracy 79.793 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  23551
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Finished training it 24576/76743 of epoch 2, 39.37 ms/it, loss 0.436323, accuracy 79.748 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  24575
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Finished training it 25600/76743 of epoch 2, 39.32 ms/it, loss 0.436460, accuracy 79.708 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  25599
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Finished training it 26624/76743 of epoch 2, 39.38 ms/it, loss 0.436666, accuracy 79.760 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  26623
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Finished training it 27648/76743 of epoch 2, 39.20 ms/it, loss 0.437094, accuracy 79.784 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  27647
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Finished training it 28672/76743 of epoch 2, 39.27 ms/it, loss 0.440186, accuracy 79.596 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  28671
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Finished training it 29696/76743 of epoch 2, 39.36 ms/it, loss 0.437781, accuracy 79.671 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  29695
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Finished training it 30720/76743 of epoch 2, 39.46 ms/it, loss 0.442268, accuracy 79.668 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  30719
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Saving model to saved_models/TensorTrainMatrix_warmup_50000__lr_0.005_kl_0.001
+Testing at - 30720/76743 of epoch 0, loss 0.458364, accuracy 78.558 %, best 0.000 %
+Finished training it 31744/76743 of epoch 2, 39.47 ms/it, loss 0.440887, accuracy 79.754 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  31743
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Finished training it 32768/76743 of epoch 2, 39.41 ms/it, loss 0.443216, accuracy 79.612 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  32767
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Finished training it 33792/76743 of epoch 2, 34.69 ms/it, loss 0.450798, accuracy 79.531 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  33791
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Finished training it 34816/76743 of epoch 2, 39.25 ms/it, loss 0.449382, accuracy 79.675 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  34815
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Finished training it 35840/76743 of epoch 2, 39.42 ms/it, loss 0.450110, accuracy 79.680 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  35839
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Finished training it 36864/76743 of epoch 2, 39.43 ms/it, loss 0.452141, accuracy 79.617 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  36863
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Finished training it 37888/76743 of epoch 2, 39.36 ms/it, loss 0.452391, accuracy 79.598 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  37887
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Finished training it 38912/76743 of epoch 2, 39.30 ms/it, loss 0.446290, accuracy 79.760 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  38911
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Finished training it 39936/76743 of epoch 2, 39.34 ms/it, loss 0.450497, accuracy 79.756 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  39935
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Finished training it 40960/76743 of epoch 2, 39.32 ms/it, loss 0.447886, accuracy 79.668 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  40959
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Saving model to saved_models/TensorTrainMatrix_warmup_50000__lr_0.005_kl_0.001
+Testing at - 40960/76743 of epoch 0, loss 0.460303, accuracy 78.662 %, best 0.000 %
+Finished training it 41984/76743 of epoch 2, 39.17 ms/it, loss 0.445620, accuracy 79.638 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  41983
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Finished training it 43008/76743 of epoch 2, 39.41 ms/it, loss 0.454535, accuracy 79.457 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  43007
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Finished training it 44032/76743 of epoch 2, 34.39 ms/it, loss 0.452375, accuracy 79.688 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  44031
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Finished training it 45056/76743 of epoch 2, 39.42 ms/it, loss 0.452543, accuracy 79.731 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  45055
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Finished training it 46080/76743 of epoch 2, 39.36 ms/it, loss 0.461425, accuracy 79.449 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  46079
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Finished training it 47104/76743 of epoch 2, 39.25 ms/it, loss 0.470609, accuracy 79.465 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  47103
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Finished training it 48128/76743 of epoch 2, 39.32 ms/it, loss 0.466616, accuracy 78.700 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  48127
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Finished training it 49152/76743 of epoch 2, 39.43 ms/it, loss 0.451418, accuracy 79.365 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  49151
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Finished training it 50176/76743 of epoch 2, 39.47 ms/it, loss 0.448317, accuracy 79.604 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  50175
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Finished training it 51200/76743 of epoch 2, 39.22 ms/it, loss 0.445208, accuracy 79.645 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  51199
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Saving model to saved_models/TensorTrainMatrix_warmup_50000__lr_0.005_kl_0.001
+Testing at - 51200/76743 of epoch 0, loss 0.473695, accuracy 78.573 %, best 0.000 %
+Finished training it 52224/76743 of epoch 2, 39.46 ms/it, loss 0.446185, accuracy 79.647 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  52223
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Finished training it 53248/76743 of epoch 2, 39.29 ms/it, loss 0.446018, accuracy 79.594 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  53247
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Finished training it 54272/76743 of epoch 2, 35.72 ms/it, loss 0.449927, accuracy 79.463 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  54271
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Finished training it 55296/76743 of epoch 2, 38.25 ms/it, loss 0.447801, accuracy 79.643 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  55295
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Finished training it 56320/76743 of epoch 2, 39.45 ms/it, loss 0.449874, accuracy 79.724 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  56319
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Finished training it 57344/76743 of epoch 2, 39.32 ms/it, loss 0.455423, accuracy 79.667 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  57343
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Finished training it 58368/76743 of epoch 2, 39.54 ms/it, loss 0.453568, accuracy 79.655 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  58367
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Finished training it 59392/76743 of epoch 2, 39.27 ms/it, loss 0.454281, accuracy 79.624 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  59391
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Finished training it 60416/76743 of epoch 2, 39.19 ms/it, loss 0.464096, accuracy 79.464 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  60415
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Finished training it 61440/76743 of epoch 2, 39.23 ms/it, loss 0.476938, accuracy 79.616 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  61439
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Saving model to saved_models/TensorTrainMatrix_warmup_50000__lr_0.005_kl_0.001
+Testing at - 61440/76743 of epoch 0, loss 0.489474, accuracy 78.610 %, best 0.000 %
+Finished training it 62464/76743 of epoch 2, 39.22 ms/it, loss 0.466306, accuracy 79.601 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  62463
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Finished training it 63488/76743 of epoch 2, 39.18 ms/it, loss 0.470760, accuracy 79.635 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  63487
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Finished training it 64512/76743 of epoch 2, 35.46 ms/it, loss 0.469168, accuracy 79.469 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  64511
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Finished training it 65536/76743 of epoch 2, 37.96 ms/it, loss 0.462614, accuracy 79.710 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  65535
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Finished training it 66560/76743 of epoch 2, 39.54 ms/it, loss 0.465347, accuracy 79.628 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  66559
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Finished training it 67584/76743 of epoch 2, 39.54 ms/it, loss 0.494620, accuracy 79.426 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  67583
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Finished training it 68608/76743 of epoch 2, 39.41 ms/it, loss 0.493354, accuracy 79.341 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  68607
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Finished training it 69632/76743 of epoch 2, 39.42 ms/it, loss 0.487312, accuracy 79.408 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  69631
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Finished training it 70656/76743 of epoch 2, 39.33 ms/it, loss 0.477320, accuracy 79.326 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  70655
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Finished training it 71680/76743 of epoch 2, 39.31 ms/it, loss 0.472257, accuracy 79.545 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  71679
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Saving model to saved_models/TensorTrainMatrix_warmup_50000__lr_0.005_kl_0.001
+Testing at - 71680/76743 of epoch 0, loss 0.479446, accuracy 78.606 %, best 0.000 %
+Finished training it 72704/76743 of epoch 2, 39.39 ms/it, loss 0.480523, accuracy 79.078 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  72703
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Finished training it 73728/76743 of epoch 2, 39.49 ms/it, loss 0.472638, accuracy 79.396 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  73727
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Finished training it 74752/76743 of epoch 2, 37.54 ms/it, loss 0.497103, accuracy 79.481 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  74751
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Finished training it 75776/76743 of epoch 2, 36.02 ms/it, loss 0.476855, accuracy 79.462 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  75775
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Finished training it 76743/76743 of epoch 2, 39.40 ms/it, loss 0.473860, accuracy 79.350 %
+KL loss  0.0 iteration kl_multiplier  0.0  iter  76742
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Tensor type  TensorTrainMatrix  rank  [16, 16]
+Saving model to saved_models/TensorTrainMatrix_warmup_50000__lr_0.005_kl_0.001
+Testing at - 76743/76743 of epoch 0, loss 0.486535, accuracy 78.485 %, best 0.000 %
+done

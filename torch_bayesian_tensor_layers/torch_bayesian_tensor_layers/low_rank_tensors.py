@@ -113,6 +113,8 @@ class CP(LowRankTensor):
 
         mask.to(self.rank_parameter.device)
 
+        self.masks = [mask] 
+
         self.weights = torch.squeeze(mask)
         
     def get_parameter_savings(self):

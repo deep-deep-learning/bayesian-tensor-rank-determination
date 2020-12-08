@@ -115,6 +115,12 @@ def print_ranks(model):
             print('Tensor type ', layer.tensor.tensor_type," rank ", layer.tensor.estimate_rank(1e-7))
 
 
+def print_masks(model):
+
+    for layer in model.emb_l:
+        if hasattr(layer, "tensor"):
+            for mask in layer.tensor.masks:
+                print(mask)
 
 def get_kl_loss(model):
 
@@ -1013,8 +1019,9 @@ if __name__ == "__main__":
         while k < args.nepochs:
 
             print_ranks(dlrm)
-            if k>1:
+            if k>0:
                 prune_ranks(dlrm)
+                print_masks(dlrm)
                 args.kl_multiplier = 0.0
 
 
@@ -1075,8 +1082,8 @@ if __name__ == "__main__":
                 E = loss_fn_wrap(Z, T, use_gpu, device)
 
                 low_rank_kl_loss = iter_kl_multiplier * get_kl_loss(dlrm)
-
-                E += low_rank_kl_loss
+                if args.kl_multiplier>0.0: 
+                    E += low_rank_kl_loss
                 '''
                 # debug prints
                 print("output and loss")
