@@ -483,7 +483,7 @@ class TensorTrain(LowRankTensor):
         return [int(sum(torch.square(x) > threshold)) for x in self.rank_parameters]
 
     def prune_ranks(self, threshold=1e-5):
-        self.masks =[torch.tensor(torch.square(x)>threshold,dtype = torch.float32).to(x.device) for x in self.rank_parameters]
+        self.masks =[(torch.square(x)>threshold).detach().clone().to(x.device) for x in self.rank_parameters]
 
     def get_kl_divergence_to_prior(self):
 
@@ -530,7 +530,7 @@ class Tucker(LowRankTensor):
 
     def estimate_rank(self, threshold=1e-4):
 
-        return [int(sum(torch.square(x) > threshold)) for x in self.rank_parameters]
+        return [int(sum(torch.square(x.detach().clone()) > threshold)) for x in self.rank_parameters]
 
     def get_parameter_savings(self):
         
@@ -546,7 +546,7 @@ class Tucker(LowRankTensor):
 
 
     def prune_ranks(self, threshold=1e-4):
-        self.masks =[torch.tensor(torch.square(x)>threshold,dtype = torch.float32).to(x.device) for x in self.rank_parameters]
+        self.masks =[(torch.square(x)>threshold).detach().clone().to(x.device) for x in self.rank_parameters]
 
     def _nn_init(self):
 
@@ -786,7 +786,7 @@ class TensorTrainMatrix(LowRankTensor):
     def prune_ranks(self, threshold=1e-5):
 
         self.masks = [
-            torch.tensor(torch.square(x)>threshold, dtype=torch.float32).to(x.device)
+            (torch.square(x)>threshold).detach().clone().to(x.device)
             for x in self.rank_parameters
         ]
 
