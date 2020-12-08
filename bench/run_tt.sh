@@ -5,11 +5,11 @@ dlrm_pt_bin="python tensorized_dlrm_pytorch.py"
 for tensor_type in "TensorTrain" 
 do for kl_mult in  0.0001;
 do for no_kl_steps in 50000;
-do for minibatch_size in 512 1024;
+do for minibatch_size in 512 1024 2048;
 do for lr in 0.001 0.0001 0.00001;
 do
 	export CUDA_VISIBLE_DEVICES=0
-	name="${tensor_type}_warmup_${no_kl_steps}_${optimizer}_lr_${lr}_kl_${kl_mult}"
+	name="${tensor_type}_warmup_${no_kl_steps}_${optimizer}_lr_${lr}_kl_${kl_mult}_batch${minibatch_size}"
         
 	$dlrm_pt_bin  --nepochs=1 \
 			--arch-sparse-feature-size=128 \
