@@ -1013,7 +1013,9 @@ if __name__ == "__main__":
         while k < args.nepochs:
 
             print_ranks(dlrm)
-            prune_ranks(dlrm)
+            if k>1:
+                prune_ranks(dlrm)
+                args.kl_multiplier = 0.0
 
 
             if k < skip_upto_epoch:
