@@ -1037,7 +1037,7 @@ if __name__ == "__main__":
 
                 if args.tensor_type=='TensorTrain':
                     if k==0:
-                        iter_kl_multiplier=0.0
+                        iter_kl_multiplier=torch.tensor(0.0)
 
                     elif k == 1:
                         iter_kl_multiplier = args.kl_multiplier * torch.clamp(
