@@ -381,7 +381,7 @@ class TensorTrain(LowRankTensor):
             elif self.initialization_method == 'nn':
                 self.factors = self._nn_init()
             elif self.initialization_method == 'svd':
-                self.initialization_tensor = tf.reshape(self.initialization_tensor,self.dims)
+                self.initialization_tensor = torch.reshape(self.initialization_tensor,self.dims)
                 self.factors = tensorly.decomposition.matrix_product_state(
                     self.initialization_tensor, self.max_ranks)
             else:

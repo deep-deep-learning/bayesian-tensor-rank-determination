@@ -95,6 +95,7 @@ import torch_bayesian_tensor_layers
 import torch_bayesian_tensor_layers.layers
 from torch_bayesian_tensor_layers.layers import TensorizedEmbedding
 import os
+from train_then_compress_utils import tensor_decompose_and_replace_embedding
 #os.environ['CUDA_VISIBLE_DEVICES']=''
 
 exc = getattr(builtins, "IOError", "FileNotFoundError")
@@ -173,6 +174,66 @@ class LRPolicyScheduler(_LRScheduler):
                 lr = self.base_lrs
         return lr
 
+def compress_emb(self):
+
+
+    tensorized_embedding_layers = [2, 3, 11, 15, 20]
+
+    emb_l = self.emb_l
+    for i,layer in enumerate(self.emb_l):
+        #            print(i,' QR flag ',self.qr_flag and n > self.qr_threshold)
+        #            print(i,' md flag ',self.md_flag)
+        # construct embedding operator
+
+        shape0 = [[200, 220, 250], [125, 130, 136], [200, 200, 209],
+                    [166, 175, 188], [200, 200, 200]]
+        shape1 = [4, 4, 8]
+        if args.tensor_type != 'TensorTrainMatrix':
+            shape1 = [4 * 4 * 8]
+
+        max_ranks = {
+            'CP': [350, 306, 333, 326, 335],
+            'TensorTrainMatrix': [16, 16, 16, 16, 16],
+            'TensorTrain': [24, 24, 24, 24, 24],
+            'Tucker': [22, 20, 22, 21, 22]
+        }
+        if i in tensorized_embedding_layers:
+            print('Tensorized-Embedding %i size %ix%i' % (i, n, m))
+            """
+            EE = t3.TTEmbedding(
+                    voc_size=n,
+                    emb_size=m,
+                    auto_shapes=True,
+                    auto_shape_mode='mixed',
+                    d=3,
+                    tt_rank=16
+                )
+            print(EE.shape)
+            """
+            EE = TensorizedEmbedding(
+                tensor_type=args.tensor_type,
+                max_rank=max_ranks[args.tensor_type].pop(0),
+                shape=[shape0.pop(0), shape1])
+
+        else:
+            print('Embedding %i size %ix%i' % (i, n, m))
+            EE = nn.EmbeddingBag(n, m, mode="sum", sparse=True)
+
+            # initialize embeddings
+            # nn.init.uniform_(EE.weight, a=-np.sqrt(1 / n), b=np.sqrt(1 / n))
+            W = np.random.uniform(low=-np.sqrt(1 / n),
+                                    high=np.sqrt(1 / n),
+                                    size=(n, m)).astype(np.float32)
+            # approach 1
+            EE.weight.data = torch.tensor(W, requires_grad=True)
+            # approach 2
+            # EE.weight.data.copy_(torch.tensor(W))
+            # approach 3
+            # EE.weight = Parameter(torch.tensor(W),requires_grad=True)
+
+        emb_l.append(EE)
+
+    return emb_l
 
 ### define dlrm in PyTorch ###
 class DLRM_Net(nn.Module):
@@ -218,60 +279,27 @@ class DLRM_Net(nn.Module):
 
     def create_emb(self, m, ln):
 
-        tensorized_embedding_layers = [2, 3, 11, 15, 20]
-
         emb_l = nn.ModuleList()
-        shape0 = [[200, 220, 250], [125, 130, 136], [200, 200, 209],
-                    [166, 175, 188], [200, 200, 200]]
-        shape1 = [4, 4, 8]
-        if args.tensor_type != 'TensorTrainMatrix':
-            shape1 = [4 * 4 * 8]
-
-        max_ranks = {
-            'CP': [350, 306, 333, 326, 335],
-            'TensorTrainMatrix': [16, 16, 16, 16, 16],
-            'TensorTrain': [24, 24, 24, 24, 24],
-            'Tucker': [22, 20, 22, 21, 22]
-        }
         for i in range(0, ln.size):
             #            print(i,' QR flag ',self.qr_flag and n > self.qr_threshold)
             #            print(i,' md flag ',self.md_flag)
             n = ln[i]
             # construct embedding operator
 
-            if i in tensorized_embedding_layers:
-                print('Tensorized-Embedding %i size %ix%i' % (i, n, m))
-                """
-                EE = t3.TTEmbedding(
-                        voc_size=n,
-                        emb_size=m,
-                        auto_shapes=True,
-                        auto_shape_mode='mixed',
-                        d=3,
-                        tt_rank=16
-                    )
-                print(EE.shape)
-                """
-                EE = TensorizedEmbedding(
-                    tensor_type=args.tensor_type,
-                    max_rank=max_ranks[args.tensor_type].pop(0),
-                    shape=[shape0.pop(0), shape1])
+            print('Embedding %i size %ix%i' % (i, n, m))
+            EE = nn.EmbeddingBag(n, m, mode="sum", sparse=True)
 
-            else:
-                print('Embedding %i size %ix%i' % (i, n, m))
-                EE = nn.EmbeddingBag(n, m, mode="sum", sparse=True)
-
-                # initialize embeddings
-                # nn.init.uniform_(EE.weight, a=-np.sqrt(1 / n), b=np.sqrt(1 / n))
-                W = np.random.uniform(low=-np.sqrt(1 / n),
-                                      high=np.sqrt(1 / n),
-                                      size=(n, m)).astype(np.float32)
-                # approach 1
-                EE.weight.data = torch.tensor(W, requires_grad=True)
-                # approach 2
-                # EE.weight.data.copy_(torch.tensor(W))
-                # approach 3
-                # EE.weight = Parameter(torch.tensor(W),requires_grad=True)
+            # initialize embeddings
+            # nn.init.uniform_(EE.weight, a=-np.sqrt(1 / n), b=np.sqrt(1 / n))
+            W = np.random.uniform(low=-np.sqrt(1 / n),
+                                    high=np.sqrt(1 / n),
+                                    size=(n, m)).astype(np.float32)
+            # approach 1
+            EE.weight.data = torch.tensor(W, requires_grad=True)
+            # approach 2
+            # EE.weight.data.copy_(torch.tensor(W))
+            # approach 3
+            # EE.weight = Parameter(torch.tensor(W),requires_grad=True)
 
             emb_l.append(EE)
 
@@ -559,8 +587,8 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description="Train Deep Learning Recommendation Model (DLRM)")
     # model related parameters
-    parser.add_argument("--load-saved", type=int, default=0)
-    parser.add_argument("--tensor-type", type=str, default='CP')
+    parser.add_argument("--load-saved", type=int, default='saved_models/full')
+    parser.add_argument("--tensor-type", type=str)
     parser.add_argument("--arch-sparse-feature-size", type=int, default=2)
     parser.add_argument("--arch-embedding-size", type=str, default="4-3-2")
     # j will be replaced with the table number
@@ -660,7 +688,7 @@ if __name__ == "__main__":
     parser.add_argument("--lr-num-decay-steps", type=int, default=0)
     parser.add_argument("--kl-multiplier", type=float, default=0.0)
     parser.add_argument("--no-kl-steps", type=int, default=0)
-    parser.add_argument("--optimizer", type=str, default='SGD')
+    parser.add_argument("--optimizer", type=str, default='Adam')
     args = parser.parse_args()
 
     #    args = Namespace(activation_function='relu', arch_embedding_size='4-3-2', arch_interaction_itself=False, arch_interaction_op='dot', arch_mlp_bot='13-512-256-64-16', arch_mlp_top='512-256-1', arch_sparse_feature_size=16, data_generation='dataset', data_randomize='total', data_set='kaggle', data_size=1, data_sub_sample_rate=0.0, data_trace_enable_padding=False, data_trace_file='./input/dist_emb_j.log', debug_mode=False, enable_profiling=False, inference_only=False, learning_rate=0.1, load_model='', loss_function='bce', loss_threshold=0.0, loss_weights='1.0-1.0', lr_decay_start_step=0, lr_num_decay_steps=0, lr_num_warmup_steps=0, max_ind_range=-1, md_flag=False, md_round_dims=False, md_temperature=0.3, md_threshold=200, memory_map=True, mini_batch_size=128, mlperf_acc_threshold=0.0, mlperf_auc_threshold=0.0, mlperf_bin_loader=False, mlperf_bin_shuffle=False, mlperf_logging=False, nepochs=1, num_batches=0, num_indices_per_lookup=10, num_indices_per_lookup_fixed=False, num_workers=0, numpy_rand_seed=123, plot_compute_graph=False, print_freq=1024, print_precision=5, print_time=True, processed_data_file='./input/kaggleAdDisplayChallenge_processed.npz', qr_collisions=4, qr_flag=False, qr_operation='mult', qr_threshold=200, raw_data_file='./input/train.txt', round_targets=True, save_model='', save_onnx=False, sync_dense_params=True, test_freq=1024, test_mini_batch_size=-1, test_num_workers=16, use_gpu=False)
@@ -989,6 +1017,9 @@ if __name__ == "__main__":
             ld_gL_test = 0.0
         if not args.inference_only:
             optimizer.load_state_dict(ld_model["opt_state_dict"])
+
+
+            #HEREHEREHEREHEREHERE
 
             try:
                 best_gA_test = ld_gA_test
