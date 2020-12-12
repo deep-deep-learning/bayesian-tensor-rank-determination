@@ -1018,7 +1018,7 @@ if __name__ == "__main__":
                                          use_gpu) as prof:
         while k < args.nepochs:
 
-            if k==2 and args.tensor_type!='TensorTrain':
+            if k==2 and args.tensor_type not in ['TensorTrain','Tucker']:
                 print_ranks(dlrm)
                 prune_ranks(dlrm)
                 print_masks(dlrm)
@@ -1035,7 +1035,7 @@ if __name__ == "__main__":
 
             for j, (X, lS_o, lS_i, T) in enumerate(train_ld):
 
-                if args.tensor_type=='TensorTrain':
+                if args.tensor_type in ['TensorTrain','Tucker']:
                     if k==0:
                         iter_kl_multiplier=torch.tensor(0.0)
 
