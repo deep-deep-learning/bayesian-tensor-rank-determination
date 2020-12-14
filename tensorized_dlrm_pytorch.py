@@ -113,7 +113,7 @@ def print_ranks(model):
     for layer in model.emb_l:
         if hasattr(layer, "tensor"):
             print('Tensor type ', layer.tensor.tensor_type," rank ", layer.tensor.estimate_rank(1e-7))
-
+            print('Tensor type ', layer.tensor.tensor_type," rank ", layer.tensor.estimate_rank(1e-9))
 
 def print_masks(model):
 
@@ -1018,7 +1018,7 @@ if __name__ == "__main__":
                                          use_gpu) as prof:
         while k < args.nepochs:
 
-            if k==2 and args.tensor_type!='TensorTrain':
+            if k==2:
                 print_ranks(dlrm)
                 prune_ranks(dlrm)
                 print_masks(dlrm)
@@ -1055,8 +1055,6 @@ if __name__ == "__main__":
                         iter_kl_multiplier = args.kl_multiplier * torch.clamp(
                             torch.tensor(((len(train_ld) - args.no_kl_steps) /
                                           len(train_ld))), 0.0, 1.0)
-#                if j>249:
-#                    break
 
                 if j == 0 and args.save_onnx:
                     (X_onnx, lS_o_onnx, lS_i_onnx) = (X, lS_o, lS_i)

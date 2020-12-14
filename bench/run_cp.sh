@@ -2,8 +2,8 @@
 for tensor_type in "CP" 
 do for kl_mult in 0.1 0.05 0.001;
 do for no_kl_steps in 50000;
-do for minibatch_size in 512;
-do for lr in 0.01 0.005 0.001;
+do for minibatch_size in 256;
+do for lr in 0.005 0.001;
 do
 	export CUDA_VISIBLE_DEVICES=0
 	name="${tensor_type}_warmup_${no_kl_steps}_${optimizer}_lr_${lr}_kl_${kl_mult}_batch${minibatch_size}"
