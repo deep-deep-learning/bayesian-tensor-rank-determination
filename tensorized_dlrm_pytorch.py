@@ -987,21 +987,6 @@ if __name__ == "__main__":
             ld_total_accu = 0.0
             ld_gA_test = 0.0
             ld_gL_test = 0.0
-        if not args.inference_only:
-            optimizer.load_state_dict(ld_model["opt_state_dict"])
-
-            try:
-                best_gA_test = ld_gA_test
-                total_loss = ld_total_loss
-                total_accu = ld_total_accu
-                skip_upto_epoch = ld_k  # epochs
-                skip_upto_batch = ld_j  # batches
-            except:
-                best_gA_test = 0.0
-                total_loss = 0.0
-                total_accu = 0.0
-                skip_upto_epoch = ld_k  # epochs
-                skip_upto_batch = ld_j  # batches
         else:
             args.print_freq = ld_nbatches
             args.test_freq = 0

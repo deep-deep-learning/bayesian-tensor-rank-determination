@@ -863,27 +863,6 @@ if __name__ == "__main__":
         sys.exit("ERROR: --loss-function=" + args.loss_function +
                  " is not supported")
 
-    if not args.inference_only:
-        # specify the optimizer algorithm
-
-        if args.optimizer == 'SGD':
-
-            optimizer = torch.optim.SGD(dlrm.parameters(),
-                                        lr=args.learning_rate)
-
-        elif args.optimizer == 'Adagrad':
-
-            optimizer = torch.optim.Adagrad(dlrm.parameters(),
-                                            lr=args.learning_rate)
-
-        elif args.optimizer == 'Adam':
-            from allennlp.training.optimizers import DenseSparseAdam
-            optimizer = DenseSparseAdam([(None, x) for x in dlrm.parameters()],
-                                        lr=args.learning_rate)
-
-        lr_scheduler = LRPolicyScheduler(optimizer, args.lr_num_warmup_steps,
-                                         args.lr_decay_start_step,
-                                         args.lr_num_decay_steps)
 
     ### main loop ###
     def time_wrap(use_gpu):
@@ -970,7 +949,6 @@ if __name__ == "__main__":
             ld_gA_test = ld_model["test_acc"]
             ld_gL_test = ld_model["test_loss"]
         except:
-
             ld_j = 0
             ld_k = 0
             ld_nepochs = 0
@@ -983,7 +961,6 @@ if __name__ == "__main__":
             ld_gA_test = 0.0
             ld_gL_test = 0.0
         if not args.inference_only:
-            optimizer.load_state_dict(ld_model["opt_state_dict"])
 
             try:
                 best_gA_test = ld_gA_test
@@ -1012,6 +989,43 @@ if __name__ == "__main__":
     print("Before compression")
     print(dlrm.parameters)
 
+    test_accu = 0
+    test_loss = 0
+    test_samp = 0
+    
+    for i, (X_test, lS_o_test, lS_i_test,
+            T_test) in enumerate(test_ld):
+        Z_test = dlrm_wrap(X_test, lS_o_test, lS_i_test,
+                           use_gpu, device)
+        if args.mlperf_logging:
+            S_test = Z_test.detach().cpu().numpy(
+            )  # numpy array
+            T_test = T_test.detach().cpu().numpy(
+            )  # numpy array
+            scores.append(S_test)
+            targets.append(T_test)
+        else:
+            # loss
+            E_test = loss_fn_wrap(Z_test, T_test, use_gpu,
+                                  device)
+
+            # compute loss and accuracy
+            L_test = E_test.detach().cpu().numpy(
+            )  # numpy array
+            S_test = Z_test.detach().cpu().numpy(
+            )  # numpy array
+            T_test = T_test.detach().cpu().numpy(
+            )  # numpy array
+            mbs_test = T_test.shape[
+                0]  # = mini_batch_size except last
+            A_test = np.sum(
+                (np.round(S_test,
+                          0) == T_test).astype(np.uint8))
+            test_accu += A_test
+            test_loss += L_test * mbs_test
+            test_samp += mbs_test
+
+    print("test acc %f test loss %f test_sample %f"%(test_accu,test_loss,test_samp))
 
     print("*********************************************************")
     print("*********************************************************")
@@ -1023,6 +1037,63 @@ if __name__ == "__main__":
     print("After compression")
     print(dlrm.parameters)
 
+    test_accu = 0
+    test_loss = 0
+    test_samp = 0
+    
+    for i, (X_test, lS_o_test, lS_i_test,
+            T_test) in enumerate(test_ld):
+       
+        Z_test = dlrm_wrap(X_test, lS_o_test, lS_i_test,
+                           use_gpu, device)
+        if args.mlperf_logging:
+            S_test = Z_test.detach().cpu().numpy(
+            )  # numpy array
+            T_test = T_test.detach().cpu().numpy(
+            )  # numpy array
+            scores.append(S_test)
+            targets.append(T_test)
+        else:
+            # loss
+            E_test = loss_fn_wrap(Z_test, T_test, use_gpu,
+                                  device)
+
+            # compute loss and accuracy
+            L_test = E_test.detach().cpu().numpy(
+            )  # numpy array
+            S_test = Z_test.detach().cpu().numpy(
+            )  # numpy array
+            T_test = T_test.detach().cpu().numpy(
+            )  # numpy array
+            mbs_test = T_test.shape[
+                0]  # = mini_batch_size except last
+            A_test = np.sum(
+                (np.round(S_test,
+                          0) == T_test).astype(np.uint8))
+            test_accu += A_test
+            test_loss += L_test * mbs_test
+            test_samp += mbs_test
+
+    print("test acc %f test loss %f test_sample %f"%(test_accu,test_loss,test_samp))
+
+    if args.optimizer == 'SGD':
+
+        optimizer = torch.optim.SGD(dlrm.parameters(),
+                                    lr=args.learning_rate)
+
+    elif args.optimizer == 'Adagrad':
+
+        optimizer = torch.optim.Adagrad(dlrm.parameters(),
+                                        lr=args.learning_rate)
+
+    elif args.optimizer == 'Adam':
+        from allennlp.training.optimizers import DenseSparseAdam
+        optimizer = DenseSparseAdam([(None, x) for x in dlrm.parameters()],
+                                    lr=args.learning_rate)
+
+    lr_scheduler = LRPolicyScheduler(optimizer, args.lr_num_warmup_steps,
+                                     args.lr_decay_start_step,
+                                     args.lr_num_decay_steps)
     print("*********************************************************")
     print("*********************************************************")
     print("*********************************************************")
@@ -1049,7 +1120,6 @@ if __name__ == "__main__":
                 previous_iteration_time = None
 
             for j, (X, lS_o, lS_i, T) in enumerate(train_ld):
-
                 if k == 0:
                     iter_kl_multiplier = args.kl_multiplier * torch.clamp(
                         torch.tensor((
@@ -1064,8 +1134,6 @@ if __name__ == "__main__":
                 if j == 0 and args.save_onnx:
                     (X_onnx, lS_o_onnx, lS_i_onnx) = (X, lS_o, lS_i)
 
-                if j < skip_upto_batch:
-                    continue
 
                 if args.mlperf_logging:
                     current_time = time_wrap(use_gpu)
@@ -1096,9 +1164,6 @@ if __name__ == "__main__":
                 # loss
                 E = loss_fn_wrap(Z, T, use_gpu, device)
 
-                low_rank_kl_loss = iter_kl_multiplier * get_kl_loss(dlrm)
-                if args.kl_multiplier>0.0: 
-                    E += low_rank_kl_loss
                 '''
                 # debug prints
                 print("output and loss")
@@ -1145,7 +1210,6 @@ if __name__ == "__main__":
                                and (args.data_generation == "dataset")
                                and (((j + 1) % args.test_freq == 0) or
                                     (j + 1 == nbatches)))
-
                 # print time, loss and accuracy
                 if should_print or should_test:
                     gT = 1000.0 * total_time / total_iter if args.print_time else -1
@@ -1163,13 +1227,11 @@ if __name__ == "__main__":
                         format(str_run_type, j + 1, nbatches, k, gT) +
                         "loss {:.6f}, accuracy {:3.3f} %".format(gL, gA * 100))
 
-                    print("KL loss ",
-                          low_rank_kl_loss.detach().cpu().numpy(),
-                          "iteration kl_multiplier ",
-                          iter_kl_multiplier.detach().cpu().numpy(), " iter ",
-                          j)
                     print_ranks(dlrm)
-
+                    """
+                    for i,emb in enumerate(dlrm.emb_l):
+                        print('Emb layer ',i,type(emb))
+                    """
                     # Uncomment the line below to print out the total time with overhead
                     # print("Accumulated time so far: {}" \
                     # .format(time_wrap(use_gpu) - accum_time_begin))
