@@ -17,6 +17,10 @@ def get_reshape_dims(tensor_type,shape):
     return reshape_dims
 
 def pad_tensor(init_tensor,shape):
+
+    print('Shape ',shape)
+    print("init tensor shape",init_tensor.shape)
+
     padding_size = np.prod(shape[0])-init_tensor.shape[0]
 
     if padding_size>0:

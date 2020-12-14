@@ -1035,11 +1035,11 @@ if __name__ == "__main__":
 
             for j, (X, lS_o, lS_i, T) in enumerate(train_ld):
 
-                if args.tensor_type=='TensorTrain':
+                if args.tensor_type in ['TensorTrain','Tucker']:
                     if k==0:
                         iter_kl_multiplier=torch.tensor(0.0)
 
-                    elif k == 1:
+                    elif k < args.nepochs:
                         iter_kl_multiplier = args.kl_multiplier * torch.clamp(
                             torch.tensor((
                                 j / len(train_ld))), 0.0, 1.0)
