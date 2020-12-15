@@ -255,7 +255,9 @@ class DLRM_Net(nn.Module):
                 EE = TensorizedEmbedding(
                     tensor_type=args.tensor_type,
                     max_rank=max_ranks[args.tensor_type].pop(0),
-                    shape=[shape0.pop(0), shape1])
+                    shape=[shape0.pop(0), shape1],
+                    prior_type=args.prior_type,
+                    eta = args.eta)
 
             else:
                 print('Embedding %i size %ix%i' % (i, n, m))
@@ -561,6 +563,8 @@ if __name__ == "__main__":
     # model related parameters
     parser.add_argument("--load-saved", type=int, default=0)
     parser.add_argument("--tensor-type", type=str, default='CP')
+    parser.add_argument("--prior-type", type=str, default='log_uniform')
+    parser.add_argument("--eta", type=float, default=None)
     parser.add_argument("--arch-sparse-feature-size", type=int, default=2)
     parser.add_argument("--arch-embedding-size", type=str, default="4-3-2")
     # j will be replaced with the table number

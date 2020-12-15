@@ -233,11 +233,13 @@ class CP(LowRankTensor):
     def get_rank_parameters_update(self):
         def half_cauchy():
 
-            M = torch.sum(torch.tensor([torch.sum(torch.square(x.mean) + torch.square(x.stddev),dim=0) for x in self.factor_distributions]),dim=0)
+
+            M = torch.sum(torch.stack([torch.sum(torch.square(x.mean) + torch.square(x.stddev),
+                              dim=0) for x in self.factor_distributions]),dim=0)
 
             D = 1.0 * sum(self.dims)
 
-            update = (M - D * self.eta**2 + torch.sqrt(torch.square(M) + (2.0 * D + 8.0) * torch.square(self.eta) * M +torch.pow(self.eta, 4.0) * torch.square(D))) / (2.0 * D + 4.0)
+            update = (M - D * self.eta**2 + torch.sqrt(torch.square(M) + (2.0 * D + 8.0) * torch.square(torch.tensor(self.eta)) * M +torch.pow(torch.tensor(self.eta), 4.0) * torch.square(torch.tensor(D)))) / (2.0 * D + 4.0)
 
             return update
 

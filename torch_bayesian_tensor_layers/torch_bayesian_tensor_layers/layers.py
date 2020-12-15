@@ -13,6 +13,7 @@ class TensorizedEmbedding(nn.Module):
                  max_rank=16,
                  em_stepsize=1.0,
                  prior_type='log_uniform',
+                 eta = None,
                  batch_dim_last=None,
                  padding_idx=None,
                  naive=False):
@@ -29,7 +30,7 @@ class TensorizedEmbedding(nn.Module):
         else:
             tensor_shape = self.shape[0]+self.shape[1]
 
-        self.tensor = getattr(low_rank_tensors,self.tensor_type)(tensor_shape,prior_type=prior_type,em_stepsize=em_stepsize,max_rank=max_rank,initialization_method='nn',target_stddev=target_stddev,learned_scale=False)
+        self.tensor = getattr(low_rank_tensors,self.tensor_type)(tensor_shape,prior_type=prior_type,em_stepsize=em_stepsize,max_rank=max_rank,initialization_method='nn',target_stddev=target_stddev,learned_scale=False,eta=eta)
 
         self.parameters = self.tensor.parameters
 
