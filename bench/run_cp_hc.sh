@@ -3,7 +3,7 @@ export tensor_type="CP"
 export no_kl_steps=50000
 export minibatch_size=256
 export prior_type="half_cauchy"
-export kl_mult=
+export kl_mult=0.1
 
 
 for eta in 1.0 0.1 0.01 0.001; 

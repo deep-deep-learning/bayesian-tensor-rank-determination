@@ -112,8 +112,8 @@ def print_ranks(model):
 
     for layer in model.emb_l:
         if hasattr(layer, "tensor"):
-            print('Tensor type ', layer.tensor.tensor_type," rank ", layer.tensor.estimate_rank(1e-7))
-            print('Tensor type ', layer.tensor.tensor_type," rank ", layer.tensor.estimate_rank(1e-9))
+            print('Tensor type ', layer.tensor.tensor_type," rank 1e-7", layer.tensor.estimate_rank(1e-7))
+            print('Tensor type ', layer.tensor.tensor_type," rank 1e-9", layer.tensor.estimate_rank(1e-9))
 
 def print_masks(model):
 
@@ -258,6 +258,9 @@ class DLRM_Net(nn.Module):
                     shape=[shape0.pop(0), shape1],
                     prior_type=args.prior_type,
                     eta = args.eta)
+
+                print(EE.tensor.prior_type)
+                print(EE.tensor.eta)
 
             else:
                 print('Embedding %i size %ix%i' % (i, n, m))
