@@ -3,12 +3,12 @@
 dlrm_pt_bin="python tensorized_dlrm_pytorch.py"
 
 for tensor_type in "Tucker" 
-do for kl_mult in  0.001 0.0001 0.00001 0.000001 0.0000001;
+do for kl_mult in  1.0 0.01 0.001;
 do for no_kl_steps in 25000;
 do for minibatch_size in 2048;
 do for lr in 0.005;
 do
-	export CUDA_VISIBLE_DEVICES=""
+	export CUDA_VISIBLE_DEVICES=1
 	name="${tensor_type}_warmup_${no_kl_steps}_${optimizer}_lr_${lr}_kl_${kl_mult}_batch${minibatch_size}"
         
 	$dlrm_pt_bin  --nepochs=3 \

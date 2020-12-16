@@ -105,7 +105,7 @@ def prune_ranks(model):
 
     for layer in model.emb_l:
         if hasattr(layer, "tensor"):
-            print("pruning with rank cutoff 1e-7", layer.tensor.prune_ranks(threshold=1e-7))
+            print("pruning with rank cutoff 1e-8", layer.tensor.prune_ranks(threshold=1e-8))
 
 
 def print_ranks(model):
@@ -113,6 +113,7 @@ def print_ranks(model):
     for layer in model.emb_l:
         if hasattr(layer, "tensor"):
             print('Tensor type ', layer.tensor.tensor_type," rank 1e-7", layer.tensor.estimate_rank(1e-7))
+            print('Tensor type ', layer.tensor.tensor_type," rank 1e-8", layer.tensor.estimate_rank(1e-8))
             print('Tensor type ', layer.tensor.tensor_type," rank 1e-9", layer.tensor.estimate_rank(1e-9))
 
 def print_masks(model):
