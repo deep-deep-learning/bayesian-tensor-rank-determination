@@ -1011,12 +1011,13 @@ if __name__ == "__main__":
                                          use_gpu) as prof:
         while k < args.nepochs:
 
+            """
             if k==2:
                 print_ranks(dlrm)
                 prune_ranks(dlrm)
                 print_masks(dlrm)
                 args.kl_multiplier = 0.0
-
+            """
 
             if k < skip_upto_epoch:
                 continue
@@ -1028,7 +1029,18 @@ if __name__ == "__main__":
 
             for j, (X, lS_o, lS_i, T) in enumerate(train_ld):
 
-                if args.tensor_type in ['TensorTrain','Tucker']:
+                if args.tensor_type in ['Tucker']:
+                    if k==0:
+                        iter_kl_multiplier=torch.tensor(0.0)
+
+                    elif k==1: 
+                        iter_kl_multiplier = args.kl_multiplier * torch.clamp(
+                            torch.tensor((
+                                j / len(train_ld))), 0.0, 1.0)
+                    else:
+                        iter_kl_multiplier = args.kl_multiplier 
+
+                elif args.tensor_type in ['TensorTrain']:
                     if k==0:
                         iter_kl_multiplier=torch.tensor(0.0)
 

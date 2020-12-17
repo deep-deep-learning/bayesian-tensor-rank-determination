@@ -6,7 +6,7 @@ for tensor_type in "TensorTrain"
 do for kl_mult in  0.001;
 do for no_kl_steps in 25000;
 do for minibatch_size in 2048;
-do for lr in 0.005 0.001;
+do for lr in 0.005
 do
 	export CUDA_VISIBLE_DEVICES=0
 	name="${tensor_type}_warmup_${no_kl_steps}_${optimizer}_lr_${lr}_kl_${kl_mult}_batch${minibatch_size}"
