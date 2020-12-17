@@ -3,7 +3,7 @@
 dlrm_pt_bin="python tensorized_dlrm_pytorch.py"
 
 for tensor_type in "Tucker" 
-do for kl_mult in  1.0 0.01 0.001;
+do for kl_mult in  100.0 10.0;
 do for no_kl_steps in 25000;
 do for minibatch_size in 2048;
 do for lr in 0.005;
