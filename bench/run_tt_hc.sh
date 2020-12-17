@@ -6,13 +6,13 @@ export minibatch_size=2048
 export prior_type="half_cauchy"
 export kl_mult=0.001
 export lr=0.005
+export CUDA_VISIBLE_DEVICES=0
 
 dlrm_pt_bin="python tensorized_dlrm_pytorch.py"
 
 for eta in 1.0 0.1 0.01 0.001; 
 do
-	export CUDA_VISIBLE_DEVICES=0
-	name="${tensor_type}_warmup_${no_kl_steps}_${optimizer}_lr_${lr}_kl_${kl_mult}_batch${minibatch_size}"
+	name="${tensor_type}_warmup_${no_kl_steps}_${optimizer}_lr_${lr}_kl_${kl_mult}_batch${minibatch_size}_eta_${eta}"
         
 	$dlrm_pt_bin  --nepochs=3 \
 			--prior-type=$prior_type \

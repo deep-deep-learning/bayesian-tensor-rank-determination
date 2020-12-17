@@ -1,14 +1,14 @@
 #!/bin/bash
 export tensor_type="CP"
 export no_kl_steps=50000
-export minibatch_size=256
+export minibatch_size=512
 export prior_type="half_cauchy"
 export lr=0.005
 
+export CUDA_VISIBLE_DEVICES=1
 for kl_mult in 0.5 0.1;
-for eta in 1.0 0.1 0.01; 
+do for eta in 1.0 0.1 0.01; 
 do
-	export CUDA_VISIBLE_DEVICES=1
 	name="${tensor_type}_warmup_${no_kl_steps}_${optimizer}_lr_${lr}_kl_${kl_mult}_batch${minibatch_size}_eta_${eta}"
   
 	dlrm_pt_bin="python tensorized_dlrm_pytorch.py"
@@ -37,6 +37,7 @@ do
 			--print-freq=1024 \
 			--kl-multiplier=${kl_mult} \
 			--no-kl-steps=${no_kl_steps} > logs/${name}.log
+done
 done
 echo "done"
 
