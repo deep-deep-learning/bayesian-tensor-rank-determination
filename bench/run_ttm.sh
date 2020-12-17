@@ -5,13 +5,13 @@ do for no_kl_steps in 50000;
 do for minibatch_size in 256 512;
 do for lr in 0.005 0.001;
 do
-	export CUDA_VISIBLE_DEVICES=0
+	export CUDA_VISIBLE_DEVICES=1
 	name="${tensor_type}_warmup_${no_kl_steps}_${optimizer}_lr_${lr}_kl_${kl_mult}_batch${minibatch_size}"
   
 	dlrm_pt_bin="python tensorized_dlrm_pytorch.py"
 
 
-	$dlrm_pt_bin  --nepochs=3 \
+	$dlrm_pt_bin  --nepochs=2 \
 			--arch-sparse-feature-size=128 \
 			--arch-mlp-bot="13-512-256-256-128" \
 			--arch-mlp-top="512-256-1" \
@@ -28,7 +28,7 @@ do
 			--learning-rate=${lr} \
 			--tensor-type="${tensor_type}" \
 			--use-gpu=1 \
-			--test-freq=5120 \
+			--test-freq=10240 \
 			--print-freq=1024 \
 			--kl-multiplier=${kl_mult} \
 			--no-kl-steps=${no_kl_steps} > logs/${name}.log
