@@ -1166,7 +1166,7 @@ if __name__ == "__main__":
                     print("KL loss ",
                           low_rank_kl_loss.detach().cpu().numpy(),
                           "iteration kl_multiplier ",
-                          iter_kl_multiplier.detach().cpu().numpy(), " iter ",
+                          iter_kl_multiplier, " iter ",
                           j)
                     print_ranks(dlrm)
 
