@@ -99,11 +99,22 @@ from train_then_compress_utils import tensor_decompose_and_replace_embedding
 #os.environ['CUDA_VISIBLE_DEVICES']=''
 
 MAX_RANKS = {
+
+        'CP': [163, 171, 161, 175, 153],
+        'TensorTrainMatrix': [[1,16,4,1], [1,16,1,1], [1,16,2,1], [1,16,2,1],[1,16,1,1]],
+        'TensorTrain': [[1,23,5,7,1], [1,20,3,5,1], [1,15,6,4,1], [1,22,6,5,1], [1,23,6,7,1]],
+        'Tucker': [22, 20, 22, 21, 22]
+}
+
+"""
+MAX_RANKS = {
             'CP': [350, 306, 333, 326, 335],
             'TensorTrainMatrix': [16, 16, 16, 16, 16],
             'TensorTrain': [24, 24, 24, 24, 24],
             'Tucker': [22, 20, 22, 21, 22]
 }
+
+"""
 exc = getattr(builtins, "IOError", "FileNotFoundError")
 
 def prune_ranks(model):

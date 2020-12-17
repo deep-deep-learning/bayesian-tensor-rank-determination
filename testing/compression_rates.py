@@ -1,7 +1,7 @@
 #%%
 import numpy as np
 
-log_uniform=True
+log_uniform=False
 
 def get_tucker_params(tucker_dims, tucker_rank):
 
