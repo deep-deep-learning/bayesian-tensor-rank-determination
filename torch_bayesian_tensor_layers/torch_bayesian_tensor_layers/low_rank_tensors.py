@@ -274,13 +274,18 @@ class CP(LowRankTensor):
     def get_rank(self, threshold=1e-4):
         return len(torch.where(self.get_rank_variance() > threshold))
 
-    def get_kl_divergence_to_prior(self):
+    def get_kl_divergence_to_prior(self,rank_parameter=None):
+
+        if rank_parameter is None:
+            rank_parameter = self.rank_parameter 
+        else:
+            pass
 
         kl_sum= 0.0
 
         for p in self.factor_distributions:
-            var_ratio = (p.stddev / self.rank_parameter).pow(2)
-            t1 = ((p.mean ) / self.rank_parameter).pow(2)
+            var_ratio = (p.stddev / rank_parameter).pow(2)
+            t1 = ((p.mean ) / rank_parameter).pow(2)
             kl = torch.sum(0.5 * (var_ratio + t1 - 1 - var_ratio.log()))
             kl_sum+=kl
 

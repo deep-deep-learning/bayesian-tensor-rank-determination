@@ -48,7 +48,7 @@ class TensorizedEmbedding(nn.Module):
 
 
 
-    def forward(self, x):
+    def forward(self, x,rank_update=True):
 
         xshape = list(x.shape)
         xshape_new = xshape + [self.emb_size, ]
@@ -72,7 +72,7 @@ class TensorizedEmbedding(nn.Module):
 
         rows = rows.view(*xshape_new)
 
-        if self.training:
+        if self.training and rank_update:
             self.tensor.update_rank_parameters()
         
 
