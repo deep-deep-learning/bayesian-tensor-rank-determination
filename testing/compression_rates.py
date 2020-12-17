@@ -60,19 +60,30 @@ baseline_params = [10131227, 2202608, 8351593, 5461306, 7046547]
 baseline_params = [128 * x for x in baseline_params]
 print(baseline_params)
 
+
+
 max_ranks = {
     'CP': [350, 306, 333, 326, 335],
     'TensorTrainMatrix': [16, 16, 16, 16, 16],
     'TensorTrain': [24, 24, 24, 24, 24],
     'Tucker': [22, 20, 22, 21, 22]
 }
+log_uniform=False
+if log_uniform:
 
-true_ranks = {
-    'CP': [163, 171, 161, 175, 153],
-    'TensorTrainMatrix': [[1,16,4,1], [1,16,1,1], [1,16,2,1], [1,16,2,1],[1,16,1,1]],
-    'TensorTrain': [24, 24, 24, 24, 24],
-    'Tucker': [22, 20, 22, 21, 22]
-}
+    true_ranks = {
+        'CP': [163, 171, 161, 175, 153],
+        'TensorTrainMatrix': [[1,16,4,1], [1,16,1,1], [1,16,2,1], [1,16,2,1],[1,16,1,1]],
+        'TensorTrain': [24, 24, 24, 24, 24],
+        'Tucker': [22, 20, 22, 21, 22]
+    }
+else:
+    true_ranks = {
+        'CP': [163, 171, 161, 175, 153],
+        'TensorTrainMatrix': [[1,16,2,1], [1,16,2,1], [1,16,1,1], [1,16,1,1],[1,16,2,1]],
+        'TensorTrain': [24, 24, 24, 24, 24],
+        'Tucker': [22, 20, 22, 21, 22]
+    }
 
 tensorized_params = {}
 ard_params = {}
