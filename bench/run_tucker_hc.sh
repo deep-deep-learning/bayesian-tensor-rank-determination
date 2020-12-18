@@ -10,8 +10,8 @@ dlrm_pt_bin="python tensorized_dlrm_pytorch.py"
 for eta in 1.0 0.1 0.01 0.001; 
 do for lr in 0.005 0.001;
 do
-	export CUDA_VISIBLE_DEVICES=""
-	name="${tensor_type}_warmup_${no_kl_steps}_${optimizer}_lr_${lr}_kl_${kl_mult}_batch${minibatch_size}"
+	export CUDA_VISIBLE_DEVICES=1
+	name="${tensor_type}_warmup_${no_kl_steps}_${optimizer}_lr_${lr}_kl_${kl_mult}_batch${minibatch_size}_eta_${eta}"
         
 	$dlrm_pt_bin  --nepochs=3 \
 			--prior-type=$prior_type \
@@ -38,9 +38,6 @@ do
 			--kl-multiplier=${kl_mult} \
 			--no-kl-steps=${no_kl_steps} > logs/${name}.log
 
-done
-done
-done
 done
 done
 
