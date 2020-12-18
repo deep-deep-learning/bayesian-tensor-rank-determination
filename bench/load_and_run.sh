@@ -1,33 +1,18 @@
 #!/bin/bash
-# Copyright (c) Facebook, Inc. and its affiliates.
-#
-# This source code is licensed under the MIT license found in the
-# LICENSE file in the root directory of this source tree.
-#
-#WARNING: must have compiled PyTorch and caffe2
-
-#check if extra argument is passed to the test
-if [[ $# == 1 ]]; then
-    dlrm_extra_option=$1
-else
-    dlrm_extra_option=""
-fi
-#echo $dlrm_extra_option
-
-dlrm_pt_bin="python dlrm_s_pytorch.py"
-dlrm_c2_bin="python dlrm_s_caffe2.py"
-
-
 export CUDA_VISIBLE_DEVICES=""
 
 
 
 echo "run pytorch ..."
-# WARNING: the following parameters will be set based on the data set
-# --arch-embedding-size=... (sparse feature sizes)
-# --arch-mlp-bot=... (the input to the first layer of bottom mlp)
-$dlrm_pt_bin --load-model="saved_models/full" --arch-sparse-feature-size=128 --arch-mlp-bot="13-512-256-64-128" --arch-mlp-top="512-256-1" --data-generation=dataset --data-set=kaggle --raw-data-file=./input/train.txt --processed-data-file=./input/kaggleAdDisplayChallenge_processed.npz --loss-function=bce --round-targets=True --mini-batch-size=128 --print-time $dlrm_extra_option --test-num-workers=16 --test-freq=10240 --print-freq=1024 --memory-map  > logs/full.log
 
+for tensor_type in "TensorTrainMatrix" 
+do 
+    export name="${tensor_type}_train_then_compress_or.log"
+
+	dlrm_pt_bin="python tensorized_dlrm_pytorch.py"
+
+	$dlrm_pt_bin  --tensor-type=${tensor_type} --learning-rate=0.0001 --optimizer='SGD' --load-model="saved_models/${tensor_type}" --memory-map --arch-sparse-feature-size=128 --arch-mlp-bot="13-512-256-256-128" --arch-mlp-top="512-256-1" --data-generation=dataset--data-set=kaggle --raw-data-file=./input/train.txt --processed-data-file=./input/kaggleAdDisplayChallenge_processed.npz --loss-function='bce' --round-targets=True  --test-num-workers=16 --memory-map --mini-batch-size=512 --nepochs=1 --test-freq=100 --print-freq=10 --kl-multiplier=0.0  --no-kl-steps=25000 > logs/${name}.log
+done
 #echo "run caffe2 ..."
 # WARNING: the following parameters will be set based on the data set
 # --arch-embedding-size=... (sparse feature sizes)

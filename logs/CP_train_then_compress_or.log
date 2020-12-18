@@ -31,9 +31,9 @@ Embedding 23 size 286181x128
 Embedding 24 size 105x128
 Embedding 25 size 142572x128
 Loading saved model saved_models/safe/full
-Saved at: epoch = 0/1, batch = 71680/76743, ntbatch = 6396
-Training state: loss = 0.454900, accuracy = 78.811 %
-Testing state: loss = 0.461507, accuracy = 78.399 %
+Saved at: epoch = 0/1, batch = 306969/306969, ntbatch = 25581
+Training state: loss = 0.447980, accuracy = 79.230 %
+Testing state: loss = 0.453967, accuracy = 78.776 %
 Before compression
 <bound method Module.parameters of DLRM_Net(
   (emb_l): ModuleList(
