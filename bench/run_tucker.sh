@@ -1,17 +1,19 @@
 #!/bin/bash
+export tensor_type="Tucker"
+export no_kl_steps=2500
+export minibatch_size=2048
+export prior_type="log_uniform"
+export lr=0.005
 
 dlrm_pt_bin="python tensorized_dlrm_pytorch.py"
 
-for tensor_type in "Tucker" 
-do for kl_mult in 1000.0 100.0 10.0;
-do for no_kl_steps in 25000;
-do for minibatch_size in 2048;
-do for lr in 0.005;
+for kl_mult in 1.0 0.5 0.1 0.01;
 do
-	export CUDA_VISIBLE_DEVICES=1
+	export CUDA_VISIBLE_DEVICES=0
 	name="${tensor_type}_warmup_${no_kl_steps}_${optimizer}_lr_${lr}_kl_${kl_mult}_batch${minibatch_size}"
         
 	$dlrm_pt_bin  --nepochs=3 \
+			--prior-type=$prior_type \
 			--arch-sparse-feature-size=128 \
 			--arch-mlp-bot="13-512-256-256-128" \
 			--arch-mlp-top="512-256-1" \
@@ -34,10 +36,6 @@ do
 			--kl-multiplier=${kl_mult} \
 			--no-kl-steps=${no_kl_steps} > logs/${name}.log
 
-done
-done
-done
-done
 done
 
 

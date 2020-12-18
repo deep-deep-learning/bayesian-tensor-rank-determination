@@ -7,13 +7,13 @@ export lr=0.005
 
 dlrm_pt_bin="python tensorized_dlrm_pytorch.py"
 
-for eta in 1.0 0.1 0.01 0.001; 
-do for kl_mult in 0.1 0.01 0.001;
+for eta in 0.1 0.01; 
+do for kl_mult in 1.0 0.5 0.1;
 do
 	export CUDA_VISIBLE_DEVICES=1
 	name="${tensor_type}_warmup_${no_kl_steps}_${optimizer}_lr_${lr}_kl_${kl_mult}_batch${minibatch_size}_eta_${eta}"
         
-	$dlrm_pt_bin  --nepochs=2 \
+	$dlrm_pt_bin  --nepochs=3 \
 			--prior-type=$prior_type \
 			--eta=$eta \
 			--arch-sparse-feature-size=128 \
