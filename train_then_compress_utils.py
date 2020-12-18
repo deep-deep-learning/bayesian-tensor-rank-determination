@@ -31,6 +31,7 @@ def pad_tensor(init_tensor,shape):
 
     return padded_tensor
 
+@torch.no_grad()
 def tensor_decompose(to_decompose,tensor_type,max_ranks):
 
     if tensor_type=='TensorTrain':
@@ -40,10 +41,11 @@ def tensor_decompose(to_decompose,tensor_type,max_ranks):
     elif tensor_type=='TensorTrainMatrix':
         factors = tl.decomposition.tensor_train_matrix(to_decompose,max_ranks)
     elif tensor_type=='CP':
-        _,factors = tl.decomposition.parafac(to_decompose,max_ranks,init='random')
+        _,factors = tl.decomposition.parafac(to_decompose,max_ranks,n_iter_max=10,init='random')
 
     return factors
 
+@torch.no_grad()
 def tensor_decompose_and_replace_embedding(embedding,tensor_type,shape,max_ranks):
 
     init_tensor = embedding.weight.detach()
