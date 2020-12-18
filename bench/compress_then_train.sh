@@ -6,7 +6,7 @@ export CUDA_VISIBLE_DEVICES=""
 
 source ~/.bashrc
 
-for tensor_type in "TensorTrainMatrix" "TensorTrain" "CP" 
+for tensor_type in "CP" 
 do
 
 export name="${tensor_type}_train_then_compress_or"

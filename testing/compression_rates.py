@@ -1,7 +1,7 @@
 #%%
 import numpy as np
 
-log_uniform=True
+log_uniform=False
 
 def get_tucker_params(tucker_dims, tucker_rank):
 
@@ -82,8 +82,8 @@ else:
     true_ranks = {
         'CP': [166, 181, 154, 164, 169],
         'TensorTrainMatrix': [[1,16,2,1], [1,16,2,1], [1,16,1,1], [1,16,1,1],[1,16,2,1]],
-        'TensorTrain': [[21,5,2], [22,4,4], [23,6,5], [23,7,9], [22,4,7]],
-        'Tucker': [] 
+        'TensorTrain': [[1,21,5,2,1], [1,22,4,4,1], [1,23,6,5,1], [1,23,7,9,1], [1,22,4,7,1]],
+        'Tucker': max_ranks['Tucker']
     }
 
 tensorized_params = {}
