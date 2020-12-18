@@ -209,7 +209,9 @@ class DLRM_Net(nn.Module):
             if i in tensorized_embedding_layers:
 
                 tensorized_emb = tensor_decompose_and_replace_embedding(layer,args.tensor_type,[shape0.pop(0), shape1],MAX_RANKS[args.tensor_type].pop(0))
+                old_emb = self.emb_l[i]
                 self.emb_l[i] = tensorized_emb
+                del old_emb
             else:
                 pass
 
