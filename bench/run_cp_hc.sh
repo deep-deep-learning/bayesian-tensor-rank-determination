@@ -5,7 +5,7 @@ export minibatch_size=512
 export prior_type="half_cauchy"
 export lr=0.005
 
-export CUDA_VISIBLE_DEVICES=1
+export CUDA_VISIBLE_DEVICES=0
 for kl_mult in 0.5 0.1;
 do for eta in 1.0 0.1 0.01; 
 do
