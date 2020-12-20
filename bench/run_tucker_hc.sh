@@ -7,8 +7,8 @@ export lr=0.005
 
 dlrm_pt_bin="python tensorized_dlrm_pytorch.py"
 
-for eta in 0.1 0.01; 
-do for kl_mult in 1.0 0.5 0.1;
+for eta in 0.1; 
+do for kl_mult in 1.0;
 do
 	export CUDA_VISIBLE_DEVICES=1
 	name="${tensor_type}_warmup_${no_kl_steps}_${optimizer}_lr_${lr}_kl_${kl_mult}_batch${minibatch_size}_eta_${eta}"
