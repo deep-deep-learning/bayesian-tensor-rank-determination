@@ -13,7 +13,7 @@ pip install -e .
 ```
 This should set up the tensorized embedding package. The tensorized embedding package does not compute the full embedding, but instead only selects the necessary tensor slices. This lookup can be further optimized by avoiding redundant computations.
 
-## Run the tensorized model
+## Running the tensorized models with rank determination
 
 The appropriate scripts are all located in the directory `bench`. Assuming you have set up a conda environment using the pip install above, you should be able to run the scripts in `bench` from the root directory.
 
