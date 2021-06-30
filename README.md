@@ -15,7 +15,7 @@ This should set up the tensorized embedding package. The tensorized embedding pa
 
 ## Run the tensorized model
 
-The appropriate scripts are all located in the folder `bench`. Assuming you have set up a conda environment using the pip install above, you should be able to run the scripts in `bench` from the root directory.
+The appropriate scripts are all located in the directory `bench`. Assuming you have set up a conda environment using the pip install above, you should be able to run the scripts in `bench` from the root directory.
 
 Most script names are self-explanatory. 
 
