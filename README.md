@@ -17,9 +17,9 @@ This should set up the tensorized embedding package. The tensorized embedding pa
 
 The appropriate scripts are all located in the directory `bench`. Assuming you have set up a conda environment using the pip install above, you should be able to run the scripts in `bench` from the root directory.
 
-Most script names are self-explanatory. 
+Most script names are self-explanatory. The tensorized model scripts will print accuracy and ranks at each validation/test checkpoint. 
 
-For example `run_cp_hc.sh` runs the half-cauchy CP model hyperparameter search. 
+For example `run_cp_hc.sh` runs the half-cauchy CP model hyperparameter search.
 
 In order to run the train-then-compress approach via `compress_then_train.sh` you will need to save a DLRM model.
 
