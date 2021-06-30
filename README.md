@@ -1,4 +1,4 @@
-This README assumes you have already loaded the dataset as detailed in the repository `https://github.com/facebookresearch/dlrm` which forms the basis for this implementation.
+This README assumes you have already loaded the dataset as detailed in the repository `https://github.com/facebookresearch/dlrm` which forms the backbone of this implementation and contains a much more thorough set of directions for running the DLRM model.
 
 ## Setup
 
