@@ -23,4 +23,7 @@ For example `run_cp_hc.sh` runs the half-cauchy CP model hyperparameter search.
 
 In order to run the train-then-compress approach via `compress_then_train.sh` you will need to save a DLRM model.
 
+
+## Issues?
+
 Feel free to contact `colepshawkins@gmail.com` with any questions, or raise an issue.
