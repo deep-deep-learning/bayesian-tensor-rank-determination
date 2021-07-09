@@ -1,10 +1,12 @@
-This README assumes you have already loaded the dataset as detailed in the repository `https://github.com/facebookresearch/dlrm` which forms the backbone of this implementation and contains a much more thorough set of directions for running the DLRM model.
+This README assumes you have already loaded the dataset as detailed in the repository `https://github.com/facebookresearch/dlrm` which forms most of the infrastructure for this repository.
+
+The dataset should be located in the folder `input`.
 
 ## Setup
 
 Install the requirements using 
 ```
-pip install -r requirements.txt
+conda env update -f conda_reqs.yml
 ```
 Next install the tensorized embedding package by moving from the root directory to the package directory and using pip:
 ```

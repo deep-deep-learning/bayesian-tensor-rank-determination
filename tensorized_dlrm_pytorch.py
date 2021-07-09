@@ -64,7 +64,6 @@ import json
 from torch.nn.modules.sparse import EmbeddingBag
 # data generation
 import dlrm_data_pytorch as dp
-import t3nsor as t3
 # numpy
 import numpy as np
 
@@ -361,7 +360,7 @@ class DLRM_Net(nn.Module):
 
             E = emb_l[k]
 
-            if type(E) in [t3.TTEmbedding, TensorizedEmbedding]:
+            if type(E) in [TensorizedEmbedding]:
                 assert (sparse_offset_group_batch.shape ==
                         sparse_index_group_batch.shape)
                 V = E(sparse_index_group_batch)
@@ -1011,13 +1010,6 @@ if __name__ == "__main__":
                                          use_gpu) as prof:
         while k < args.nepochs:
 
-            """
-            if k==2:
-                print_ranks(dlrm)
-                prune_ranks(dlrm)
-                print_masks(dlrm)
-                args.kl_multiplier = 0.0
-            """
 
             if k < skip_upto_epoch:
                 continue
