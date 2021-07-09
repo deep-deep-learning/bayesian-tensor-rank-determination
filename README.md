@@ -1,4 +1,4 @@
-This README assumes you have already loaded the dataset as detailed in the repository `https://github.com/facebookresearch/dlrm` which forms most of the infrastructure for this repository.
+This README assumes you have already loaded the [Criteo Kaggle dataset](https://labs.criteo.com/2014/02/kaggle-display-advertising-challenge-dataset/) as described in the [Facebook DLRM repository](https://github.com/facebookresearch/dlrm) which forms most of the infrastructure for this repository.
 
 The dataset should be located in the folder `input`.
 
