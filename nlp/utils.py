@@ -3,7 +3,15 @@ import torch.nn as nn
 import subprocess
 import pandas as pd
 import pickle
+def get_kl_loss(model):
 
+    kl_loss = 0.0
+    for layer in model.modules():
+        if hasattr(layer, "tensor"):
+
+            kl_loss += layer.tensor.get_kl_divergence_to_prior()
+
+    return kl_loss
 
 def binary_accuracy(preds, y):
     """

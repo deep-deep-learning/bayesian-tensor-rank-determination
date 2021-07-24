@@ -1,2 +1,2 @@
-import torch_bayesian_tensor_layers.low_rank_tensors
-import torch_bayesian_tensor_layers.layers
+from . import low_rank_tensors
+from . import layers

@@ -1,42 +1,47 @@
 #%%
 import tensorly as tl
-import tensorly.contrib
 import tensorly.decomposition
-import torch_bayesian_tensor_layers
+import tensor_layers
 import numpy as np
 import random
 import os
-os.environ['CUDA_VISIBLE_DEVICES'] = "0"
-import torch_bayesian_tensor_layers.low_rank_tensors
+import tensor_layers.low_rank_tensors
 import torch
-import torch_bayesian_tensor_layers.layers
+import tensor_layers.layers
 
 from torch_bayesian_tensor_layers.layers import TensorizedEmbedding
 
 from train_then_compress_utils import tensor_decompose_and_replace_embedding
 import time
 
-torch.manual_seed(0)
-
 t = time.time()
 
-shape = [[100,100], [10,10]]
-prior_type = 'log_uniform'
-tensor_type = 'CP'
-max_rank = 3
-eta = 1e-2
-inner_iter = 5
-delta_approx=True
-lr = 5e-3
+shape = [[10,10,10], [4,4,8]]
+prior_type = 'half_cauchy'
+tensor_to_tensor = False
+tensor_type = 'TensorTrain'
+max_rank = 10
+eta = 0.01
 
 if tensor_type != 'TensorTrainMatrix':
     shape[1] = [np.prod(shape[1])]
 
+"""
+if tensor_to_tensor:
+    tmp_emb = TensorizedEmbedding(shape=shape,
+                            tensor_type=tensor_type,
+                            max_rank=max_rank)
+    true_emb = torch.nn.EmbeddingBag(np.prod(shape[0]),np.prod(shape[1]))
+    with torch.no_grad():
+        true_emb.weight.data.copy_(torch.reshape(tmp_emb.tensor.get_full().data,[-1,np.prod(shape[1])]).detach().data)
 
+else:
+    true_emb = torch.nn.EmbeddingBag(np.prod(shape[0])-11,np.prod(shape[1]))
+"""
 
 true_emb = TensorizedEmbedding(shape=shape,
                           tensor_type=tensor_type,
-                          max_rank=1,
+                          max_rank=max_rank//2,
                           prior_type=prior_type,eta=eta)
 trained_emb = TensorizedEmbedding(shape=shape,
                           tensor_type=tensor_type,
@@ -54,127 +59,56 @@ elif tensor_type=='TensorTrainMatrix':
 elif tensor_type=='CP':
     max_ranks = max_rank
 
-batch_size = np.prod(shape[0])//5
+
+
+#true_emb.to('cuda')
+
+#print(torch.std(emb.tensor.sample_full()))
+lr = 5e-3
+
 def get_batch_idx():
     n = np.prod(shape[0])
-#    x_list = [x for x in range(n)]
-    x_list = [random.randint(0, n - 1) for _ in range(batch_size)]
+    x_list = [x for x in range(n)]
+#    x_list = [random.randint(0, n - 1) for _ in range(batch_size)]
     input_values = torch.tensor(x_list)
     return input_values
 
 true_emb.to('cuda')
 trained_emb.to('cuda')
+#%%
+opt = torch.optim.Adam(lr=lr,params = trained_emb.parameters())
 
-import torch.distributions as td
+for ii in range(5000):
 
-rank_parameter_std = torch.nn.Parameter(torch.ones(trained_emb.tensor.rank_parameter.shape))
+    opt.zero_grad()
 
-rank_parameter_std.to('cuda')
+    input_values = get_batch_idx().to(true_emb.tensor.factors[0].device)
 
-rank_dist = td.HalfNormal(rank_parameter_std)
+    learned_rows = trained_emb.forward(input_values.view(-1, 1))
 
-rank_prior_dist = td.HalfNormal(eta*torch.ones(rank_parameter_std.shape))
+    true_rows = true_emb.forward(input_values.view(-1, 1))
 
-if delta_approx:
-    opt = torch.optim.Adam(lr=lr,params = list(trained_emb.parameters()))
-else:
-    opt = torch.optim.Adam(lr=lr,params = list(trained_emb.parameters())[1:]+[rank_parameter_std])
+    loss = torch.sum(torch.square(learned_rows-true_rows))
 
-grads_list = []
-parameter_means = []
+    kl_mult = 5e-4*torch.clamp(torch.tensor((ii)/500),torch.tensor(0.0),torch.tensor(1.0))
 
+    loss+=kl_mult*trained_emb.tensor.get_kl_divergence_to_prior()
 
-for ii in range(1000):
-
-    grads_list.append([])
-
-    if delta_approx:
-        parameter_means.append(torch.square(trained_emb.tensor.rank_parameter).detach().cpu().numpy())
-    else:
-        parameter_means.append(torch.square(rank_dist.mean).detach().cpu().numpy())
-
-    for jj in range(inner_iter):
-
-        opt.zero_grad()
-        
-        input_values = get_batch_idx().to(true_emb.tensor.factors[0].device)
-
-        if delta_approx:
-
-            true_rows = true_emb.forward(input_values.view(-1, 1))
-        else:
-
-            true_rows = true_emb.forward(input_values.view(-1, 1),rank_update=False)
-
-
-        learned_rows = trained_emb.forward(input_values.view(-1, 1))
-
-
-        loss = torch.sum(torch.square(learned_rows-true_rows))
-
-        kl_mult = 1e-2*torch.clamp(torch.tensor(ii/500),torch.tensor(0.0),torch.tensor(1.0))
-
-        if delta_approx:
-
-            loss+=kl_mult*(trained_emb.tensor.get_kl_divergence_to_prior())
-        else:
-
-            loss+=kl_mult*(trained_emb.tensor.get_kl_divergence_to_prior(rank_parameter=rank_dist.rsample().to('cuda'))+torch.sum(td.kl_divergence(rank_dist,rank_prior_dist)))
-
-        loss.backward()
-
-        grads_list[-1].append(trained_emb.tensor.factors[0].grad[0].detach().cpu().numpy())
+    loss.backward()
 
     opt.step()
 
     if ii%100==0:
-        print("%s of %s" % (ii,1000))
-        print("Loss ",loss)
-        print('RMSE ',torch.norm(learned_rows-true_rows)/torch.norm(true_rows))
-
-        if delta_approx:
-            print(trained_emb.tensor.estimate_rank(threshold=1e-6))
-        else:
-            print(rank_parameter_std)
+        print(torch.sum(torch.square(learned_rows-true_rows)))
+        print(trained_emb.tensor.estimate_rank(threshold=1e-6))
 
 
-variances = []
 
-for grads in grads_list:
-    var_mean = np.var(np.stack(grads),axis=0)
-    variances.append(var_mean)
-    #variances.append(np.var(np.stack(grads),axis=0))
+full = trained_emb.tensor.get_full()
 
-stacked_parameter_means = np.concatenate(parameter_means,axis=0).T
+trained_emb.tensor.prune_ranks(threshold=1e-6)
 
-stacked_variances = np.stack(variances,axis=1)
-
-
-import matplotlib.pyplot as plt
-
-for ii in range(3):
-    plt.figure()
-    plt.title('Variance %s' % (ii))
-    plt.semilogy(stacked_variances[ii])
-    plt.figure()
-    plt.title('Parameter %s' % (ii))
-    plt.semilogy(stacked_parameter_means[ii])
-
-if delta_approx:
-    delta_variance = stacked_variances
-else:
-    sampling_variance = stacked_variances
-
-for ii in range(3):
-    plt.figure()
-    plt.title('Variance rank %s' % (ii))
-    plt.semilogy(delta_variance[ii],label='Delta variance')
-    plt.semilogy(sampling_variance[ii],label='Sampling variance')
-    plt.legend()
 #%%
-trained_emb.tensor.rank_parameter
-
-trained_emb.tensor.factors[0].grad[0].detach().cpu().numpy()
 
 """
 

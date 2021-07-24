@@ -7,6 +7,7 @@ The DLRM example has a separate requirements file, with installation instruction
 conda env update -f requirements.yml
 
 ```
+This will create the `tensor_layers` conda environment.
 
 To install the tensorized embedding package from the root directory using pip:
 ```

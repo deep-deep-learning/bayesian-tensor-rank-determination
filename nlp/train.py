@@ -6,7 +6,7 @@ sys.path.insert(0, '..')
 parser = argparse.ArgumentParser()
 parser.add_argument(
     '--embedding',
-    default='tt',
+    default='full',
     choices=['tt', 'tr', 'full'],
     type=str)
 parser.add_argument('--ranks', type=int, default=8)
@@ -19,11 +19,6 @@ parser.add_argument('--hidden_dim', default=128, type=int)
 parser.add_argument('--n_epochs',  default=10, type=int)
 parser.add_argument('--fout',  default="logdir/", type=str)
 parser.add_argument('--dropout', default=0.5, type=float)
-parser.add_argument(
-    '--dataset',
-    default='imdb',
-    choices=['imdb', 'sst3', 'sst5'],
-    type=str)
 args = parser.parse_args()
 
 if args.embedding == 'tt':
@@ -45,7 +40,7 @@ import torch
 import numpy as np
 import torch.nn.functional as F
 import torch.nn as nn
-import t3nsor as t3
+import tensor_layers
 from torchtext import data
 from torchtext import datasets
 import torch.optim as optim
@@ -62,24 +57,17 @@ TEXT = data.Field(tokenize='spacy', fix_length=1000)
 LABEL = data.LabelField(dtype=torch.float)
 
 print('Building dataset...')
-if args.dataset == 'imdb':
-    OUTPUT_DIM = 1
-    train_data, test_ = datasets.IMDB.splits(TEXT, LABEL)
-    test_list = list(test_)
-    random.shuffle(test_list)
-    test_data_ = test_list[:12500]
-    val_data_ = test_list[12500:]
-    valid_data = data.dataset.Dataset(
-        val_data_, fields=[('text', TEXT), ('label', LABEL)])
-    test_data = data.dataset.Dataset(
-        test_data_, fields=[('text', TEXT), ('label', LABEL)])
-elif args.dataset[:3] == 'sst':
-    OUTPUT_DIM = int(args.dataset[3])
-    fine_grained = (OUTPUT_DIM == 5)
-    train_data, valid_data, test_data = datasets.SST.splits(
-        TEXT, LABEL, fine_grained=fine_grained)
-else:
-    raise NotImplementedError
+OUTPUT_DIM = 1
+train_data, test_ = datasets.IMDB.splits(TEXT, LABEL)
+test_list = list(test_)
+random.shuffle(test_list)
+test_data_ = test_list[:12500]
+val_data_ = test_list[12500:]
+valid_data = data.dataset.Dataset(
+    val_data_, fields=[('text', TEXT), ('label', LABEL)])
+test_data = data.dataset.Dataset(
+    test_data_, fields=[('text', TEXT), ('label', LABEL)])
+
 print('Done')
 
 
@@ -117,7 +105,7 @@ lstm_model = LSTM_Classifier(embedding_dim=EMBEDDING_DIM,
                              dropout=DROPOUT)
 
 if args.embedding == 'tt':
-        embed_model = t3.TTEmbedding(
+        embed_model = tensor_layers.TensorizedEmbedding(
             voc_size=INPUT_DIM,
             emb_size=EMBEDDING_DIM,
             auto_shapes=True,
@@ -126,18 +114,6 @@ if args.embedding == 'tt':
             tt_rank=args.ranks,
             padding_idx=1
         )
-        compression_rate = INPUT_DIM * EMBEDDING_DIM / embed_model.tt_matrix.dof
-elif args.embedding == 'tr':
-        embed_model = t3.TREmbedding(
-            voc_size=INPUT_DIM,
-            emb_size=EMBEDDING_DIM,
-            auto_shapes=True,
-            auto_shape_mode='mixed',
-            d=args.d,
-            tr_rank=args.ranks,
-            padding_idx=1
-        )
-        compression_rate = INPUT_DIM * EMBEDDING_DIM / embed_model.tr_matrix.dof
 else:
     embed_model = nn.Embedding(
         num_embeddings=INPUT_DIM,
@@ -200,6 +176,7 @@ for epoch in range(N_EPOCHS):
             pickle.dump(best_result, f)
     print(f'| Epoch: {epoch+1:02} | Train Loss: {train_loss:.3f} | Train Acc: {train_acc*100:.2f}% | Val. Loss: {valid_loss:.3f} | Val. Acc: {valid_acc*100:.2f}% | Test Loss: {test_loss:.3f} | Test Acc: {test_acc*100:.2f}% |')
     print ("TEST ACCURACY:", np.round(best_result["test_acc"] * 100, 2))
+    """
     if epoch == 0 or epoch == N_EPOCHS-1:
-+        print('Compression rate:', compression_rate)
-+        print('#params = {}'.format(n_all_param))
+        print('Compression rate:', compression_rate)        print('#params = {}'.format(n_all_param))
+    """

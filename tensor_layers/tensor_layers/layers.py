@@ -1,9 +1,50 @@
 import torch
 import numpy as np
 import torch.nn as nn
+import torch.nn.functional as F
 from .low_rank_tensors import CP,TensorTrain,TensorTrainMatrix,Tucker
 from . import low_rank_tensors
 from .emb_utils import get_cum_prod,tensorized_lookup
+
+class TensorizedLinear(nn.Linear):
+    def __init__(self,
+                in_features,
+                out_features,
+                bias,
+                init=None,
+                shape=None,
+                tensor_type='TensorTrainMatrix',
+                max_rank=16,
+                em_stepsize=1.0,
+                prior_type='log_uniform',
+                eta = None,
+                device=None,
+                dtype=None,
+    ):
+
+        super(TensorizedLinear,self).__init__(in_features,out_features,bias,device,dtype)
+
+        self.in_features = in_features
+        self.out_features = out_features
+
+        if tensor_type=='TensorTrainMatrix':
+            tensor_shape = shape
+        else:
+            tensor_shape = self.shape[0]+self.shape[1]
+
+        self.tensor = getattr(low_rank_tensors,self.tensor_type)(tensor_shape,prior_type=prior_type,em_stepsize=em_stepsize,max_rank=max_rank,initialization_method='nn',target_stddev=target_stddev,learned_scale=False,eta=eta)
+        
+        del self.weight
+
+
+    def forward(self, input):
+        return F.linear(input,self.tensor.get_full().view(self.in_features,self.out_features),self.bias)
+
+
+    def update_rank_parameters(self):
+        self.tensor.update_rank_parameters()
+
+
 
 class TensorizedEmbedding(nn.Module):
     def __init__(self,
@@ -46,6 +87,8 @@ class TensorizedEmbedding(nn.Module):
 
         self.cum_prod = get_cum_prod(shape)
 
+    def update_rank_parameters(self):
+        self.tensor.update_rank_parameters()
 
 
     def forward(self, x,rank_update=True):
