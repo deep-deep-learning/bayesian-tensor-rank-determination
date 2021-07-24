@@ -2,7 +2,6 @@ import sys
 import torch
 import numpy as np
 import torch.nn as nn
-import t3nsor as t3
 
 
 class LSTM_Classifier(nn.Module):

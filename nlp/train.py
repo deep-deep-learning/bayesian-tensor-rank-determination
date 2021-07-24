@@ -1,5 +1,19 @@
+from functools import reduce
 import argparse
+import torch
+import numpy as np
+import torch.nn.functional as F
+import torch.nn as nn
+import tensor_layers
+from torchtext.legacy import data
+from torchtext.legacy import datasets
+import torch.optim as optim
+from models import LSTM_Classifier
+from utils import train, evaluate
+import random
+import math
 import sys
+import os
 sys.path.insert(0, '..')
 
 
@@ -7,50 +21,46 @@ parser = argparse.ArgumentParser()
 parser.add_argument(
     '--embedding',
     default='full',
-    choices=['tt', 'tr', 'full'],
+    choices=['CP', 'TensorTrain', 'TensorTrainMatrix','Tucker','full'],
     type=str)
-parser.add_argument('--ranks', type=int, default=8)
-parser.add_argument('--d', type=int, default=3)
-parser.add_argument('--embed_dim', type=int)
+parser.add_argument('--rank', type=int, default=8)
+parser.add_argument('--prior-type', type=str, default='log_uniform')
+parser.add_argument('--eta', type=float, default=1.0)
+parser.add_argument('--embed-dim', default=256, type=int)
 parser.add_argument('--voc_dim', default=25000, type=int)
-parser.add_argument('--lr', default=5e-4)
-parser.add_argument('--gpu', default='', type=str)
-parser.add_argument('--hidden_dim', default=128, type=int)
-parser.add_argument('--n_epochs',  default=10, type=int)
-parser.add_argument('--fout',  default="logdir/", type=str)
+parser.add_argument('--lr', default=1e-3)
+parser.add_argument('--gpu', default='0', type=str)
+parser.add_argument('--hidden-dim', default=128, type=int)
+parser.add_argument('--n_epochs',  default=100, type=int)
 parser.add_argument('--dropout', default=0.5, type=float)
 args = parser.parse_args()
+model_name = args.embedding
 
-if args.embedding == 'tt':
-    tt = "tt"
-elif args.embedding == 'tt':
-    tt = 'tr'
-else:
-    tt = "full"
-
-model_name = f"{args.dataset}-dim_{args.embed_dim}-d_{args.d}-ranks_{args.ranks}-{tt}"
-
-
-import os
 os.environ['CUDA_DEVICE_ORDER']='PCI_BUS_ID'
 os.environ['CUDA_VISIBLE_DEVICES']=args.gpu
 
+if args.embedding=='full':
+    pass
+else:
+    if args.embedding=="TensorTrainMatrix":
+        tensor_dims = [[5,5,5,5,6,8],[2,2,2,2,4,4]]
+        args.voc_dim = reduce(lambda x,y:x*y,tensor_dims[0])
+    elif args.embedding=="Tucker":
+        tensor_dims = [25,25,40,16,16]
+        args.voc_dim = 25*25*40
+    elif args.embedding in ["CP","TensorTrain"]:
+        tensor_dims = [5,8,25,25,4,8,8]
+        args.voc_dim = 5*5*5*5*5*8
 
-import torch
-import numpy as np
-import torch.nn.functional as F
-import torch.nn as nn
-import tensor_layers
-from torchtext import data
-from torchtext import datasets
-import torch.optim as optim
-from models import LSTM_Classifier
-from utils import binary_accuracy, train, evaluate
-import pickle
-import random
+    target_stddev = math.sqrt(2/(args.voc_dim+256))
+
+
 
 random.seed(42)
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+
+
+
 
 
 TEXT = data.Field(tokenize='spacy', fix_length=1000)
@@ -104,22 +114,20 @@ lstm_model = LSTM_Classifier(embedding_dim=EMBEDDING_DIM,
                              bidirectional=BIDIRECTIONAL,
                              dropout=DROPOUT)
 
-if args.embedding == 'tt':
-        embed_model = tensor_layers.TensorizedEmbedding(
-            voc_size=INPUT_DIM,
-            emb_size=EMBEDDING_DIM,
-            auto_shapes=True,
-            auto_shape_mode='mixed',
-            d=args.d,
-            tt_rank=args.ranks,
-            padding_idx=1
-        )
-else:
+if args.embedding == 'full':
     embed_model = nn.Embedding(
         num_embeddings=INPUT_DIM,
         embedding_dim=EMBEDDING_DIM
     )
     compression_rate = 1.0
+else:
+    embed_model = tensor_layers.TensorizedEmbedding(
+        shape=tensor_dims,
+        tensor_type=args.embedding,
+        max_rank=args.rank,
+        prior_type=args.prior_type,
+        eta=args.eta
+    )
 
 
 def cross_entropy_loss(logits, target):
@@ -131,17 +139,10 @@ model = nn.Sequential(embed_model, lstm_model)
 
 n_all_param = sum([p.nelement() for p in model.parameters()])
 
-if args.dataset == 'imdb':
-    criterion = nn.BCEWithLogitsLoss()
-    #criterion = criterion.to(device)
-elif args.dataset[:3] == 'sst':
-    criterion = nn.CrossEntropyLoss()
-    #criterion = criterion.to(device)
-else:
-    raise NotImplementedError
+criterion = nn.BCEWithLogitsLoss()
 
 model = model.to(device)
-optimizer = optim.Adam(model.parameters(), lr=1e-3)
+optimizer = optim.Adam(model.parameters(), lr=args.lr)
 print(model)
 N_EPOCHS = args.n_epochs
 
@@ -171,9 +172,6 @@ for epoch in range(N_EPOCHS):
         best_result["valid_acc"] = valid_acc
         best_result["test_acc"] = test_acc
 
-    if args.fout is not None:
-        with open(args.fout+f"{model_name}-best.pkl", 'wb') as f:
-            pickle.dump(best_result, f)
     print(f'| Epoch: {epoch+1:02} | Train Loss: {train_loss:.3f} | Train Acc: {train_acc*100:.2f}% | Val. Loss: {valid_loss:.3f} | Val. Acc: {valid_acc*100:.2f}% | Test Loss: {test_loss:.3f} | Test Acc: {test_acc*100:.2f}% |')
     print ("TEST ACCURACY:", np.round(best_result["test_acc"] * 100, 2))
     """
