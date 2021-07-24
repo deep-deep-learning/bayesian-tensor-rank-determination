@@ -1,15 +1,17 @@
 #!/bin/bash
 
 #may need smaller batch size to fit on 8gb gpu
+BATCH_SIZE=128
+
 
 for tensor_type in 'TensorTrainMatrix' 'TensorTrain';
 do for kl_mult in 0.0 1e-4 1e-5 1e-6 1e-7 1e-8;
-do python train.py --gpu=0 --n_epochs=100 --embedding $tensor_type --rank 20 --lr 0.0005 --kl-multiplier $kl_mult --rank-loss True --batch-size 200 | tee logs/{$tensor_type}_low_batch_${kl_mult}.txt;
+do python train.py --gpu=0 --n_epochs=100 --embedding $tensor_type --rank 20 --lr 0.0005 --kl-multiplier $kl_mult --rank-loss True --batch-size $BATCH_SIZE | tee logs/{$tensor_type}_low_batch_${kl_mult}.txt;
 done
 done
 
 
-python train.py --gpu=0 --n_epochs=100 --embedding full --lr 0.001 | tee logs/full.txt;
+python train.py --gpu=0 --n_epochs=100 --embedding full --lr 0.001 --batch-size $BATCH_SIZE | tee logs/full.txt;
 
 
 #python train.py --gpu=0 --n_epochs=100 --embedding TensorTrain --rank 20 --lr 0.0005 --kl-multiplier 0.01 --rank-loss True 
