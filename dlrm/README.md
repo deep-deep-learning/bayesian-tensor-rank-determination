@@ -4,7 +4,12 @@ The dataset should be located in the folder `input`.
 
 ## Running the tensorized DLRM models with rank determination
 
-Install the appropriate additional requirements for this directory using 
+Install the appropriate additional requirements for this directory using
+
+```
+conda env update -f dlrm_reqs.yml
+```
+This will create the conda environment `dlrm_tensor`.
 
 The appropriate scripts are all located in the directory `bench`. Assuming you have set up a conda environment using the pip install above, you should be able to run the scripts in `bench` from the this directory (the `dlrm` directory).
 
