@@ -24,7 +24,7 @@ parser.add_argument(
     choices=['CP', 'TensorTrain', 'TensorTrainMatrix','Tucker','full'],
     type=str)
 parser.add_argument('--rank-loss', type=bool, default=False)
-parser.add_argument('--kl-multiplier', type=float, default=1.0)
+parser.add_argument('--kl-multiplier', type=float, default=1.0) #account for the batch size,dataset size, and renormalize
 parser.add_argument('--no-kl-epochs', type=int, default=20)
 parser.add_argument('--warmup-epochs', type=int, default=50)
 parser.add_argument('--rank', type=int, default=8)
@@ -60,13 +60,11 @@ else:
 
     target_stddev = math.sqrt(2/(args.voc_dim+256))
 
+print(args)
 
 
 random.seed(42)
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-
-
-
 
 
 TEXT = data.Field(tokenize='spacy', fix_length=1000)
@@ -130,7 +128,8 @@ else:
         tensor_type=args.embedding,
         max_rank=args.rank,
         prior_type=args.prior_type,
-        eta=args.eta
+        eta=args.eta,
+        em_stepsize=0.1,
     )
     compression_rate = 1e10
 
@@ -141,12 +140,12 @@ def cross_entropy_loss(logits, target):
 
 
 model = nn.Sequential(embed_model, lstm_model)
-
+"""
 from utils import get_kl_loss
 for fake_epoch in range(100):
     print("Epoch ",fake_epoch)
     get_kl_loss(model,args,fake_epoch)
-
+"""
 
 n_all_param = sum([p.nelement() for p in model.parameters()])
 
@@ -187,7 +186,10 @@ for epoch in range(N_EPOCHS):
     print ("TEST ACCURACY:", np.round(best_result["test_acc"] * 100, 2))
 
     if hasattr(embed_model,'tensor'):
-        print(embed_model.get_parameter_savings(threshold=1e-8))
+        print("Ranks ",embed_model.tensor.estimate_rank(threshold=1e-8))
+        param_savings = embed_model.tensor.get_parameter_savings(threshold=1e-8)
+        full_params = 25000*256
+        print("Savings {} ratio {}".format(param_savings,full_params/(full_params-param_savings)))
 
     """
     if epoch == 0 or epoch == N_EPOCHS-1:

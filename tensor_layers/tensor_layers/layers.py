@@ -64,7 +64,7 @@ class TensorizedEmbedding(nn.Module):
         self.shape = shape
         self.tensor_type=tensor_type
 
-        target_stddev = np.sqrt(2/np.prod(self.shape[0]))
+        target_stddev = np.sqrt(2/(np.prod(self.shape[0])+np.prod(self.shape[1])))
 
         if self.tensor_type=='TensorTrainMatrix':
             tensor_shape = shape

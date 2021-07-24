@@ -14,10 +14,10 @@ def get_kl_loss(model, args, epoch):
     kl_mult = args.kl_multiplier * torch.clamp(
                             torch.tensor((
                                 (epoch - args.no_kl_epochs) / args.warmup_epochs)), 0.0, 1.0)
-
+    """
     print("KL loss ",kl_loss.item())
     print("KL Mult ",kl_mult.item())
-
+    """
     return kl_loss*kl_mult.to(kl_loss.device)
 
 def binary_accuracy(preds, y):
