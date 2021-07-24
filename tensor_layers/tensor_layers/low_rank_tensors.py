@@ -121,7 +121,7 @@ class CP(LowRankTensor):
 
         self.weights = torch.squeeze(mask)
         
-    def get_parameter_savings(self):
+    def get_parameter_savings(self, threshold=1e-5):
         
         rank_difference = self.max_rank-self.estimate_rank()
         savings_per_dim = [rank_difference*x for x in self.dims]

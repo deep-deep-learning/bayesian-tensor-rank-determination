@@ -23,19 +23,25 @@ parser.add_argument(
     default='full',
     choices=['CP', 'TensorTrain', 'TensorTrainMatrix','Tucker','full'],
     type=str)
+parser.add_argument('--rank-loss', type=bool, default=False)
+parser.add_argument('--kl-multiplier', type=float, default=1.0)
+parser.add_argument('--no-kl-epochs', type=int, default=20)
+parser.add_argument('--warmup-epochs', type=int, default=50)
 parser.add_argument('--rank', type=int, default=8)
 parser.add_argument('--prior-type', type=str, default='log_uniform')
 parser.add_argument('--eta', type=float, default=1.0)
 parser.add_argument('--embed-dim', default=256, type=int)
 parser.add_argument('--voc_dim', default=25000, type=int)
-parser.add_argument('--lr', default=1e-3)
+parser.add_argument('--lr', type=float, default=1e-3)
 parser.add_argument('--gpu', default='0', type=str)
 parser.add_argument('--hidden-dim', default=128, type=int)
 parser.add_argument('--n_epochs',  default=100, type=int)
+parser.add_argument('--batch-size',  default=256, type=int)
 parser.add_argument('--dropout', default=0.5, type=float)
 args = parser.parse_args()
 model_name = args.embedding
 
+BATCH_SIZE = args.batch_size
 os.environ['CUDA_DEVICE_ORDER']='PCI_BUS_ID'
 os.environ['CUDA_VISIBLE_DEVICES']=args.gpu
 
@@ -46,10 +52,10 @@ else:
         tensor_dims = [[5,5,5,5,6,8],[2,2,2,2,4,4]]
         args.voc_dim = reduce(lambda x,y:x*y,tensor_dims[0])
     elif args.embedding=="Tucker":
-        tensor_dims = [25,25,40,16,16]
+        tensor_dims = [[25,25,40],[16,16]]
         args.voc_dim = 25*25*40
     elif args.embedding in ["CP","TensorTrain"]:
-        tensor_dims = [5,8,25,25,4,8,8]
+        tensor_dims = [[5,8,25,25],[4,8,8]]
         args.voc_dim = 5*5*5*5*5*8
 
     target_stddev = math.sqrt(2/(args.voc_dim+256))
@@ -87,7 +93,6 @@ def sort_key(ex):
 TEXT.build_vocab(train_data, max_size=args.voc_dim - 2)
 LABEL.build_vocab(train_data)
 
-BATCH_SIZE = 256
 
 train_iterator, valid_iterator, test_iterator = data.BucketIterator.splits(
     (train_data, valid_data, test_data),
@@ -104,7 +109,6 @@ N_LAYERS = 2
 BIDIRECTIONAL = True
 DROPOUT = args.dropout
 
-actual_vocab_size = len(TEXT.vocab.stoi)
 
 
 lstm_model = LSTM_Classifier(embedding_dim=EMBEDDING_DIM,
@@ -128,6 +132,7 @@ else:
         prior_type=args.prior_type,
         eta=args.eta
     )
+    compression_rate = 1e10
 
 
 def cross_entropy_loss(logits, target):
@@ -136,6 +141,12 @@ def cross_entropy_loss(logits, target):
 
 
 model = nn.Sequential(embed_model, lstm_model)
+
+from utils import get_kl_loss
+for fake_epoch in range(100):
+    print("Epoch ",fake_epoch)
+    get_kl_loss(model,args,fake_epoch)
+
 
 n_all_param = sum([p.nelement() for p in model.parameters()])
 
@@ -155,7 +166,7 @@ best_result = {
 
 for epoch in range(N_EPOCHS):
 
-    train_loss, train_acc = train(model, train_iterator, optimizer, criterion)
+    train_loss, train_acc = train(model, train_iterator, optimizer, criterion, args, epoch)
     test_loss, test_acc = evaluate(model, test_iterator, criterion)
     valid_loss, valid_acc = evaluate(model, valid_iterator, criterion)
 
@@ -174,6 +185,10 @@ for epoch in range(N_EPOCHS):
 
     print(f'| Epoch: {epoch+1:02} | Train Loss: {train_loss:.3f} | Train Acc: {train_acc*100:.2f}% | Val. Loss: {valid_loss:.3f} | Val. Acc: {valid_acc*100:.2f}% | Test Loss: {test_loss:.3f} | Test Acc: {test_acc*100:.2f}% |')
     print ("TEST ACCURACY:", np.round(best_result["test_acc"] * 100, 2))
+
+    if hasattr(embed_model,'tensor'):
+        print(embed_model.get_parameter_savings(threshold=1e-8))
+
     """
     if epoch == 0 or epoch == N_EPOCHS-1:
         print('Compression rate:', compression_rate)        print('#params = {}'.format(n_all_param))

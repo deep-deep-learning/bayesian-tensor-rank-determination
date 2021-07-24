@@ -4,15 +4,21 @@ import subprocess
 import pandas as pd
 import pickle
 
-def get_kl_loss(model):
+def get_kl_loss(model, args, epoch):
 
     kl_loss = 0.0
     for layer in model.modules():
         if hasattr(layer, "tensor"):
 
             kl_loss += layer.tensor.get_kl_divergence_to_prior()
+    kl_mult = args.kl_multiplier * torch.clamp(
+                            torch.tensor((
+                                (epoch - args.no_kl_epochs) / args.warmup_epochs)), 0.0, 1.0)
 
-    return kl_loss
+    print("KL loss ",kl_loss.item())
+    print("KL Mult ",kl_mult.item())
+
+    return kl_loss*kl_mult.to(kl_loss.device)
 
 def binary_accuracy(preds, y):
     """
@@ -29,7 +35,7 @@ def binary_accuracy(preds, y):
     return acc
 
 
-def train(model, iterator, optimizer, criterion):
+def train(model, iterator, optimizer, criterion, args, epoch):
 
     epoch_loss = 0
     epoch_acc = 0
@@ -49,6 +55,11 @@ def train(model, iterator, optimizer, criterion):
         labels = batch.label.type(dtype).to(device)
         predictions = model(batch.text).squeeze(1)
         loss = criterion(predictions, labels)
+
+        if args.rank_loss:
+            ard_loss = get_kl_loss(model,args,epoch)
+            loss += ard_loss
+
         acc = binary_accuracy(predictions, labels)
         loss.backward()
         optimizer.step()
