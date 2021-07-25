@@ -758,7 +758,7 @@ class TensorTrainMatrix(LowRankTensor):
         rank_estimates = [1]+self.estimate_rank(threshold=1e-4)+[1]
 
         reduced_rank_parameters = 0
-        total_tt_parameters = sum([np.prod(x.shape.as_list()) for x in self.factors])
+        total_tt_parameters = sum([np.prod(x.shape) for x in self.factors])
 
         for i,x in enumerate(zip(self.dims1,self.dims2)):
             reduced_rank_parameters+= rank_estimates[i]*x[0]*x[1]*rank_estimates[i+1]
@@ -1014,7 +1014,7 @@ class TensorTrainMatrix(LowRankTensor):
         ndims = len(self.dims1)
 
         a_columns = self.shape[0]
-        b_rows = matrix_b.get_shape().as_list()[0]
+        b_rows = matrix_b.get_shape()[0]
 
         a_shape = self.shape
         a_raw_shape = self.dims
