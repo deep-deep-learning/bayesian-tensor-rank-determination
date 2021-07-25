@@ -326,9 +326,9 @@ class TensorTrain(LowRankTensor):
         return [int(sum(torch.square(x) > threshold)) for x in self.rank_parameters]
 
 
-    def get_parameter_savings(self):
+    def get_parameter_savings(self,threshold=1e-4):
         
-        rank_estimates = [1]+self.estimate_rank()+[1]
+        rank_estimates = [1]+self.estimate_rank(threshold=threshold)+[1]
 
         reduced_rank_parameters = 0
         total_tt_parameters = sum([np.prod(x.shape) for x in self.factors])
@@ -556,13 +556,13 @@ class Tucker(LowRankTensor):
 
         return [int(sum(torch.square(x.detach().clone()) > threshold)) for x in self.rank_parameters]
 
-    def get_parameter_savings(self):
+    def get_parameter_savings(self,threshold=1e-4):
         
-        rank_differences = [self.max_ranks[i]-x for i,x in enumerate(self.estimate_rank())]
+        rank_differences = [self.max_ranks[i]-x for i,x in enumerate(self.estimate_rank(threshold=threshold))]
         factor_savings = sum([self.dims[i]*x for i,x in enumerate(rank_differences)])
         
         core_parameters = np.prod(self.max_ranks)#**(len(self.dims)) 
-        core_savings = core_parameters-np.prod(self.estimate_rank())
+        core_savings = core_parameters-np.prod(self.estimate_rank(threshold=threshold))
         tensorized_savings = np.prod(self.dims)-core_parameters-sum([self.max_ranks[i]*x for i,x in enumerate(self.dims)])
 
 
@@ -753,9 +753,9 @@ class TensorTrainMatrix(LowRankTensor):
         self.tensor_type = 'TensorTrainMatrix'
         self.order = len(self.dims1)
 
-    def get_parameter_savings(self):
+    def get_parameter_savings(self,threshold=1e-4):
         
-        rank_estimates = [1]+self.estimate_rank()+[1]
+        rank_estimates = [1]+self.estimate_rank(threshold=1e-4)+[1]
 
         reduced_rank_parameters = 0
         total_tt_parameters = sum([np.prod(x.shape.as_list()) for x in self.factors])
