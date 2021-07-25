@@ -189,7 +189,8 @@ for epoch in range(N_EPOCHS):
         print("Ranks ",embed_model.tensor.estimate_rank(threshold=1e-8))
         param_savings = embed_model.tensor.get_parameter_savings(threshold=1e-8)
         full_params = 25000*256
-        print("Savings {} ratio {}".format(param_savings,full_params/(full_params-param_savings)))
+        print(param_savings)
+        print("Savings {} ratio {}".format(param_savings,full_params/(full_params-sum(param_savings))))
 
     """
     if epoch == 0 or epoch == N_EPOCHS-1:
