@@ -33,7 +33,6 @@ parser.add_argument('--eta', type=float, default=1.0)
 parser.add_argument('--embed-dim', default=256, type=int)
 parser.add_argument('--voc_dim', default=25000, type=int)
 parser.add_argument('--lr', type=float, default=1e-3)
-parser.add_argument('--gpu', default='0', type=str)
 parser.add_argument('--hidden-dim', default=128, type=int)
 parser.add_argument('--n_epochs',  default=100, type=int)
 parser.add_argument('--batch-size',  default=256, type=int)
@@ -42,8 +41,6 @@ args = parser.parse_args()
 model_name = args.embedding
 
 BATCH_SIZE = args.batch_size
-os.environ['CUDA_DEVICE_ORDER']='PCI_BUS_ID'
-os.environ['CUDA_VISIBLE_DEVICES']=args.gpu
 
 if args.embedding=='full':
     pass
