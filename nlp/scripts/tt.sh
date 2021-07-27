@@ -4,18 +4,14 @@
 BATCH_SIZE=128
 
 
-for tensor_type in 'Tucker';
-do for kl_mult in 0.0 1e-4 1e-5 1e-6 1e-7 1e-8;
-do python train.py  --n_epochs=100 --embedding ${tensor_type} --rank 5 --lr 0.0005 --kl-multiplier $kl_mult --rank-loss True --batch-size $BATCH_SIZE | tee logs/${tensor_type}_low_batch_${kl_mult}.txt;
+for tensor_type in  'TensorTrain';
+do for kl_mult in 0.0 1e-1 1e-2 1e-3 1e-4;
+do python train.py  --n_epochs=100 --embedding ${tensor_type} --rank 20 --lr 0.0005 --kl-multiplier $kl_mult --rank-loss True --batch-size $BATCH_SIZE | tee logs/${tensor_type}_low_batch_${kl_mult}.txt;
 done
 done
 
-for tensor_type in  'CP';
-do for kl_mult in 0.0 1e-4 1e-5 1e-6 1e-7 1e-8;
-do python train.py  --n_epochs=100 --embedding ${tensor_type} --rank 100 --lr 0.0005 --kl-multiplier $kl_mult --rank-loss True --batch-size $BATCH_SIZE | tee logs/${tensor_type}_low_batch_${kl_mult}.txt;
-done
-done
 
+python train.py  --n_epochs=100 --embedding full --lr 0.001 --batch-size $BATCH_SIZE | tee logs/full.txt;
 
 
 #python train.py --gpu=0 --n_epochs=100 --embedding TensorTrain --rank 20 --lr 0.0005 --kl-multiplier 0.01 --rank-loss True 
