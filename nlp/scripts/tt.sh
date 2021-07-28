@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #may need smaller batch size to fit on 8gb gpu
-BATCH_SIZE=128
+BATCH_SIZE=256
 
 
 for tensor_type in  'TensorTrain';

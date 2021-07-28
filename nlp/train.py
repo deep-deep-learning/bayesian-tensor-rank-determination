@@ -14,6 +14,7 @@ import random
 import math
 import sys
 import os
+import time
 sys.path.insert(0, '..')
 
 
@@ -118,7 +119,7 @@ if args.embedding == 'full':
         num_embeddings=INPUT_DIM,
         embedding_dim=EMBEDDING_DIM
     )
-        compression_rate = 1.0
+    compression_rate = 1.0
 else:
     embed_model = tensor_layers.TensorizedEmbedding(
         shape=tensor_dims,
@@ -161,7 +162,7 @@ best_result = {
     "epoch": 0, "train_acc": 0, "valid_acc": 0, "train_acc": 0}
 
 for epoch in range(N_EPOCHS):
-
+    t = time.time()
     train_loss, train_acc = train(model, train_iterator, optimizer, criterion, args, epoch)
     test_loss, test_acc = evaluate(model, test_iterator, criterion)
     valid_loss, valid_acc = evaluate(model, valid_iterator, criterion)
@@ -181,6 +182,7 @@ for epoch in range(N_EPOCHS):
 
     print(f'| Epoch: {epoch+1:02} | Train Loss: {train_loss:.3f} | Train Acc: {train_acc*100:.2f}% | Val. Loss: {valid_loss:.3f} | Val. Acc: {valid_acc*100:.2f}% | Test Loss: {test_loss:.3f} | Test Acc: {test_acc*100:.2f}% |')
     print ("TEST ACCURACY:", np.round(best_result["test_acc"] * 100, 2))
+    print ("Epoch time :",time.time()-t)
 
     #terminate low-performing run early
     if epoch>40 and valid_acc<0.6:
