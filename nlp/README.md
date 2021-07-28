@@ -13,6 +13,7 @@ Install spacy `en` for the tokenizer:
 ```
 python -m spacy download en
 ```
+This setup has been tested on a clean g4dn AWS instance running Ubuntu 18.04 (deep learning AMI).
 
 ## Run the code
 
