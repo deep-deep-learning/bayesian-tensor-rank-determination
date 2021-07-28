@@ -32,4 +32,4 @@ bash scripts/cp.sh
 ```
 The TT,TTM, and Tucker formats are similar.
 
-On the first run the IMDB dataset should download automatically. It occupies 22MB.
+On the first run the IMDB dataset should download automatically. It occupies 88MB.
