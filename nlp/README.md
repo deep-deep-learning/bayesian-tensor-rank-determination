@@ -14,7 +14,7 @@ Install spacy `en` for the tokenizer:
 python -m spacy download en
 ```
 
-Install the tensor layers package. You will need to move up one directory.
+Install the tensor layers package. You will need to move up one directory, then return to this directory to run the NLP example.
 ```
 cd ../tensor_layers
 pip install -e .
