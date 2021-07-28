@@ -1,0 +1,536 @@
+Namespace(batch_size=128, dropout=0.5, embed_dim=256, embedding='TensorTrain', eta=1.0, hidden_dim=128, kl_multiplier=0.0, lr=0.0005, n_epochs=100, no_kl_epochs=20, prior_type='log_uniform', rank=20, rank_loss=True, voc_dim=25000, warmup_epochs=50)
+Building dataset...
+Done
+Sequential(
+  (0): TensorizedEmbedding(
+    (tensor): TensorTrain(
+      (trainable_variables): ParameterList(
+          (0): Parameter containing: [torch.cuda.FloatTensor of size 1x5x20 (GPU 0)]
+          (1): Parameter containing: [torch.cuda.FloatTensor of size 20x8x20 (GPU 0)]
+          (2): Parameter containing: [torch.cuda.FloatTensor of size 20x25x20 (GPU 0)]
+          (3): Parameter containing: [torch.cuda.FloatTensor of size 20x25x20 (GPU 0)]
+          (4): Parameter containing: [torch.cuda.FloatTensor of size 20x4x20 (GPU 0)]
+          (5): Parameter containing: [torch.cuda.FloatTensor of size 20x8x20 (GPU 0)]
+          (6): Parameter containing: [torch.cuda.FloatTensor of size 20x8x1 (GPU 0)]
+          (7): Parameter containing: [torch.cuda.FloatTensor of size 1x5x20 (GPU 0)]
+          (8): Parameter containing: [torch.cuda.FloatTensor of size 20x8x20 (GPU 0)]
+          (9): Parameter containing: [torch.cuda.FloatTensor of size 20x25x20 (GPU 0)]
+          (10): Parameter containing: [torch.cuda.FloatTensor of size 20x25x20 (GPU 0)]
+          (11): Parameter containing: [torch.cuda.FloatTensor of size 20x4x20 (GPU 0)]
+          (12): Parameter containing: [torch.cuda.FloatTensor of size 20x8x20 (GPU 0)]
+          (13): Parameter containing: [torch.cuda.FloatTensor of size 20x8x1 (GPU 0)]
+          (14): Parameter containing: [torch.cuda.FloatTensor of size 20 (GPU 0)]
+          (15): Parameter containing: [torch.cuda.FloatTensor of size 20 (GPU 0)]
+          (16): Parameter containing: [torch.cuda.FloatTensor of size 20 (GPU 0)]
+          (17): Parameter containing: [torch.cuda.FloatTensor of size 20 (GPU 0)]
+          (18): Parameter containing: [torch.cuda.FloatTensor of size 20 (GPU 0)]
+          (19): Parameter containing: [torch.cuda.FloatTensor of size 20 (GPU 0)]
+      )
+    )
+  )
+  (1): LSTM_Classifier(
+    (rnn): LSTM(256, 128, num_layers=2, dropout=0.5, bidirectional=True)
+    (fc): Linear(in_features=256, out_features=1, bias=True)
+    (dropout): Dropout(p=0.5, inplace=False)
+  )
+)
+| Epoch: 01 | Train Loss: 0.687 | Train Acc: 52.29% | Val. Loss: 0.720 | Val. Acc: 60.90% | Test Loss: 0.724 | Test Acc: 60.31% |
+TEST ACCURACY: 60.31
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 02 | Train Loss: 0.643 | Train Acc: 63.34% | Val. Loss: 0.713 | Val. Acc: 53.25% | Test Loss: 0.712 | Test Acc: 53.18% |
+TEST ACCURACY: 60.31
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 03 | Train Loss: 0.601 | Train Acc: 68.10% | Val. Loss: 0.725 | Val. Acc: 62.76% | Test Loss: 0.725 | Test Acc: 62.87% |
+TEST ACCURACY: 62.87
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 04 | Train Loss: 0.564 | Train Acc: 71.44% | Val. Loss: 0.530 | Val. Acc: 74.87% | Test Loss: 0.532 | Test Acc: 74.47% |
+TEST ACCURACY: 74.47
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 05 | Train Loss: 0.593 | Train Acc: 68.40% | Val. Loss: 0.557 | Val. Acc: 72.37% | Test Loss: 0.560 | Test Acc: 71.62% |
+TEST ACCURACY: 74.47
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 06 | Train Loss: 0.550 | Train Acc: 72.60% | Val. Loss: 0.512 | Val. Acc: 75.84% | Test Loss: 0.514 | Test Acc: 75.30% |
+TEST ACCURACY: 75.3
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 07 | Train Loss: 0.489 | Train Acc: 77.03% | Val. Loss: 0.485 | Val. Acc: 77.57% | Test Loss: 0.488 | Test Acc: 76.99% |
+TEST ACCURACY: 76.99
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 08 | Train Loss: 0.490 | Train Acc: 77.40% | Val. Loss: 0.518 | Val. Acc: 74.91% | Test Loss: 0.523 | Test Acc: 74.05% |
+TEST ACCURACY: 76.99
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 09 | Train Loss: 0.447 | Train Acc: 79.76% | Val. Loss: 0.469 | Val. Acc: 78.74% | Test Loss: 0.469 | Test Acc: 78.59% |
+TEST ACCURACY: 78.59
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 10 | Train Loss: 0.538 | Train Acc: 75.30% | Val. Loss: 0.472 | Val. Acc: 78.68% | Test Loss: 0.472 | Test Acc: 78.34% |
+TEST ACCURACY: 78.59
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 11 | Train Loss: 0.447 | Train Acc: 80.14% | Val. Loss: 0.463 | Val. Acc: 79.78% | Test Loss: 0.470 | Test Acc: 79.67% |
+TEST ACCURACY: 79.67
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 12 | Train Loss: 0.436 | Train Acc: 81.18% | Val. Loss: 0.421 | Val. Acc: 81.51% | Test Loss: 0.424 | Test Acc: 81.49% |
+TEST ACCURACY: 81.49
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 13 | Train Loss: 0.406 | Train Acc: 82.88% | Val. Loss: 0.473 | Val. Acc: 79.35% | Test Loss: 0.476 | Test Acc: 78.93% |
+TEST ACCURACY: 81.49
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 14 | Train Loss: 0.394 | Train Acc: 83.22% | Val. Loss: 0.410 | Val. Acc: 82.36% | Test Loss: 0.411 | Test Acc: 82.38% |
+TEST ACCURACY: 82.38
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 15 | Train Loss: 0.398 | Train Acc: 82.83% | Val. Loss: 0.395 | Val. Acc: 83.11% | Test Loss: 0.402 | Test Acc: 82.87% |
+TEST ACCURACY: 82.87
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 16 | Train Loss: 0.361 | Train Acc: 84.98% | Val. Loss: 0.383 | Val. Acc: 83.26% | Test Loss: 0.394 | Test Acc: 82.83% |
+TEST ACCURACY: 82.83
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 17 | Train Loss: 0.346 | Train Acc: 85.64% | Val. Loss: 0.440 | Val. Acc: 80.09% | Test Loss: 0.448 | Test Acc: 80.28% |
+TEST ACCURACY: 82.83
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 18 | Train Loss: 0.345 | Train Acc: 85.68% | Val. Loss: 0.357 | Val. Acc: 84.93% | Test Loss: 0.369 | Test Acc: 84.24% |
+TEST ACCURACY: 84.24
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 19 | Train Loss: 0.340 | Train Acc: 86.06% | Val. Loss: 0.364 | Val. Acc: 84.12% | Test Loss: 0.377 | Test Acc: 83.39% |
+TEST ACCURACY: 84.24
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 20 | Train Loss: 0.326 | Train Acc: 86.70% | Val. Loss: 0.350 | Val. Acc: 85.15% | Test Loss: 0.360 | Test Acc: 84.81% |
+TEST ACCURACY: 84.81
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 21 | Train Loss: 0.317 | Train Acc: 87.22% | Val. Loss: 0.360 | Val. Acc: 83.90% | Test Loss: 0.370 | Test Acc: 83.29% |
+TEST ACCURACY: 84.81
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 22 | Train Loss: 0.323 | Train Acc: 86.73% | Val. Loss: 0.359 | Val. Acc: 84.26% | Test Loss: 0.367 | Test Acc: 84.25% |
+TEST ACCURACY: 84.81
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 23 | Train Loss: 0.307 | Train Acc: 87.52% | Val. Loss: 0.334 | Val. Acc: 85.75% | Test Loss: 0.347 | Test Acc: 85.21% |
+TEST ACCURACY: 85.21
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 24 | Train Loss: 0.299 | Train Acc: 87.84% | Val. Loss: 0.342 | Val. Acc: 85.74% | Test Loss: 0.353 | Test Acc: 85.37% |
+TEST ACCURACY: 85.21
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 25 | Train Loss: 0.287 | Train Acc: 88.44% | Val. Loss: 0.330 | Val. Acc: 86.30% | Test Loss: 0.342 | Test Acc: 85.74% |
+TEST ACCURACY: 85.74
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 26 | Train Loss: 0.284 | Train Acc: 88.49% | Val. Loss: 0.336 | Val. Acc: 86.11% | Test Loss: 0.347 | Test Acc: 85.46% |
+TEST ACCURACY: 85.74
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 27 | Train Loss: 0.280 | Train Acc: 88.77% | Val. Loss: 0.325 | Val. Acc: 86.28% | Test Loss: 0.337 | Test Acc: 85.98% |
+TEST ACCURACY: 85.74
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 28 | Train Loss: 0.267 | Train Acc: 89.21% | Val. Loss: 0.329 | Val. Acc: 86.36% | Test Loss: 0.337 | Test Acc: 85.99% |
+TEST ACCURACY: 85.99
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 29 | Train Loss: 0.262 | Train Acc: 89.48% | Val. Loss: 0.336 | Val. Acc: 86.19% | Test Loss: 0.344 | Test Acc: 85.74% |
+TEST ACCURACY: 85.99
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 30 | Train Loss: 0.266 | Train Acc: 89.34% | Val. Loss: 0.329 | Val. Acc: 86.26% | Test Loss: 0.337 | Test Acc: 85.78% |
+TEST ACCURACY: 85.99
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 31 | Train Loss: 0.251 | Train Acc: 90.01% | Val. Loss: 0.329 | Val. Acc: 86.64% | Test Loss: 0.342 | Test Acc: 86.17% |
+TEST ACCURACY: 86.17
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 32 | Train Loss: 0.243 | Train Acc: 90.34% | Val. Loss: 0.320 | Val. Acc: 86.58% | Test Loss: 0.332 | Test Acc: 86.22% |
+TEST ACCURACY: 86.17
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 33 | Train Loss: 0.236 | Train Acc: 90.70% | Val. Loss: 0.323 | Val. Acc: 86.62% | Test Loss: 0.333 | Test Acc: 86.38% |
+TEST ACCURACY: 86.17
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 34 | Train Loss: 0.230 | Train Acc: 91.05% | Val. Loss: 0.331 | Val. Acc: 86.53% | Test Loss: 0.343 | Test Acc: 85.99% |
+TEST ACCURACY: 86.17
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 35 | Train Loss: 0.225 | Train Acc: 91.04% | Val. Loss: 0.337 | Val. Acc: 86.30% | Test Loss: 0.350 | Test Acc: 86.44% |
+TEST ACCURACY: 86.17
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 36 | Train Loss: 0.214 | Train Acc: 91.74% | Val. Loss: 0.331 | Val. Acc: 86.37% | Test Loss: 0.343 | Test Acc: 86.10% |
+TEST ACCURACY: 86.17
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 37 | Train Loss: 0.210 | Train Acc: 91.98% | Val. Loss: 0.336 | Val. Acc: 86.29% | Test Loss: 0.348 | Test Acc: 86.39% |
+TEST ACCURACY: 86.17
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 38 | Train Loss: 0.203 | Train Acc: 92.31% | Val. Loss: 0.337 | Val. Acc: 86.39% | Test Loss: 0.347 | Test Acc: 86.48% |
+TEST ACCURACY: 86.17
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 39 | Train Loss: 0.203 | Train Acc: 92.24% | Val. Loss: 0.343 | Val. Acc: 86.54% | Test Loss: 0.354 | Test Acc: 86.57% |
+TEST ACCURACY: 86.17
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 40 | Train Loss: 0.195 | Train Acc: 92.66% | Val. Loss: 0.353 | Val. Acc: 85.73% | Test Loss: 0.361 | Test Acc: 86.13% |
+TEST ACCURACY: 86.17
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 41 | Train Loss: 0.185 | Train Acc: 92.96% | Val. Loss: 0.350 | Val. Acc: 86.36% | Test Loss: 0.360 | Test Acc: 86.53% |
+TEST ACCURACY: 86.17
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 42 | Train Loss: 0.184 | Train Acc: 93.21% | Val. Loss: 0.400 | Val. Acc: 85.78% | Test Loss: 0.410 | Test Acc: 85.89% |
+TEST ACCURACY: 86.17
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 43 | Train Loss: 0.178 | Train Acc: 93.61% | Val. Loss: 0.365 | Val. Acc: 86.26% | Test Loss: 0.376 | Test Acc: 86.42% |
+TEST ACCURACY: 86.17
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 44 | Train Loss: 0.167 | Train Acc: 93.90% | Val. Loss: 0.353 | Val. Acc: 86.31% | Test Loss: 0.362 | Test Acc: 86.46% |
+TEST ACCURACY: 86.17
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 45 | Train Loss: 0.168 | Train Acc: 93.85% | Val. Loss: 0.378 | Val. Acc: 85.21% | Test Loss: 0.384 | Test Acc: 85.40% |
+TEST ACCURACY: 86.17
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 46 | Train Loss: 0.164 | Train Acc: 94.14% | Val. Loss: 0.408 | Val. Acc: 84.99% | Test Loss: 0.412 | Test Acc: 85.32% |
+TEST ACCURACY: 86.17
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 47 | Train Loss: 0.158 | Train Acc: 94.37% | Val. Loss: 0.402 | Val. Acc: 85.94% | Test Loss: 0.407 | Test Acc: 86.61% |
+TEST ACCURACY: 86.17
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 48 | Train Loss: 0.150 | Train Acc: 94.60% | Val. Loss: 0.385 | Val. Acc: 86.33% | Test Loss: 0.390 | Test Acc: 86.32% |
+TEST ACCURACY: 86.17
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 49 | Train Loss: 0.143 | Train Acc: 95.11% | Val. Loss: 0.428 | Val. Acc: 84.49% | Test Loss: 0.436 | Test Acc: 84.78% |
+TEST ACCURACY: 86.17
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 50 | Train Loss: 0.147 | Train Acc: 94.86% | Val. Loss: 0.396 | Val. Acc: 86.46% | Test Loss: 0.403 | Test Acc: 86.41% |
+TEST ACCURACY: 86.17
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 51 | Train Loss: 0.134 | Train Acc: 95.52% | Val. Loss: 0.429 | Val. Acc: 85.47% | Test Loss: 0.436 | Test Acc: 85.62% |
+TEST ACCURACY: 86.17
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 52 | Train Loss: 0.132 | Train Acc: 95.68% | Val. Loss: 0.428 | Val. Acc: 85.98% | Test Loss: 0.434 | Test Acc: 86.36% |
+TEST ACCURACY: 86.17
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 53 | Train Loss: 0.131 | Train Acc: 95.72% | Val. Loss: 0.422 | Val. Acc: 85.71% | Test Loss: 0.424 | Test Acc: 86.14% |
+TEST ACCURACY: 86.17
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 54 | Train Loss: 0.122 | Train Acc: 96.02% | Val. Loss: 0.435 | Val. Acc: 85.46% | Test Loss: 0.436 | Test Acc: 86.00% |
+TEST ACCURACY: 86.17
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 55 | Train Loss: 0.123 | Train Acc: 95.94% | Val. Loss: 0.437 | Val. Acc: 85.82% | Test Loss: 0.446 | Test Acc: 86.06% |
+TEST ACCURACY: 86.17
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 56 | Train Loss: 0.114 | Train Acc: 96.38% | Val. Loss: 0.447 | Val. Acc: 85.74% | Test Loss: 0.447 | Test Acc: 86.28% |
+TEST ACCURACY: 86.17
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 57 | Train Loss: 0.116 | Train Acc: 96.26% | Val. Loss: 0.497 | Val. Acc: 85.46% | Test Loss: 0.501 | Test Acc: 85.78% |
+TEST ACCURACY: 86.17
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 58 | Train Loss: 0.100 | Train Acc: 97.06% | Val. Loss: 0.492 | Val. Acc: 85.82% | Test Loss: 0.497 | Test Acc: 85.97% |
+TEST ACCURACY: 86.17
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 59 | Train Loss: 0.108 | Train Acc: 96.74% | Val. Loss: 0.451 | Val. Acc: 86.00% | Test Loss: 0.450 | Test Acc: 85.94% |
+TEST ACCURACY: 86.17
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 60 | Train Loss: 0.107 | Train Acc: 96.64% | Val. Loss: 0.453 | Val. Acc: 86.13% | Test Loss: 0.456 | Test Acc: 86.31% |
+TEST ACCURACY: 86.17
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 61 | Train Loss: 0.092 | Train Acc: 97.25% | Val. Loss: 0.483 | Val. Acc: 85.84% | Test Loss: 0.484 | Test Acc: 85.74% |
+TEST ACCURACY: 86.17
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 62 | Train Loss: 0.092 | Train Acc: 97.32% | Val. Loss: 0.490 | Val. Acc: 85.54% | Test Loss: 0.494 | Test Acc: 85.70% |
+TEST ACCURACY: 86.17
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 63 | Train Loss: 0.089 | Train Acc: 97.38% | Val. Loss: 0.493 | Val. Acc: 85.30% | Test Loss: 0.489 | Test Acc: 85.14% |
+TEST ACCURACY: 86.17
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 64 | Train Loss: 0.095 | Train Acc: 97.19% | Val. Loss: 0.529 | Val. Acc: 85.46% | Test Loss: 0.520 | Test Acc: 85.62% |
+TEST ACCURACY: 86.17
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 65 | Train Loss: 0.105 | Train Acc: 96.66% | Val. Loss: 0.437 | Val. Acc: 84.53% | Test Loss: 0.434 | Test Acc: 84.93% |
+TEST ACCURACY: 86.17
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 66 | Train Loss: 0.116 | Train Acc: 96.14% | Val. Loss: 0.508 | Val. Acc: 85.12% | Test Loss: 0.499 | Test Acc: 85.49% |
+TEST ACCURACY: 86.17
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 67 | Train Loss: 0.089 | Train Acc: 97.30% | Val. Loss: 0.510 | Val. Acc: 85.37% | Test Loss: 0.505 | Test Acc: 85.70% |
+TEST ACCURACY: 86.17
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 68 | Train Loss: 0.084 | Train Acc: 97.58% | Val. Loss: 0.513 | Val. Acc: 85.52% | Test Loss: 0.511 | Test Acc: 85.87% |
+TEST ACCURACY: 86.17
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 69 | Train Loss: 0.074 | Train Acc: 98.00% | Val. Loss: 0.560 | Val. Acc: 85.37% | Test Loss: 0.562 | Test Acc: 85.53% |
+TEST ACCURACY: 86.17
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 70 | Train Loss: 0.080 | Train Acc: 97.70% | Val. Loss: 0.520 | Val. Acc: 85.35% | Test Loss: 0.512 | Test Acc: 85.86% |
+TEST ACCURACY: 86.17
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 71 | Train Loss: 0.079 | Train Acc: 97.70% | Val. Loss: 0.518 | Val. Acc: 85.49% | Test Loss: 0.513 | Test Acc: 85.51% |
+TEST ACCURACY: 86.17
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 72 | Train Loss: 0.069 | Train Acc: 98.22% | Val. Loss: 0.533 | Val. Acc: 85.84% | Test Loss: 0.538 | Test Acc: 85.80% |
+TEST ACCURACY: 86.17
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 73 | Train Loss: 0.077 | Train Acc: 97.95% | Val. Loss: 0.538 | Val. Acc: 85.10% | Test Loss: 0.534 | Test Acc: 85.27% |
+TEST ACCURACY: 86.17
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 74 | Train Loss: 0.071 | Train Acc: 98.05% | Val. Loss: 0.544 | Val. Acc: 85.61% | Test Loss: 0.535 | Test Acc: 86.03% |
+TEST ACCURACY: 86.17
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 75 | Train Loss: 0.071 | Train Acc: 98.06% | Val. Loss: 0.500 | Val. Acc: 85.52% | Test Loss: 0.506 | Test Acc: 85.61% |
+TEST ACCURACY: 86.17
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 76 | Train Loss: 0.065 | Train Acc: 98.40% | Val. Loss: 0.594 | Val. Acc: 85.73% | Test Loss: 0.598 | Test Acc: 85.70% |
+TEST ACCURACY: 86.17
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 77 | Train Loss: 0.066 | Train Acc: 98.34% | Val. Loss: 0.584 | Val. Acc: 85.41% | Test Loss: 0.585 | Test Acc: 85.69% |
+TEST ACCURACY: 86.17
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 78 | Train Loss: 0.067 | Train Acc: 98.18% | Val. Loss: 0.549 | Val. Acc: 85.19% | Test Loss: 0.547 | Test Acc: 85.53% |
+TEST ACCURACY: 86.17
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 79 | Train Loss: 0.067 | Train Acc: 98.27% | Val. Loss: 0.573 | Val. Acc: 85.35% | Test Loss: 0.570 | Test Acc: 85.58% |
+TEST ACCURACY: 86.17
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 80 | Train Loss: 0.061 | Train Acc: 98.40% | Val. Loss: 0.562 | Val. Acc: 85.24% | Test Loss: 0.559 | Test Acc: 85.59% |
+TEST ACCURACY: 86.17
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 81 | Train Loss: 0.065 | Train Acc: 98.34% | Val. Loss: 0.568 | Val. Acc: 85.34% | Test Loss: 0.557 | Test Acc: 85.77% |
+TEST ACCURACY: 86.17
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 82 | Train Loss: 0.063 | Train Acc: 98.40% | Val. Loss: 0.562 | Val. Acc: 85.29% | Test Loss: 0.564 | Test Acc: 85.43% |
+TEST ACCURACY: 86.17
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 83 | Train Loss: 0.062 | Train Acc: 98.40% | Val. Loss: 0.590 | Val. Acc: 85.69% | Test Loss: 0.590 | Test Acc: 85.82% |
+TEST ACCURACY: 86.17
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 84 | Train Loss: 0.060 | Train Acc: 98.52% | Val. Loss: 0.586 | Val. Acc: 85.25% | Test Loss: 0.571 | Test Acc: 85.70% |
+TEST ACCURACY: 86.17
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 85 | Train Loss: 0.059 | Train Acc: 98.60% | Val. Loss: 0.560 | Val. Acc: 85.30% | Test Loss: 0.545 | Test Acc: 85.78% |
+TEST ACCURACY: 86.17
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 86 | Train Loss: 0.059 | Train Acc: 98.55% | Val. Loss: 0.575 | Val. Acc: 85.17% | Test Loss: 0.570 | Test Acc: 85.40% |
+TEST ACCURACY: 86.17
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 87 | Train Loss: 0.058 | Train Acc: 98.55% | Val. Loss: 0.622 | Val. Acc: 85.50% | Test Loss: 0.612 | Test Acc: 85.98% |
+TEST ACCURACY: 86.17
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 88 | Train Loss: 0.060 | Train Acc: 98.59% | Val. Loss: 0.625 | Val. Acc: 85.20% | Test Loss: 0.615 | Test Acc: 85.66% |
+TEST ACCURACY: 86.17
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 89 | Train Loss: 0.062 | Train Acc: 98.47% | Val. Loss: 0.552 | Val. Acc: 85.11% | Test Loss: 0.546 | Test Acc: 85.50% |
+TEST ACCURACY: 86.17
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 90 | Train Loss: 0.060 | Train Acc: 98.43% | Val. Loss: 0.576 | Val. Acc: 85.55% | Test Loss: 0.569 | Test Acc: 85.94% |
+TEST ACCURACY: 86.17
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 91 | Train Loss: 0.057 | Train Acc: 98.52% | Val. Loss: 0.577 | Val. Acc: 85.45% | Test Loss: 0.567 | Test Acc: 85.94% |
+TEST ACCURACY: 86.17
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 92 | Train Loss: 0.058 | Train Acc: 98.66% | Val. Loss: 0.589 | Val. Acc: 85.45% | Test Loss: 0.578 | Test Acc: 85.79% |
+TEST ACCURACY: 86.17
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 93 | Train Loss: 0.051 | Train Acc: 98.86% | Val. Loss: 0.610 | Val. Acc: 85.40% | Test Loss: 0.599 | Test Acc: 85.74% |
+TEST ACCURACY: 86.17
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 94 | Train Loss: 0.054 | Train Acc: 98.74% | Val. Loss: 0.622 | Val. Acc: 85.22% | Test Loss: 0.613 | Test Acc: 85.57% |
+TEST ACCURACY: 86.17
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 95 | Train Loss: 0.059 | Train Acc: 98.48% | Val. Loss: 0.581 | Val. Acc: 85.42% | Test Loss: 0.585 | Test Acc: 85.50% |
+TEST ACCURACY: 86.17
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 96 | Train Loss: 0.059 | Train Acc: 98.52% | Val. Loss: 0.557 | Val. Acc: 85.46% | Test Loss: 0.554 | Test Acc: 86.04% |
+TEST ACCURACY: 86.17
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 97 | Train Loss: 0.057 | Train Acc: 98.54% | Val. Loss: 0.576 | Val. Acc: 85.47% | Test Loss: 0.578 | Test Acc: 85.66% |
+TEST ACCURACY: 86.17
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 98 | Train Loss: 0.051 | Train Acc: 98.78% | Val. Loss: 0.643 | Val. Acc: 85.34% | Test Loss: 0.636 | Test Acc: 85.58% |
+TEST ACCURACY: 86.17
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 99 | Train Loss: 0.052 | Train Acc: 98.79% | Val. Loss: 0.595 | Val. Acc: 85.50% | Test Loss: 0.595 | Test Acc: 85.36% |
+TEST ACCURACY: 86.17
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378
+| Epoch: 100 | Train Loss: 0.056 | Train Acc: 98.60% | Val. Loss: 0.607 | Val. Acc: 85.46% | Test Loss: 0.610 | Test Acc: 85.48% |
+TEST ACCURACY: 86.17
+Ranks  [20, 20, 20, 20, 20, 20]
+(0, 6371740)
+Savings (0, 6371740) ratio 226.46850672328378

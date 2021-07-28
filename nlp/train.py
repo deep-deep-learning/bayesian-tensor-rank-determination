@@ -118,7 +118,7 @@ if args.embedding == 'full':
         num_embeddings=INPUT_DIM,
         embedding_dim=EMBEDDING_DIM
     )
-    compression_rate = 1.0
+        compression_rate = 1.0
 else:
     embed_model = tensor_layers.TensorizedEmbedding(
         shape=tensor_dims,
@@ -181,6 +181,10 @@ for epoch in range(N_EPOCHS):
 
     print(f'| Epoch: {epoch+1:02} | Train Loss: {train_loss:.3f} | Train Acc: {train_acc*100:.2f}% | Val. Loss: {valid_loss:.3f} | Val. Acc: {valid_acc*100:.2f}% | Test Loss: {test_loss:.3f} | Test Acc: {test_acc*100:.2f}% |')
     print ("TEST ACCURACY:", np.round(best_result["test_acc"] * 100, 2))
+
+    #terminate low-performing run early
+    if epoch>40 and valid_acc<0.6:
+        break
 
     if hasattr(embed_model,'tensor'):
         print("Ranks ",embed_model.tensor.estimate_rank(threshold=1e-8))
