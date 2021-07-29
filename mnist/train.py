@@ -13,13 +13,13 @@ from utils import train,test,get_net
 def main():
     # Training settings
     parser = argparse.ArgumentParser(description='PyTorch MNIST Example')
-    parser.add_argument('--batch-size', type=int, default=64, metavar='N'
-                        help='input batch size for training (default: 64)')
     parser.add_argument(
         '--model-type',
         default='full',
         choices=['CP', 'TensorTrain', 'TensorTrainMatrix','Tucker','full'],
     type=str)
+    parser.add_argument('--batch-size', type=int, default=128, metavar='N'
+                        help='input batch size for training (default: 128)')
     parser.add_argument('--rank-loss', type=bool, default=False)
     parser.add_argument('--kl-multiplier', type=float, default=1.0) #account for the batch size,dataset size, and renormalize
     parser.add_argument('--no-kl-epochs', type=int, default=20)
