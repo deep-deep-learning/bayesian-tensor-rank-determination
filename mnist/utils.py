@@ -1,12 +1,8 @@
 from __future__ import print_function
-import argparse
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-import torch.optim as optim
-from torchvision import datasets, transforms
-from torch.optim.lr_scheduler import StepLR
-
+from tensor_layers import TensorizedLinear
 
 def get_kl_loss(model, args, epoch):
 
@@ -27,8 +23,8 @@ def get_kl_loss(model, args, epoch):
 
 
 def get_net(args):
-    if args.tensorized:
-        return TensorizedNet()
+    if args.model_type in ['CP','TensorTrain','TensorTrainMatrix','Tucker']:
+        return get_TensorizedNet(args)
     else:
         return Net()
 
@@ -40,10 +36,11 @@ def train(args, model, device, train_loader, optimizer, epoch):
         optimizer.zero_grad()
         output = model(data)
         loss = F.nll_loss(output, target)
-
+        """
         if args.rank_loss:
             ard_loss = get_kl_loss(model,args,epoch)
             loss += ard_loss
+        """
 
 
         loss.backward()
@@ -69,12 +66,32 @@ def test(model, device, test_loader):
             correct += pred.eq(target.view_as(pred)).sum().item()
 
     test_loss /= len(test_loader.dataset)
-
     print('\nTest set: Average loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n'.format(
         test_loss, correct, len(test_loader.dataset),
         100. * correct / len(test_loader.dataset)))
 
-class TensorizedNet(nn.Module):
+def get_TensorizedNet(args):
+
+    if args.model_type=='full':
+        fc1 = nn.Linear(784, 512)
+        fc2 = nn.Linear(512, 10)
+     
+    else:
+        if args.model_type=='TensorTrainMatrix':
+            shape1 = [[4,7,4,7], [4,4,8,4]]    
+            shape2 = [[16,32], [2,5]]
+
+        else:
+            shape1 = [28, 28, 16, 32]
+            shape2 = [32, 16, 10]
+
+    
+        fc1 = TensorizedLinear(784, 512, shape=shape1, tensor_type=args.model_type,max_rank=args.rank,em_stepsize=args.em_stepsize)
+        fc2 = TensorizedLinear(512, 10, shape=shape2, tensor_type=args.model_type,max_rank=args.rank,em_stepsize=args.em_stepsize)
+    
+    return TensorizedNet(fc1,fc2)
+
+class Net(nn.Module):
     def __init__(self):
         super(Net, self).__init__()
         self.dropout = nn.Dropout(0.5)
@@ -91,12 +108,12 @@ class TensorizedNet(nn.Module):
         output = F.log_softmax(x, dim=1)
         return output
 
-class Net(nn.Module):
-    def __init__(self):
-        super(Net, self).__init__()
+class TensorizedNet(nn.Module):
+    def __init__(self,fc1,fc2):
+        super(TensorizedNet, self).__init__()
         self.dropout = nn.Dropout(0.5)
-        self.fc1 = nn.Linear(784, 512)
-        self.fc2 = nn.Linear(512, 10)
+        self.add_module('fc1',fc1)
+        self.add_module('fc2',fc2)
         self.relu = nn.ReLU()
 
     def forward(self, x):

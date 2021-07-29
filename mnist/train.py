@@ -18,30 +18,29 @@ def main():
         default='full',
         choices=['CP', 'TensorTrain', 'TensorTrainMatrix','Tucker','full'],
     type=str)
-    parser.add_argument('--batch-size', type=int, default=128, metavar='N'
+    parser.add_argument('--batch-size', type=int, default=128, metavar='N',
                         help='input batch size for training (default: 128)')
     parser.add_argument('--rank-loss', type=bool, default=False)
     parser.add_argument('--kl-multiplier', type=float, default=1.0) #account for the batch size,dataset size, and renormalize
-    parser.add_argument('--no-kl-epochs', type=int, default=20)
-    parser.add_argument('--warmup-epochs', type=int, default=50)
-    parser.add_argument('--rank', type=int, default=8)
+    parser.add_argument('--em-stepsize', type=float, default=1.0) #account for the batch size,dataset size, and renormalize
+    parser.add_argument('--no-kl-epochs', type=int, default=5)
+    parser.add_argument('--warmup-epochs', type=int, default=20)
+    parser.add_argument('--epochs', type=int, default=25, metavar='N',
+                        help='number of epochs to train')
+    parser.add_argument('--rank', type=int, default=20)
     parser.add_argument('--prior-type', type=str, default='log_uniform')
     parser.add_argument('--eta', type=float, default=1.0)
     parser.add_argument('--test-batch-size', type=int, default=1000, metavar='N',
                         help='input batch size for testing (default: 1000)')
-    parser.add_argument('--epochs', type=int, default=20, metavar='N',
-                        help='number of epochs to train')
-    parser.add_argument('--lr', type=float, default=1.0, metavar='LR',
+    parser.add_argument('--lr', type=float, default=0.001, metavar='LR',
                         help='learning rate (default: 1.0)')
-    parser.add_argument('--gamma', type=float, default=0.95, metavar='M',
-                        help='Learning rate step gamma (default: 0.05)')
     parser.add_argument('--no-cuda', action='store_true', default=False,
                         help='disables CUDA training')
     parser.add_argument('--dry-run', action='store_true', default=False,
                         help='quickly check a single pass')
     parser.add_argument('--seed', type=int, default=1, metavar='S',
                         help='random seed (default: 1)')
-    parser.add_argument('--log-interval', type=int, default=10, metavar='N',
+    parser.add_argument('--log-interval', type=int, default=1000, metavar='N',
                         help='how many batches to wait before logging training status')
     parser.add_argument('--save-model', action='store_true', default=False,
                         help='For Saving the current Model')
@@ -76,13 +75,13 @@ def main():
 
     model = get_net(args).to(device)
 
-    optimizer = optim.Adadelta(model.parameters(), lr=args.lr)
+    print(model)
 
-    scheduler = StepLR(optimizer, step_size=1, gamma=args.gamma)
+    optimizer = optim.Adam(model.parameters(), lr=args.lr)
+
     for epoch in range(1, args.epochs + 1):
         train(args, model, device, train_loader, optimizer, epoch)
         test(model, device, test_loader)
-        scheduler.step()
 
     if args.save_model:
         torch.save(model.state_dict(), "mnist_cnn.pt")

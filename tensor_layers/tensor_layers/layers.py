@@ -10,11 +10,11 @@ class TensorizedLinear(nn.Linear):
     def __init__(self,
                 in_features,
                 out_features,
-                bias,
+                bias=True,
                 init=None,
                 shape=None,
                 tensor_type='TensorTrainMatrix',
-                max_rank=16,
+                max_rank=20,
                 em_stepsize=1.0,
                 prior_type='log_uniform',
                 eta = None,
@@ -26,20 +26,17 @@ class TensorizedLinear(nn.Linear):
 
         self.in_features = in_features
         self.out_features = out_features
+        target_stddev = np.sqrt(2/self.in_features)
 
-        if tensor_type=='TensorTrainMatrix':
-            tensor_shape = shape
-        else:
-            tensor_shape = self.shape[0]+self.shape[1]
+        #shape taken care of at input time
+        self.tensor = getattr(low_rank_tensors,tensor_type)(shape,prior_type=prior_type,em_stepsize=em_stepsize,max_rank=max_rank,initialization_method='nn',target_stddev=target_stddev,learned_scale=False,eta=eta)
 
-        self.tensor = getattr(low_rank_tensors,self.tensor_type)(tensor_shape,prior_type=prior_type,em_stepsize=em_stepsize,max_rank=max_rank,initialization_method='nn',target_stddev=target_stddev,learned_scale=False,eta=eta)
-        
-        del self.weight
+    def forward(self, input, rank_update=True):
 
+        if self.training and rank_update:
+            self.tensor.update_rank_parameters()
 
-    def forward(self, input):
-        return F.linear(input,self.tensor.get_full().view(self.in_features,self.out_features),self.bias)
-
+        return F.linear(input,self.tensor.get_full().view(self.out_features,self.in_features),self.bias)
 
     def update_rank_parameters(self):
         self.tensor.update_rank_parameters()
