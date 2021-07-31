@@ -1,0 +1,45 @@
+TensorizedNet(
+  (dropout): Dropout(p=0.5, inplace=False)
+  (fc1): TensorizedLinear(
+    in_features=784, out_features=512, bias=True
+    (tensor): TensorTrainMatrix(
+      (trainable_variables): ParameterList(
+          (0): Parameter containing: [torch.cuda.FloatTensor of size 1x4x4x10 (GPU 0)]
+          (1): Parameter containing: [torch.cuda.FloatTensor of size 10x7x4x10 (GPU 0)]
+          (2): Parameter containing: [torch.cuda.FloatTensor of size 10x4x8x10 (GPU 0)]
+          (3): Parameter containing: [torch.cuda.FloatTensor of size 10x7x4x1 (GPU 0)]
+          (4): Parameter containing: [torch.cuda.FloatTensor of size 1x4x4x10 (GPU 0)]
+          (5): Parameter containing: [torch.cuda.FloatTensor of size 10x7x4x10 (GPU 0)]
+          (6): Parameter containing: [torch.cuda.FloatTensor of size 10x4x8x10 (GPU 0)]
+          (7): Parameter containing: [torch.cuda.FloatTensor of size 10x7x4x1 (GPU 0)]
+          (8): Parameter containing: [torch.cuda.FloatTensor of size 10 (GPU 0)]
+          (9): Parameter containing: [torch.cuda.FloatTensor of size 10 (GPU 0)]
+          (10): Parameter containing: [torch.cuda.FloatTensor of size 10 (GPU 0)]
+      )
+    )
+  )
+  (fc2): TensorizedLinear(
+    in_features=512, out_features=10, bias=True
+    (tensor): TensorTrainMatrix(
+      (trainable_variables): ParameterList(
+          (0): Parameter containing: [torch.cuda.FloatTensor of size 1x16x2x10 (GPU 0)]
+          (1): Parameter containing: [torch.cuda.FloatTensor of size 10x32x5x1 (GPU 0)]
+          (2): Parameter containing: [torch.cuda.FloatTensor of size 1x16x2x10 (GPU 0)]
+          (3): Parameter containing: [torch.cuda.FloatTensor of size 10x32x5x1 (GPU 0)]
+          (4): Parameter containing: [torch.cuda.FloatTensor of size 10 (GPU 0)]
+      )
+    )
+  )
+  (relu): ReLU()
+)
+Train Epoch: 1 [0/60000 (0%)]	Loss: 3.434337
+Epoch time 9.62
+
+Test set: Average loss: 0.5194, Accuracy: 8573/10000 (86%)
+
+Train Epoch: 2 [0/60000 (0%)]	Loss: 0.875975
+Epoch time 8.19
+
+Test set: Average loss: 0.3536, Accuracy: 9022/10000 (90%)
+
+******Tensor Ranks*******

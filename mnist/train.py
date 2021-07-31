@@ -7,7 +7,7 @@ import torch.optim as optim
 from torchvision import datasets, transforms
 from torch.optim.lr_scheduler import StepLR
 from utils import train,test,get_net
-
+import time
 
 
 def main():
@@ -24,8 +24,8 @@ def main():
     parser.add_argument('--kl-multiplier', type=float, default=1.0) #account for the batch size,dataset size, and renormalize
     parser.add_argument('--em-stepsize', type=float, default=1.0) #account for the batch size,dataset size, and renormalize
     parser.add_argument('--no-kl-epochs', type=int, default=5)
-    parser.add_argument('--warmup-epochs', type=int, default=20)
-    parser.add_argument('--epochs', type=int, default=25, metavar='N',
+    parser.add_argument('--warmup-epochs', type=int, default=50)
+    parser.add_argument('--epochs', type=int, default=100, metavar='N',
                         help='number of epochs to train')
     parser.add_argument('--rank', type=int, default=20)
     parser.add_argument('--prior-type', type=str, default='log_uniform')
@@ -80,14 +80,28 @@ def main():
     optimizer = optim.Adam(model.parameters(), lr=args.lr)
 
     for epoch in range(1, args.epochs + 1):
+        t = time.time()
         train(args, model, device, train_loader, optimizer, epoch)
+        print("Epoch time {:.2f}".format(time.time()-t))
         test(model, device, test_loader)
 
-    if args.save_model:
-        torch.save(model.state_dict(), "mnist_cnn.pt")
 
+        if args.model_type == 'full':
+            pass
+        else:
+            print("******Tensor Ranks*******")
+            print(model.fc1.tensor.estimate_rank())
+            print(model.fc2.tensor.estimate_rank())
+            print("******Param Savings*******")
+            param_savings_1 = model.fc1.tensor.get_parameter_savings(threshold=1e-4)
+            param_savings_2 = model.fc2.tensor.get_parameter_savings(threshold=1e-4)
+            full_params = 784*512+512+512*10+10
+            print(param_savings_1,param_savings_2)
+            total_savings = sum(param_savings_1)+sum(param_savings_2)
+            print("Savings {} ratio {}".format(total_savings,full_params/(full_params-total_savings)))
 
-    print("Tensor Ranks")
+            print("******End epoch stats*******")
+
 
 if __name__ == '__main__':
     main()

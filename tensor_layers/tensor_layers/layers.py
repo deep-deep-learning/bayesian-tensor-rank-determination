@@ -36,7 +36,7 @@ class TensorizedLinear(nn.Linear):
         if self.training and rank_update:
             self.tensor.update_rank_parameters()
 
-        return F.linear(input,self.tensor.get_full().view(self.out_features,self.in_features),self.bias)
+        return F.linear(input,self.tensor.get_full().reshape([self.out_features,self.in_features]),self.bias)
 
     def update_rank_parameters(self):
         self.tensor.update_rank_parameters()

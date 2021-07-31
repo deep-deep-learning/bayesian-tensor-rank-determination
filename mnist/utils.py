@@ -36,11 +36,11 @@ def train(args, model, device, train_loader, optimizer, epoch):
         optimizer.zero_grad()
         output = model(data)
         loss = F.nll_loss(output, target)
-        """
+        
         if args.rank_loss:
             ard_loss = get_kl_loss(model,args,epoch)
             loss += ard_loss
-        """
+        
 
 
         loss.backward()
