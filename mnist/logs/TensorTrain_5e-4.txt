@@ -1,0 +1,73 @@
+TensorizedNet(
+  (dropout): Dropout(p=0.5, inplace=False)
+  (fc1): TensorizedLinear(
+    in_features=784, out_features=512, bias=True
+    (tensor): TensorTrain(
+      (trainable_variables): ParameterList(
+          (0): Parameter containing: [torch.cuda.FloatTensor of size 1x28x20 (GPU 0)]
+          (1): Parameter containing: [torch.cuda.FloatTensor of size 20x28x20 (GPU 0)]
+          (2): Parameter containing: [torch.cuda.FloatTensor of size 20x16x20 (GPU 0)]
+          (3): Parameter containing: [torch.cuda.FloatTensor of size 20x32x1 (GPU 0)]
+          (4): Parameter containing: [torch.cuda.FloatTensor of size 1x28x20 (GPU 0)]
+          (5): Parameter containing: [torch.cuda.FloatTensor of size 20x28x20 (GPU 0)]
+          (6): Parameter containing: [torch.cuda.FloatTensor of size 20x16x20 (GPU 0)]
+          (7): Parameter containing: [torch.cuda.FloatTensor of size 20x32x1 (GPU 0)]
+          (8): Parameter containing: [torch.cuda.FloatTensor of size 20 (GPU 0)]
+          (9): Parameter containing: [torch.cuda.FloatTensor of size 20 (GPU 0)]
+          (10): Parameter containing: [torch.cuda.FloatTensor of size 20 (GPU 0)]
+      )
+    )
+  )
+  (fc2): TensorizedLinear(
+    in_features=512, out_features=10, bias=True
+    (tensor): TensorTrain(
+      (trainable_variables): ParameterList(
+          (0): Parameter containing: [torch.cuda.FloatTensor of size 1x32x20 (GPU 0)]
+          (1): Parameter containing: [torch.cuda.FloatTensor of size 20x16x20 (GPU 0)]
+          (2): Parameter containing: [torch.cuda.FloatTensor of size 20x10x1 (GPU 0)]
+          (3): Parameter containing: [torch.cuda.FloatTensor of size 1x32x20 (GPU 0)]
+          (4): Parameter containing: [torch.cuda.FloatTensor of size 20x16x20 (GPU 0)]
+          (5): Parameter containing: [torch.cuda.FloatTensor of size 20x10x1 (GPU 0)]
+          (6): Parameter containing: [torch.cuda.FloatTensor of size 20 (GPU 0)]
+          (7): Parameter containing: [torch.cuda.FloatTensor of size 20 (GPU 0)]
+      )
+    )
+  )
+  (relu): ReLU()
+)
+Train Epoch: 1 [0/60000 (0%)]	Loss: 4.100849
+Epoch time 12.39
+
+Test set: Average loss: 0.2086, Accuracy: 9372/10000 (94%)
+
+******Tensor Ranks*******
+[20, 20, 20]
+[20, 20]
+******Param Savings*******
+(0, 382608) (0, -2120)
+Savings 380488 ratio 15.324523755741284
+******End epoch stats*******
+Train Epoch: 2 [0/60000 (0%)]	Loss: 0.219754
+Epoch time 11.01
+
+Test set: Average loss: 0.1481, Accuracy: 9545/10000 (95%)
+
+******Tensor Ranks*******
+[20, 20, 20]
+[20, 20]
+******Param Savings*******
+(0, 382608) (0, -2120)
+Savings 380488 ratio 15.324523755741284
+******End epoch stats*******
+Train Epoch: 3 [0/60000 (0%)]	Loss: 0.306363
+Epoch time 11.30
+
+Test set: Average loss: 0.1272, Accuracy: 9602/10000 (96%)
+
+******Tensor Ranks*******
+[20, 20, 20]
+[20, 20]
+******Param Savings*******
+(0, 382608) (0, -2120)
+Savings 380488 ratio 15.324523755741284
+******End epoch stats*******
