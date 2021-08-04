@@ -82,7 +82,7 @@ def main():
     for epoch in range(1, args.epochs + 1):
         t = time.time()
         train(args, model, device, train_loader, optimizer, epoch)
-        print("Epoch time {:.2f}".format(time.time()-t))
+        print("Epoch train time {:.2f}".format(time.time()-t))
         test(model, device, test_loader)
 
 
