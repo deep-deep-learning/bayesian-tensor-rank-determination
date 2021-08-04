@@ -2,19 +2,12 @@
 
 ## Setup
 
-The DLRM example has a separate requirements file, with installation instructions in the `dlrm` directory. The MNIST and NLP examples have fewer requirements, which can be installed using
-```
-conda env update -f requirements.yml
+Each example has a separate requirements file to avoid unnecessary extra install for the smaller problems (MNIST,NLP).
 
-```
-This will create the `tensor_layers` conda environment.
+The directories `mnist` `nlp` and `dlrm` contain MAP implementations (no sampling for variational inference) of the examples in our
 
-To install the tensorized embedding package from the root directory using pip:
-```
-cd torch_bayesian_tensor_layers
-pip install -e .
-```
-This should set up the tensorized layers package. The tensorized embedding package does not compute the full embedding, but instead only selects the necessary tensor slices. This lookup can be further optimized by avoiding redundant computations. The tensorized forward propagation for the MLP often reforms the full tensor, which is suboptimal.
+This implementation differs slightly from the results described in [our paper on Bayesian tensor rank determination for neural networks](https://arxiv.org/abs/2010.08689 in which many posterior samples are drawn. However the results are very similar.
+
 
 
 
