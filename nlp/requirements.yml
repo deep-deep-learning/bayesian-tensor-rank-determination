@@ -99,4 +99,3 @@ dependencies:
     - scipy==1.7.0
     - tensorly==0.6.0
     - torchtext==0.10.0
-prefix: /home/cole/anaconda3/envs/tensor_layers
