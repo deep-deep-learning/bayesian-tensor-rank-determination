@@ -9,7 +9,10 @@ from torch.nn.init import xavier_uniform, xavier_normal, orthogonal
 
 class SubNet(nn.Module):
     '''
+    From https://github.com/Justin1904/Low-rank-Multimodal-Fusion/blob/master/model.py
+    
     The subnetwork that is used in TFN for video and audio in the pre-fusion stage
+    
     '''
 
     def __init__(self, in_size, hidden_size, dropout):
@@ -44,6 +47,8 @@ class SubNet(nn.Module):
 
 class TextSubNet(nn.Module):
     '''
+    From https://github.com/Justin1904/Low-rank-Multimodal-Fusion/blob/master/model.py
+    
     The LSTM-based subnetwork that is used in TFN for text
     '''
 
@@ -76,6 +81,8 @@ class TextSubNet(nn.Module):
 
 class TFN(nn.Module):
     '''
+    From https://github.com/Justin1904/TensorFusionNetworks/blob/master/model.py
+    
     Implements the Tensor Fusion Networks for multimodal sentiment analysis as is described in:
     Zadeh, Amir, et al. "Tensor fusion network for multimodal sentiment analysis." EMNLP 2017 Oral.
     '''
@@ -165,4 +172,101 @@ class TFN(nn.Module):
         post_fusion_y_3 = F.sigmoid(self.post_fusion_layer_3(post_fusion_y_2))
         output = post_fusion_y_3 * self.output_range + self.output_shift
 
+        return output
+    
+class LMF(nn.Module):
+    '''
+    From https://github.com/Justin1904/Low-rank-Multimodal-Fusion/blob/master/model.py
+    
+    Low-rank Multimodal Fusion
+    '''
+
+    def __init__(self, input_dims, hidden_dims, text_out, dropouts, output_dim, rank, use_softmax=False):
+        '''
+        Args:
+            input_dims - a length-3 tuple, contains (audio_dim, video_dim, text_dim)
+            hidden_dims - another length-3 tuple, hidden dims of the sub-networks
+            text_out - int, specifying the resulting dimensions of the text subnetwork
+            dropouts - a length-4 tuple, contains (audio_dropout, video_dropout, text_dropout, post_fusion_dropout)
+            output_dim - int, specifying the size of output
+            rank - int, specifying the size of rank in LMF
+        Output:
+            (return value in forward) a scalar value between -3 and 3
+        '''
+        super(LMF, self).__init__()
+
+        # dimensions are specified in the order of audio, video and text
+        self.audio_in = input_dims[0]
+        self.video_in = input_dims[1]
+        self.text_in = input_dims[2]
+
+        self.audio_hidden = hidden_dims[0]
+        self.video_hidden = hidden_dims[1]
+        self.text_hidden = hidden_dims[2]
+        self.text_out= text_out
+        self.output_dim = output_dim
+        self.rank = rank
+        self.use_softmax = use_softmax
+
+        self.audio_prob = dropouts[0]
+        self.video_prob = dropouts[1]
+        self.text_prob = dropouts[2]
+        self.post_fusion_prob = dropouts[3]
+
+        # define the pre-fusion subnetworks
+        self.audio_subnet = SubNet(self.audio_in, self.audio_hidden, self.audio_prob)
+        self.video_subnet = SubNet(self.video_in, self.video_hidden, self.video_prob)
+        self.text_subnet = TextSubNet(self.text_in, self.text_hidden, self.text_out, dropout=self.text_prob)
+
+        # define the post_fusion layers
+        self.post_fusion_dropout = nn.Dropout(p=self.post_fusion_prob)
+        # self.post_fusion_layer_1 = nn.Linear((self.text_out + 1) * (self.video_hidden + 1) * (self.audio_hidden + 1), self.post_fusion_dim)
+        self.audio_factor = Parameter(torch.Tensor(self.rank, self.audio_hidden + 1, self.output_dim))
+        self.video_factor = Parameter(torch.Tensor(self.rank, self.video_hidden + 1, self.output_dim))
+        self.text_factor = Parameter(torch.Tensor(self.rank, self.text_out + 1, self.output_dim))
+        self.fusion_weights = Parameter(torch.Tensor(1, self.rank))
+        self.fusion_bias = Parameter(torch.Tensor(1, self.output_dim))
+
+        # init teh factors
+        xavier_normal(self.audio_factor)
+        xavier_normal(self.video_factor)
+        xavier_normal(self.text_factor)
+        xavier_normal(self.fusion_weights)
+        self.fusion_bias.data.fill_(0)
+
+    def forward(self, audio_x, video_x, text_x):
+        '''
+        Args:
+            audio_x: tensor of shape (batch_size, audio_in)
+            video_x: tensor of shape (batch_size, video_in)
+            text_x: tensor of shape (batch_size, sequence_len, text_in)
+        '''
+        audio_h = self.audio_subnet(audio_x)
+        video_h = self.video_subnet(video_x)
+        text_h = self.text_subnet(text_x)
+        batch_size = audio_h.data.shape[0]
+
+        # next we perform low-rank multimodal fusion
+        # here is a more efficient implementation than the one the paper describes
+        # basically swapping the order of summation and elementwise product
+        if audio_h.is_cuda:
+            DTYPE = torch.cuda.FloatTensor
+        else:
+            DTYPE = torch.FloatTensor
+
+        _audio_h = torch.cat((Variable(torch.ones(batch_size, 1).type(DTYPE), requires_grad=False), audio_h), dim=1)
+        _video_h = torch.cat((Variable(torch.ones(batch_size, 1).type(DTYPE), requires_grad=False), video_h), dim=1)
+        _text_h = torch.cat((Variable(torch.ones(batch_size, 1).type(DTYPE), requires_grad=False), text_h), dim=1)
+
+        fusion_audio = torch.matmul(_audio_h, self.audio_factor)
+        fusion_video = torch.matmul(_video_h, self.video_factor)
+        fusion_text = torch.matmul(_text_h, self.text_factor)
+        fusion_zy = fusion_audio * fusion_video * fusion_text
+
+        # output = torch.sum(fusion_zy, dim=0).squeeze()
+        # use linear transformation instead of simple summation, more flexibility
+        output = torch.matmul(self.fusion_weights, fusion_zy.permute(1, 0, 2)).squeeze() + self.fusion_bias
+        output = output.view(-1, self.output_dim)
+        if self.use_softmax:
+            output = F.softmax(output)
         return output
