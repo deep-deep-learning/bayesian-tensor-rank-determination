@@ -5,7 +5,110 @@ import torch.nn.functional as F
 from torch.autograd import Variable
 from torch.nn.parameter import Parameter
 from torch.nn.init import xavier_uniform, xavier_normal, orthogonal
+from torch.distributions.half_cauchy import HalfCauchy
+from torch.distributions.normal import Normal
 
+
+class AdaptiveRankFusionLayer(nn.Module):
+
+    def __init__(self, input_sizes, output_size, max_rank=10, eta=0.01):
+        '''
+        args:
+            input_sizes: a tuple of ints, (input_size_1, input_size_2, ..., input_size_M)
+            output_sizes: an int, output size of the fusion layer
+            dropout: a float, dropout probablity after fusion
+            max_rank: an int, maximum rank for the CP decomposition
+            eta: a float, hyperparameter for rank parameter distribution
+        '''
+        super(AdaptiveRankFusionLayer, self).__init__()
+
+        self.input_sizes = input_sizes
+        self.output_size = output_size
+        self.max_rank = max_rank
+        self.eta = eta
+
+        # CP decomposition factors for the weight tensor
+        self.factors = nn.ParameterList([nn.init.xavier_normal_(nn.Parameter(torch.empty(s, max_rank))) 
+                                        for s in input_sizes+(output_size,)])
+        # rank parameter and its distribution for adaptive rank
+        self.rank_param = nn.Parameter(torch.rand((max_rank,)))
+        self.rank_param_dist = HalfCauchy(eta)
+
+    def forward(self, inputs):
+        '''
+        args:
+            inputs: a list of vectors, (input_1, input_2, ..., input_M)
+        return:
+            y = [(input_1 @ factor_1) (input_2 @ factor_2) ... (input_M @ factor_M)] @ factor_{M+1}.T
+        '''
+
+        y = 1.0
+        for i, x in enumerate(inputs):
+            y = y * (x @ self.factors[i])
+        y = y @ self.factors[-1].T
+
+        return y
+
+    def get_log_prior(self):
+        '''
+        return:
+            log_prior = log[HalfCauchy(rank_param | eta)] + log[Normal(factor_1 | 0, rank_param)]
+                    + log[Normal(factor_2 | 0, rank_param)] + ... + log[Normal(factor_{M+1} | 0, rank_param)]
+        '''
+        # clamp rank_param because <=0 is undefined 
+        clamped_rank_param = self.rank_param.clamp(0.01)
+        log_prior = torch.sum(self.rank_param_dist.log_prob(clamped_rank_param))
+
+        # 0 mean normal distribution for the factors
+        factor_dist = Normal(0, clamped_rank_param)
+        for factor in self.factors:
+            log_prior = log_prior + torch.sum(factor_dist.log_prob(factor))
+        
+        return log_prior
+
+
+class AdaptiveRankFusion(nn.Module):
+
+    def __init__(self, input_sizes, hidden_sizes, dropouts, output_size, max_rank=10, eta=0.01):
+        '''
+        args:
+            input_sizes: a tuple of ints, (audio_in, video_in, ... text_in)
+            hidden_sizes: a tuple of ints, (audio_hidden, video_hidden, ... text_hidden)
+            dropouts: a tuple of floats, (dropout_1, dropout_2, ..., dropout_M, post_fusion_dropout)
+            output_size: an int, output size for fusion layer
+            max_rank: an int, maximum rank for the CP decomposition
+        '''
+        super(AdaptiveRankFusion, self).__init__()
+        
+        # define the pre-fusion subnetworks
+        self.audio_subnet = SubNet(input_sizes[0], hidden_sizes[0], dropouts[0])
+        self.video_subnet = SubNet(input_sizes[1], hidden_sizes[1], dropouts[1])
+        self.text_subnet = TextSubNet(input_sizes[2], hidden_sizes[2], hidden_sizes[2]//2, dropout=dropouts[2])
+        
+        fusion_input_sizes = (hidden_sizes[0]+1, hidden_sizes[1]+1, hidden_sizes[2]//2+1)
+        # define fusion layer
+        self.fusion_layer = AdaptiveRankFusionLayer(input_sizes=fusion_input_sizes,
+                                                    output_size=output_size,
+                                                    max_rank=max_rank,
+                                                    eta=eta)
+        self.post_fusion_dropout = nn.Dropout(dropouts[-1])
+
+    def forward(self, audio_x, video_x, text_x):
+
+        audio_h = self.audio_subnet(audio_x)
+        video_h = self.video_subnet(video_x)
+        text_h = self.text_subnet(text_x)
+
+        batch_size = audio_h.shape[0]
+
+        audio_h = torch.cat((audio_h, torch.ones((batch_size, 1))), dim=1)
+        video_h = torch.cat((video_h, torch.ones((batch_size, 1))), dim=1)
+        text_h = torch.cat((text_h, torch.ones((batch_size, 1))), dim=1)
+
+        output = self.fusion_layer([audio_h, video_h, text_h])
+        output = self.post_fusion_dropout(output)
+        
+        return output
 
 class SubNet(nn.Module):
     '''

@@ -1,8 +1,69 @@
 import torch
 import torch.nn as nn
+from torch.distributions.half_cauchy import HalfCauchy
+from torch.distributions.normal import Normal
 
-import numpy as np
 
+class AdaptiveRankFusionLayer(nn.Module):
+
+    def __init__(self, input_sizes, output_size, dropout=0.0, max_rank=10, eta=0.01):
+        '''
+        args:
+            input_sizes: a tuple of ints, (input_size_1, input_size_2, ..., input_size_M)
+            output_sizes: an int, output size of the fusion layer
+            dropout: a float, dropout probablity after fusion
+            max_rank: an int, maximum rank for the CP decomposition
+            eta: a float, hyperparameter for rank parameter distribution
+        '''
+        super(AdaptiveRankFusionLayer, self).__init__()
+
+        self.input_sizes = input_sizes
+        self.output_size = output_size
+        self.dropout = dropout
+        self.max_rank = max_rank
+        self.eta = eta
+
+        # CP decomposition factors for the weight tensor
+        self.factors = nn.ParameterList([nn.init.xavier_normal_(nn.Parameter(torch.empty(s, max_rank))) 
+                                        for s in input_sizes+(output_size,)])
+        # rank parameter and its distribution for adaptive rank
+        self.rank_param = nn.Parameter(torch.rand((max_rank,)))
+        self.rank_param_dist = HalfCauchy(eta)
+
+    def forward(self, inputs):
+        '''
+        args:
+            inputs: a list of vectors, (input_1, input_2, ..., input_M)
+        return:
+            y = [(input_1 @ factor_1) (input_2 @ factor_2) ... (input_M @ factor_M)] @ factor_{M+1}.T
+        '''
+
+        y = 1.0
+        for i, x in enumerate(inputs):
+            y = y * (x @ self.factors[i])
+        y = y @ self.factors[-1].T
+
+        return y
+
+    def get_log_prior(self):
+        '''
+        return:
+            log_prior = log[HalfCauchy(rank_param | eta)] + log[Normal(factor_1 | 0, rank_param)]
+                    + log[Normal(factor_2 | 0, rank_param)] + ... + log[Normal(factor_{M+1} | 0, rank_param)]
+        '''
+        # clamp rank_param because <=0 is undefined 
+        clamped_rank_param = self.rank_param.clamp(0.01)
+        log_prior = torch.sum(self.rank_param_dist.log_prob(clamped_rank_param))
+
+        # 0 mean normal distribution for the factors
+        factor_dist = Normal(0, clamped_rank_param)
+        for factor in self.factors:
+            log_prior = log_prior + torch.sum(factor_dist.log_prob(factor))
+        
+        return log_prior
+
+
+'''
 from tensor_layers import low_rank_tensors
 
 class Adaptive_Rank_CP_Linear(nn.Module):
@@ -66,3 +127,4 @@ class Fixed_Rank_CP_Linear(nn.Module):
         nn.init.xavier_normal_(factors[-1])
             
         return nn.ParameterList(factors)
+'''
