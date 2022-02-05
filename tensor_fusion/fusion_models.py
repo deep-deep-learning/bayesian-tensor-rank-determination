@@ -1,70 +1,11 @@
-from __future__ import print_function
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from torch.autograd import Variable
 from torch.nn.parameter import Parameter
-from torch.nn.init import xavier_uniform, xavier_normal, orthogonal
-from torch.distributions.half_cauchy import HalfCauchy
-from torch.distributions.normal import Normal
-
-
-class AdaptiveRankFusionLayer(nn.Module):
-
-    def __init__(self, input_sizes, output_size, max_rank=10, eta=0.01):
-        '''
-        args:
-            input_sizes: a tuple of ints, (input_size_1, input_size_2, ..., input_size_M)
-            output_sizes: an int, output size of the fusion layer
-            dropout: a float, dropout probablity after fusion
-            max_rank: an int, maximum rank for the CP decomposition
-            eta: a float, hyperparameter for rank parameter distribution
-        '''
-        super(AdaptiveRankFusionLayer, self).__init__()
-
-        self.input_sizes = input_sizes
-        self.output_size = output_size
-        self.max_rank = max_rank
-        self.eta = eta
-
-        # CP decomposition factors for the weight tensor
-        self.factors = nn.ParameterList([nn.init.xavier_normal_(nn.Parameter(torch.empty(s, max_rank))) 
-                                        for s in input_sizes+(output_size,)])
-        # rank parameter and its distribution for adaptive rank
-        self.rank_param = nn.Parameter(torch.rand((max_rank,)))
-        self.rank_param_dist = HalfCauchy(eta)
-
-    def forward(self, inputs):
-        '''
-        args:
-            inputs: a list of vectors, (input_1, input_2, ..., input_M)
-        return:
-            y = [(input_1 @ factor_1) (input_2 @ factor_2) ... (input_M @ factor_M)] @ factor_{M+1}.T
-        '''
-
-        y = 1.0
-        for i, x in enumerate(inputs):
-            y = y * (x @ self.factors[i])
-        y = y @ self.factors[-1].T
-
-        return y
-
-    def get_log_prior(self):
-        '''
-        return:
-            log_prior = log[HalfCauchy(rank_param | eta)] + log[Normal(factor_1 | 0, rank_param)]
-                    + log[Normal(factor_2 | 0, rank_param)] + ... + log[Normal(factor_{M+1} | 0, rank_param)]
-        '''
-        # clamp rank_param because <=0 is undefined 
-        clamped_rank_param = self.rank_param.clamp(0.01)
-        log_prior = torch.sum(self.rank_param_dist.log_prob(clamped_rank_param))
-
-        # 0 mean normal distribution for the factors
-        factor_dist = Normal(0, clamped_rank_param)
-        for factor in self.factors:
-            log_prior = log_prior + torch.sum(factor_dist.log_prob(factor))
-        
-        return log_prior
+from torch.nn.init import xavier_normal
+from fusion_layers import AdaptiveRankFusionLayer
+from models import SubNet, TextSubNet
 
 
 class AdaptiveRankFusion(nn.Module):
@@ -109,78 +50,6 @@ class AdaptiveRankFusion(nn.Module):
         output = self.post_fusion_dropout(output)
         
         return output
-
-class SubNet(nn.Module):
-    '''
-    From https://github.com/Justin1904/Low-rank-Multimodal-Fusion/blob/master/model.py
-    
-    The subnetwork that is used in TFN for video and audio in the pre-fusion stage
-    
-    '''
-
-    def __init__(self, in_size, hidden_size, dropout):
-        '''
-        Args:
-            in_size: input dimension
-            hidden_size: hidden layer dimension
-            dropout: dropout probability
-        Output:
-            (return value in forward) a tensor of shape (batch_size, hidden_size)
-        '''
-        super(SubNet, self).__init__()
-        self.norm = nn.BatchNorm1d(in_size)
-        self.drop = nn.Dropout(p=dropout)
-        self.linear_1 = nn.Linear(in_size, hidden_size)
-        self.linear_2 = nn.Linear(hidden_size, hidden_size)
-        self.linear_3 = nn.Linear(hidden_size, hidden_size)
-
-    def forward(self, x):
-        '''
-        Args:
-            x: tensor of shape (batch_size, in_size)
-        '''
-        normed = self.norm(x)
-        dropped = self.drop(normed)
-        y_1 = F.relu(self.linear_1(dropped))
-        y_2 = F.relu(self.linear_2(y_1))
-        y_3 = F.relu(self.linear_3(y_2))
-
-        return y_3
-
-
-class TextSubNet(nn.Module):
-    '''
-    From https://github.com/Justin1904/Low-rank-Multimodal-Fusion/blob/master/model.py
-    
-    The LSTM-based subnetwork that is used in TFN for text
-    '''
-
-    def __init__(self, in_size, hidden_size, out_size, num_layers=1, dropout=0.2, bidirectional=False):
-        '''
-        Args:
-            in_size: input dimension
-            hidden_size: hidden layer dimension
-            num_layers: specify the number of layers of LSTMs.
-            dropout: dropout probability
-            bidirectional: specify usage of bidirectional LSTM
-        Output:
-            (return value in forward) a tensor of shape (batch_size, out_size)
-        '''
-        super(TextSubNet, self).__init__()
-        self.rnn = nn.LSTM(in_size, hidden_size, num_layers=num_layers, dropout=dropout, bidirectional=bidirectional, batch_first=True)
-        self.dropout = nn.Dropout(dropout)
-        self.linear_1 = nn.Linear(hidden_size, out_size)
-
-    def forward(self, x):
-        '''
-        Args:
-            x: tensor of shape (batch_size, sequence_len, in_size)
-        '''
-        _, final_states = self.rnn(x)
-        h = self.dropout(final_states[0].squeeze())
-        y_1 = self.linear_1(h)
-        return y_1
-
 
 class TFN(nn.Module):
     '''
