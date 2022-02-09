@@ -10,7 +10,7 @@ class SubNet(nn.Module):
     
     '''
 
-    def __init__(self, in_size, hidden_size, dropout):
+    def __init__(self, in_size, hidden_size, dropout, device=None, dtype=None):
         '''
         Args:
             in_size: input dimension
@@ -20,11 +20,11 @@ class SubNet(nn.Module):
             (return value in forward) a tensor of shape (batch_size, hidden_size)
         '''
         super(SubNet, self).__init__()
-        self.norm = nn.BatchNorm1d(in_size)
+        self.norm = nn.BatchNorm1d(in_size, device=device, dtype=dtype)
         self.drop = nn.Dropout(p=dropout)
-        self.linear_1 = nn.Linear(in_size, hidden_size)
-        self.linear_2 = nn.Linear(hidden_size, hidden_size)
-        self.linear_3 = nn.Linear(hidden_size, hidden_size)
+        self.linear_1 = nn.Linear(in_size, hidden_size, device=device, dtype=dtype)
+        self.linear_2 = nn.Linear(hidden_size, hidden_size, device=device, dtype=dtype)
+        self.linear_3 = nn.Linear(hidden_size, hidden_size, device=device, dtype=dtype)
 
     def forward(self, x):
         '''
@@ -47,7 +47,7 @@ class TextSubNet(nn.Module):
     The LSTM-based subnetwork that is used in TFN for text
     '''
 
-    def __init__(self, in_size, hidden_size, out_size, num_layers=1, dropout=0.2, bidirectional=False):
+    def __init__(self, in_size, hidden_size, out_size, num_layers=1, dropout=0.2, bidirectional=False, device=None, dtype=None):
         '''
         Args:
             in_size: input dimension
@@ -59,9 +59,9 @@ class TextSubNet(nn.Module):
             (return value in forward) a tensor of shape (batch_size, out_size)
         '''
         super(TextSubNet, self).__init__()
-        self.rnn = nn.LSTM(in_size, hidden_size, num_layers=num_layers, dropout=dropout, bidirectional=bidirectional, batch_first=True)
+        self.rnn = nn.LSTM(in_size, hidden_size, num_layers=num_layers, dropout=dropout, bidirectional=bidirectional, batch_first=True, device=device, dtype=dtype)
         self.dropout = nn.Dropout(dropout)
-        self.linear_1 = nn.Linear(hidden_size, out_size)
+        self.linear_1 = nn.Linear(hidden_size, out_size, device=device, dtype=dtype)
 
     def forward(self, x):
         '''

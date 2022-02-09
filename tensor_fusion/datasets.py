@@ -53,7 +53,7 @@ class BinaryMultimodalDataset(Dataset):
         self.text = text
         self.audio = audio
         self.vision = vision
-        self.labels = (labels > 0).type(torch.float32)
+        self.labels = (labels > 0).type(labels.dtype)
 
     def __len__(self):
         return len(self.labels)
@@ -61,7 +61,6 @@ class BinaryMultimodalDataset(Dataset):
     def __getitem__(self, idx):
         '''
         Returns an individual data composed of (text, audio, vision, label)
-
         Returns:
             text: text modality feature of shape (seq. length, text_input_size)
             audio: audio modality feature of shape (audio_input_size)
@@ -74,7 +73,7 @@ class BinaryMultimodalDataset(Dataset):
         label = self.labels[idx]
         return text, audio, vision, label
 
-def get_cmu_mosi_dataset(binary=False, path='../../datasets/cmu-mosi/mosi_20_seq_data.pkl'):
+def get_cmu_mosi_dataset(binary=False, path='../../datasets/cmu-mosi/mosi_20_seq_data.pkl', device=None, dtype=None):
     
     file = open(path, 'rb')
     data = pickle.load(file)
@@ -85,32 +84,31 @@ def get_cmu_mosi_dataset(binary=False, path='../../datasets/cmu-mosi/mosi_20_seq
 
     # labels: (batch_size, 1)
     
-    text = torch.tensor(data['train']['text'], dtype=torch.float32)
-    audio = torch.tensor(data['train']['audio'], dtype=torch.float32).mean(dim=1)
-    vision = torch.tensor(data['train']['vision'], dtype=torch.float32).mean(dim=1)
-    labels = torch.tensor(data['train']['labels'], dtype=torch.float32).squeeze(1)
+    text = torch.tensor(data['train']['text'], device=device, dtype=dtype)
+    audio = torch.tensor(data['train']['audio'], device=device, dtype=dtype).mean(dim=1)
+    vision = torch.tensor(data['train']['vision'], device=device, dtype=dtype).mean(dim=1)
+    labels = torch.tensor(data['train']['labels'], device=device, dtype=dtype).squeeze(1)
     if binary:
         train_set = BinaryMultimodalDataset(text, audio, vision, labels)
     else:
         train_set = MultimodalDataset(text, audio, vision, labels)
 
-    text = torch.tensor(data['valid']['text'], dtype=torch.float32)
-    audio = torch.tensor(data['valid']['audio'], dtype=torch.float32).mean(dim=1)
-    vision = torch.tensor(data['valid']['vision'], dtype=torch.float32).mean(dim=1)
-    labels = torch.tensor(data['valid']['labels'], dtype=torch.float32).squeeze(1)
+    text = torch.tensor(data['valid']['text'], device=device, dtype=dtype)
+    audio = torch.tensor(data['valid']['audio'], device=device, dtype=dtype).mean(dim=1)
+    vision = torch.tensor(data['valid']['vision'], device=device, dtype=dtype).mean(dim=1)
+    labels = torch.tensor(data['valid']['labels'], device=device, dtype=dtype).squeeze(1)
     if binary:
         valid_set = BinaryMultimodalDataset(text, audio, vision, labels)
     else:    
         valid_set = MultimodalDataset(text, audio, vision, labels)
     
-    text = torch.tensor(data['test']['text'], dtype=torch.float32)
-    audio = torch.tensor(data['test']['audio'], dtype=torch.float32).mean(dim=1)
-    vision = torch.tensor(data['test']['vision'], dtype=torch.float32).mean(dim=1)
-    labels = torch.tensor(data['test']['labels'], dtype=torch.float32).squeeze(1)
+    text = torch.tensor(data['test']['text'], device=device, dtype=dtype)
+    audio = torch.tensor(data['test']['audio'], device=device, dtype=dtype).mean(dim=1)
+    vision = torch.tensor(data['test']['vision'], device=device, dtype=dtype).mean(dim=1)
+    labels = torch.tensor(data['test']['labels'], device=device, dtype=dtype).squeeze(1)
     if binary:
         test_set = BinaryMultimodalDataset(text, audio, vision, labels)
     else:
         test_set = MultimodalDataset(text, audio, vision, labels)
 
     return train_set, valid_set, test_set
-

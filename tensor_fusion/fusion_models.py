@@ -10,7 +10,9 @@ from models import SubNet, TextSubNet
 
 class AdaptiveRankFusion(nn.Module):
 
-    def __init__(self, input_sizes, hidden_sizes, dropouts, output_size, max_rank=10, eta=0.01):
+    def __init__(self, input_sizes, hidden_sizes, dropouts, output_size, max_rank=10, 
+                 prior_type='half_cauchy', eta=None,
+                 device=None, dtype=None):
         '''
         args:
             input_sizes: a tuple of ints, (audio_in, video_in, ... text_in)
@@ -22,16 +24,20 @@ class AdaptiveRankFusion(nn.Module):
         super(AdaptiveRankFusion, self).__init__()
         
         # define the pre-fusion subnetworks
-        self.audio_subnet = SubNet(input_sizes[0], hidden_sizes[0], dropouts[0])
-        self.video_subnet = SubNet(input_sizes[1], hidden_sizes[1], dropouts[1])
-        self.text_subnet = TextSubNet(input_sizes[2], hidden_sizes[2], hidden_sizes[2]//2, dropout=dropouts[2])
+        self.audio_subnet = SubNet(input_sizes[0], hidden_sizes[0], dropouts[0], device=device, dtype=dtype)
+        self.video_subnet = SubNet(input_sizes[1], hidden_sizes[1], dropouts[1], device=device, dtype=dtype)
+        self.text_subnet = TextSubNet(input_sizes[2], hidden_sizes[2], hidden_sizes[2]//2, dropout=dropouts[2], device=device, dtype=dtype)
         
         fusion_input_sizes = (hidden_sizes[0]+1, hidden_sizes[1]+1, hidden_sizes[2]//2+1)
         # define fusion layer
         self.fusion_layer = AdaptiveRankFusionLayer(input_sizes=fusion_input_sizes,
                                                     output_size=output_size,
                                                     max_rank=max_rank,
-                                                    eta=eta)
+                                                    prior_type=prior_type,
+                                                    eta=eta,
+                                                    device=device,
+                                                    dtype=dtype)
+
         self.post_fusion_dropout = nn.Dropout(dropouts[-1])
 
     def forward(self, audio_x, video_x, text_x):
@@ -41,10 +47,12 @@ class AdaptiveRankFusion(nn.Module):
         text_h = self.text_subnet(text_x)
 
         batch_size = audio_h.shape[0]
+        device = audio_h.device
+        dtype = audio_h.dtype
 
-        audio_h = torch.cat((audio_h, torch.ones((batch_size, 1))), dim=1)
-        video_h = torch.cat((video_h, torch.ones((batch_size, 1))), dim=1)
-        text_h = torch.cat((text_h, torch.ones((batch_size, 1))), dim=1)
+        audio_h = torch.cat((audio_h, torch.ones((batch_size, 1), device=device, dtype=dtype)), dim=1)
+        video_h = torch.cat((video_h, torch.ones((batch_size, 1), device=device, dtype=dtype)), dim=1)
+        text_h = torch.cat((text_h, torch.ones((batch_size, 1), device=device, dtype=dtype)), dim=1)
 
         output = self.fusion_layer([audio_h, video_h, text_h])
         output = self.post_fusion_dropout(output)
@@ -59,7 +67,7 @@ class TFN(nn.Module):
     Zadeh, Amir, et al. "Tensor fusion network for multimodal sentiment analysis." EMNLP 2017 Oral.
     '''
 
-    def __init__(self, input_dims, hidden_dims, text_out, dropouts, post_fusion_dim):
+    def __init__(self, input_dims, hidden_dims, text_out, dropouts, post_fusion_dim, device=None, dtype=None):
         '''
         Args:
             input_dims - a length-3 tuple, contains (audio_dim, video_dim, text_dim)
@@ -89,20 +97,22 @@ class TFN(nn.Module):
         self.post_fusion_prob = dropouts[3]
 
         # define the pre-fusion subnetworks
-        self.audio_subnet = SubNet(self.audio_in, self.audio_hidden, self.audio_prob)
-        self.video_subnet = SubNet(self.video_in, self.video_hidden, self.video_prob)
-        self.text_subnet = TextSubNet(self.text_in, self.text_hidden, self.text_out, dropout=self.text_prob)
+        self.audio_subnet = SubNet(self.audio_in, self.audio_hidden, self.audio_prob, device=device, dtype=dtype)
+        self.video_subnet = SubNet(self.video_in, self.video_hidden, self.video_prob, device=device, dtype=dtype)
+        self.text_subnet = TextSubNet(self.text_in, self.text_hidden, self.text_out, dropout=self.text_prob, device=device, dtype=dtype)
 
         # define the post_fusion layers
         self.post_fusion_dropout = nn.Dropout(p=self.post_fusion_prob)
-        self.post_fusion_layer_1 = nn.Linear((self.text_out + 1) * (self.video_hidden + 1) * (self.audio_hidden + 1), self.post_fusion_dim)
-        self.post_fusion_layer_2 = nn.Linear(self.post_fusion_dim, self.post_fusion_dim)
-        self.post_fusion_layer_3 = nn.Linear(self.post_fusion_dim, 1)
+        self.post_fusion_layer_1 = nn.Linear((self.text_out + 1) * (self.video_hidden + 1) * (self.audio_hidden + 1), self.post_fusion_dim, device=device, dtype=dtype)
+        self.post_fusion_layer_2 = nn.Linear(self.post_fusion_dim, self.post_fusion_dim, device=device, dtype=dtype)
+        self.post_fusion_layer_3 = nn.Linear(self.post_fusion_dim, 1, device=device, dtype=dtype)
 
         # in TFN we are doing a regression with constrained output range: (-3, 3), hence we'll apply sigmoid to output
         # shrink it to (0, 1), and scale\shift it back to range (-3, 3)
-        self.output_range = Parameter(torch.FloatTensor([6]), requires_grad=False)
-        self.output_shift = Parameter(torch.FloatTensor([-3]), requires_grad=False)
+        #self.output_range = Parameter(torch.FloatTensor([6]), requires_grad=False, device=device, dtype=dtype)
+        #self.output_shift = Parameter(torch.FloatTensor([-3]), requires_grad=False, device=device, dtype=dtype)
+        self.output_range = Parameter(torch.tensor([6], device=device, dtype=dtype), requires_grad=False)
+        self.output_shift = Parameter(torch.tensor([-3], device=device, dtype=dtype), requires_grad=False)
 
     def forward(self, audio_x, video_x, text_x):
         '''
@@ -153,7 +163,7 @@ class LMF(nn.Module):
     Low-rank Multimodal Fusion
     '''
 
-    def __init__(self, input_dims, hidden_dims, text_out, dropouts, output_dim, rank, use_softmax=False):
+    def __init__(self, input_dims, hidden_dims, text_out, dropouts, output_dim, rank, use_softmax=False, device=None, dtype=None):
         '''
         Args:
             input_dims - a length-3 tuple, contains (audio_dim, video_dim, text_dim)
@@ -186,18 +196,18 @@ class LMF(nn.Module):
         self.post_fusion_prob = dropouts[3]
 
         # define the pre-fusion subnetworks
-        self.audio_subnet = SubNet(self.audio_in, self.audio_hidden, self.audio_prob)
-        self.video_subnet = SubNet(self.video_in, self.video_hidden, self.video_prob)
-        self.text_subnet = TextSubNet(self.text_in, self.text_hidden, self.text_out, dropout=self.text_prob)
+        self.audio_subnet = SubNet(self.audio_in, self.audio_hidden, self.audio_prob, device=device, dtype=dtype)
+        self.video_subnet = SubNet(self.video_in, self.video_hidden, self.video_prob, device=device, dtype=dtype)
+        self.text_subnet = TextSubNet(self.text_in, self.text_hidden, self.text_out, dropout=self.text_prob, device=device, dtype=dtype)
 
         # define the post_fusion layers
         self.post_fusion_dropout = nn.Dropout(p=self.post_fusion_prob)
         # self.post_fusion_layer_1 = nn.Linear((self.text_out + 1) * (self.video_hidden + 1) * (self.audio_hidden + 1), self.post_fusion_dim)
-        self.audio_factor = Parameter(torch.Tensor(self.rank, self.audio_hidden + 1, self.output_dim))
-        self.video_factor = Parameter(torch.Tensor(self.rank, self.video_hidden + 1, self.output_dim))
-        self.text_factor = Parameter(torch.Tensor(self.rank, self.text_out + 1, self.output_dim))
-        self.fusion_weights = Parameter(torch.Tensor(1, self.rank))
-        self.fusion_bias = Parameter(torch.Tensor(1, self.output_dim))
+        self.audio_factor = Parameter(torch.empty((self.rank, self.audio_hidden + 1, self.output_dim), device=device, dtype=dtype))
+        self.video_factor = Parameter(torch.empty((self.rank, self.video_hidden + 1, self.output_dim), device=device, dtype=dtype))
+        self.text_factor = Parameter(torch.empty((self.rank, self.text_out + 1, self.output_dim), device=device, dtype=dtype))
+        self.fusion_weights = Parameter(torch.empty((1, self.rank), device=device, dtype=dtype))
+        self.fusion_bias = Parameter(torch.empty((1, self.output_dim), device=device, dtype=dtype))
 
         # init teh factors
         xavier_normal(self.audio_factor)
