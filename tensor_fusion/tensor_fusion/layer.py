@@ -15,8 +15,7 @@ class AdaptiveRankTensorizedLinear(nn.Module):
         args:
             in_features: input dimension size
             out_features: output dimension size
-            dropout: dropout probability
-            max_rank: maximum rank for LSTM's weight tensor
+            max_rank: maximum rank for weight tensor
             tensor_type: weight tensor type 'CP', 'Tucker', 'TT' or 'TTM'
             prior_type: prior for the rank parameter 'log_uniform' or 'half_cauchy'
             eta: hyperparameter for the 'half_cauchy' distribution

@@ -163,7 +163,14 @@ class AdaptiveRankTensorizedTextSubNet(nn.Module):
                                               prior_type=prior_type, eta=eta,
                                               device=device, dtype=dtype)
         self.dropout = nn.Dropout(dropout)
-        self.linear_1 = nn.Linear(hidden_size, out_size, device=device, dtype=dtype)
+        self.linear_1 = AdaptiveRankTensorizedLinear(hidden_size, out_size, bias,
+                                                     max_rank=max_rank, 
+                                                     tensor_type=tensor_type, 
+                                                     prior_type=prior_type, 
+                                                     eta=eta,
+                                                     device=device,
+                                                     dtype=dtype)
+        
 
     def forward(self, x):
         '''
