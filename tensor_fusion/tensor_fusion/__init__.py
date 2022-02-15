@@ -5,3 +5,4 @@ from . import layer
 from . import model
 from . import low_rank_tensor
 from . import tensor_times_matrix
+from . import distribution

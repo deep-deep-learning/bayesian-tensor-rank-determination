@@ -1,7 +1,8 @@
 import torch
 import torch.nn as nn
 import tltorch
-from tensor_fusion.fusion_layer import CP_with_trainable_rank_parameter
+from .low_rank_tensor import CP_with_trainable_rank_parameter, TT_with_trainable_rank_parameter, \
+    Tucker_with_trainable_rank_parameter, TTM_with_trainable_rank_parameter
 import numpy as np
 from .tensor_times_matrix import tensor_times_matrix_fwd
 
@@ -40,6 +41,42 @@ class AdaptiveRankTensorizedLinear(nn.Module):
                                                                   eta=eta,
                                                                   device=device,
                                                                   dtype=dtype)
+        elif tensor_type == 'TT':
+            self.weight_tensor = TT_with_trainable_rank_parameter(dims,
+                                                                  prior_type=prior_type,
+                                                                  max_rank=max_rank,
+                                                                  tensorized_shape=None,
+                                                                  initialization_method='nn',
+                                                                  target_stddev=target_stddev,
+                                                                  learned_scale=False,
+                                                                  eta=eta,
+                                                                  device=device,
+                                                                  dtype=dtype)
+        elif tensor_type == 'Tucker':
+            self.weight_tensor = Tucker_with_trainable_rank_parameter(dims,
+                                                                      prior_type=prior_type,
+                                                                      max_rank=max_rank,
+                                                                      tensorized_shape=tensorized_shape,
+                                                                      initialization_method='nn',
+                                                                      target_stddev=target_stddev,
+                                                                      learned_scale=False,
+                                                                      eta=eta,
+                                                                      device=device,
+                                                                      dtype=dtype)
+            print("Do not set Tucker's max rank too high (less than 15)")
+        elif tensor_type == 'TTM':
+            self.weight_tensor = TTM_with_trainable_rank_parameter(tensorized_shape,
+                                                                   prior_type=prior_type,
+                                                                   max_rank=max_rank,
+                                                                   tensorized_shape=None,
+                                                                   initialization_method='nn',
+                                                                   target_stddev=target_stddev,
+                                                                   learned_scale=False,
+                                                                   eta=eta,
+                                                                   device=device,
+                                                                   dtype=dtype)
+        else:
+            print("Do not support the tensor type")
 
         self.weight_tensor.to(dtype)
         self.weight_tensor.to(device)
