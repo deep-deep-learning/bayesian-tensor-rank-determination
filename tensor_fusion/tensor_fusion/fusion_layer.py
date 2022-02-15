@@ -5,7 +5,7 @@ from .low_rank_tensor import CP_with_trainable_rank_parameter
 class AdaptiveRankFusionLayer(nn.Module):
 
     def __init__(self, input_sizes, output_size, dropout=0.0,
-                 max_rank=10, prior_type='half_cauchy', eta=None, 
+                 max_rank=10, prior_type='log_uniform', eta=None, 
                  device=None, dtype=None):
         '''
         args:

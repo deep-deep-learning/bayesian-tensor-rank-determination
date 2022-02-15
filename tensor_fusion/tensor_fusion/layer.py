@@ -3,9 +3,9 @@ import torch.nn as nn
 import tltorch
 from tensor_fusion.fusion_layer import CP_with_trainable_rank_parameter
 import numpy as np
-from tensorized_fwd_bwd.tensor_times_matrix import tensor_times_matrix_fwd
+from .tensor_times_matrix import tensor_times_matrix_fwd
 
-class AdaptiveRankFactorizedLinear(nn.Module):
+class AdaptiveRankTensorizedLinear(nn.Module):
     
     def __init__(self, in_features, out_features, bias=True,
                  max_rank=20, tensor_type='CP', prior_type='log_uniform', eta=None,
@@ -16,7 +16,7 @@ class AdaptiveRankFactorizedLinear(nn.Module):
             out_features: output dimension size
             dropout: dropout probability
             max_rank: maximum rank for LSTM's weight tensor
-            tensor_type: LSTM's weight tensor type 'CP', 'Tucker', 'TT' or 'TTM'
+            tensor_type: weight tensor type 'CP', 'Tucker', 'TT' or 'TTM'
             prior_type: prior for the rank parameter 'log_uniform' or 'half_cauchy'
             eta: hyperparameter for the 'half_cauchy' distribution
         '''
@@ -57,3 +57,7 @@ class AdaptiveRankFactorizedLinear(nn.Module):
             output = output + self.bias
             
         return output
+    
+    def get_log_prior(self):
+
+        return self.weight_tensor._get_log_prior()
