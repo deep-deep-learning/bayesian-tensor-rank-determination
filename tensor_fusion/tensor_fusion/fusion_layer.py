@@ -1,10 +1,11 @@
+import torch
 import torch.nn as nn
 import numpy as np
 from .low_rank_tensor import CP_with_trainable_rank_parameter
 
 class AdaptiveRankFusionLayer(nn.Module):
 
-    def __init__(self, input_sizes, output_size,
+    def __init__(self, input_sizes, output_size, bias=False,
                  max_rank=10, prior_type='log_uniform', eta=None, 
                  device=None, dtype=None):
         '''
@@ -39,6 +40,11 @@ class AdaptiveRankFusionLayer(nn.Module):
         
         self.weight_tensor.to(dtype)
         self.weight_tensor.to(device)
+
+        if bias:
+            self.bias = nn.Parameter(torch.zeros((output_size,), device=device, dtype=dtype))
+        else:
+            self.bias = None
         
     def forward(self, inputs):
         '''
@@ -53,6 +59,9 @@ class AdaptiveRankFusionLayer(nn.Module):
             y = y * (x @ self.weight_tensor.factors[i])
         y = y @ self.weight_tensor.factors[-1].T
 
+        if self.bias is not None:
+            y = y + self.bias
+            
         return y
 
     def get_log_prior(self):

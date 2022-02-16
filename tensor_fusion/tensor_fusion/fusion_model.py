@@ -93,6 +93,7 @@ class AdaptiveRankFusion_with_AdaptiveRankSubNets_2(nn.Module):
         # define fusion layer
         self.fusion_layer = AdaptiveRankFusionLayer(input_sizes=fusion_input_sizes,
                                                     output_size=output_size,
+                                                    bias=bias,
                                                     max_rank=max_rank,
                                                     prior_type=prior_type,
                                                     eta=eta,

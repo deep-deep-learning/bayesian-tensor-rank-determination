@@ -185,3 +185,68 @@ class AdaptiveRankTensorizedTextSubNet(nn.Module):
     def get_log_prior(self):
 
         return self.rnn.get_log_prior()
+
+class AdaptiveRankTensorizedTextSubNet_2(nn.Module):
+
+    def __init__(self, in_size, hidden_size, out_size, dropout=0.2, bias=False,
+                 max_rank=20, tensor_type='CP', prior_type='log_uniform', eta=None,
+                 device=None, dtype=None):
+        '''
+        Args:
+            in_size: input dimension
+            hidden_size: hidden layer dimension
+            out_size: output dimension
+            dropout: dropout probability
+            max_rank: maximum rank for LSTM's weight tensor
+            tensor_type: LSTM's weight tensor type 'CP', 'Tucker', 'TT' or 'TTM'
+            prior_type: prior for the rank parameter 'log_uniform' or 'half_cauchy'
+            eta: hyperparameter for the 'half_cauchy' distribution
+            device:
+            dtype:
+            
+        Output:
+            (return value in forward) a tensor of shape (batch_size, out_size)
+        '''
+        super().__init__()
+        self.rnn = AdaptiveRankTensorizedLSTM(in_size, hidden_size, bias,
+                                              max_rank=max_rank, tensor_type=tensor_type,
+                                              prior_type=prior_type, eta=eta,
+                                              device=device, dtype=dtype)
+        self.dropout = nn.Dropout(dropout)
+        self.linear_1 = AdaptiveRankTensorizedLinear(hidden_size, out_size, bias,
+                                                     max_rank=max_rank, 
+                                                     tensor_type=tensor_type, 
+                                                     prior_type=prior_type, 
+                                                     eta=eta,
+                                                     device=device,
+                                                     dtype=dtype)
+        self.linear_2 = AdaptiveRankTensorizedLinear(out_size, out_size, bias,
+                                                     max_rank=max_rank, 
+                                                     tensor_type=tensor_type, 
+                                                     prior_type=prior_type, 
+                                                     eta=eta,
+                                                     device=device,
+                                                     dtype=dtype)        
+        self.linear_3 = AdaptiveRankTensorizedLinear(out_size, out_size, bias,
+                                                     max_rank=max_rank, 
+                                                     tensor_type=tensor_type, 
+                                                     prior_type=prior_type, 
+                                                     eta=eta,
+                                                     device=device,
+                                                     dtype=dtype)
+    def forward(self, x):
+        '''
+        Args:
+            x: tensor of shape (batch_size, sequence_len, in_size)
+        '''
+        _, final_states = self.rnn(x)
+        h = self.dropout(final_states[0].squeeze())
+        y_1 = torch.sigmoid(self.linear_1(h))
+        y_2 = torch.sigmoid(self.linear_2(y_1))
+        y_3 = torch.sigmoid(self.linear_3(y_2))
+        return y_3
+
+    def get_log_prior(self):
+
+        return self.rnn.get_log_prior() + self.linear_1.get_log_prior() + self.linear_2.get_log_prior() \
+            + self.linear_3.get_log_prior()
