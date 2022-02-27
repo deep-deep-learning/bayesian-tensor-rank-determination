@@ -1,4 +1,5 @@
 import torch
+import torch.nn as nn
 from torch.distributions.half_cauchy import HalfCauchy
 import torch.distributions as td
 from tensor_layers.low_rank_tensors import CP, TensorTrain, Tucker, TensorTrainMatrix
@@ -23,6 +24,8 @@ class CP_with_trainable_rank_parameter(CP):
             self.tensorized_shape = tensorized_shape
             self.shape = (np.prod(tensorized_shape[0]), np.prod(tensorized_shape[1]))
             self.name = self.tensor_type
+
+        self.threshold = nn.Threshold(1e-30, 1e-30, inplace=True)
         
     def _build_low_rank_prior(self):
 
@@ -38,13 +41,15 @@ class CP_with_trainable_rank_parameter(CP):
             self.factor_prior_distributions.append(independent_dist)
     
     def _get_log_prior(self):
-
+        
         # clamp rank_param because <=0 is undefined 
-        clamped_rank_parameter = self.rank_parameter.clamp(1e-5)
+        clamped_rank_parameter = self.rank_parameter.clamp(1e-30)
         self.rank_parameter.data = clamped_rank_parameter.data
-
+        
+        
+        # self.threshold(self.rank_parameter)
         log_prior = torch.sum(self.rank_parameter_prior_distribution.log_prob(self.rank_parameter))
-    
+        
         # 0 mean normal distribution for the factors
         for factor_prior_distribution, factor in zip(self.factor_prior_distributions, 
                                                      self.factors):
@@ -71,7 +76,7 @@ class TT_with_trainable_rank_parameter(TensorTrain):
     def _build_low_rank_prior(self):
 
         self.rank_parameters = [
-            self.add_variable(torch.sqrt(x.clone().detach()),trainable=True)
+            self.add_variable(torch.sqrt(x.clone().detach()).to(self.device),trainable=True)
             for x in self.get_rank_parameters_update()
         ]
 
@@ -81,13 +86,13 @@ class TT_with_trainable_rank_parameter(TensorTrain):
 
             self.factor_prior_distributions.append(
                 td.Independent(td.Normal(
-                    loc=torch.zeros(self.factors[i].shape),
+                    loc=torch.zeros(self.factors[i].shape, device=self.device, dtype=self.dtype),
                     scale=self.rank_parameters[i]),
                                 reinterpreted_batch_ndims=3))
 
         self.factor_prior_distributions.append(
             td.Independent(td.Normal(
-                loc=torch.zeros(self.factors[-1].shape),
+                loc=torch.zeros(self.factors[-1].shape, device=self.device, dtype=self.dtype),
                 scale=self.rank_parameters[-1].unsqueeze(1).unsqueeze(2)),
                             reinterpreted_batch_ndims=3))
     
@@ -137,18 +142,18 @@ class Tucker_with_trainable_rank_parameter(Tucker):
     def _build_low_rank_prior(self, core_prior=10.0):
 
         self.rank_parameters = [
-            self.add_variable(torch.sqrt(x.clone().detach()),trainable=False) for x in self.get_rank_parameters_update()
+            self.add_variable(torch.sqrt(x.clone().detach()).to(self.device),trainable=False) for x in self.get_rank_parameters_update()
         ]
 
         self.factor_prior_distributions = (td.Independent(
-            td.Normal(loc=torch.zeros(self.factors[0].shape), scale=core_prior),
+            td.Normal(loc=torch.zeros(self.factors[0].shape, device=self.device, dtype=self.dtype), scale=core_prior),
             reinterpreted_batch_ndims=len(self.dims)), [])
 
         for i in range(len(self.dims)):
 
             self.factor_prior_distributions[1].append(
                 td.Independent(td.Normal(
-                    loc=torch.zeros(self.factors[1][i].shape),
+                    loc=torch.zeros(self.factors[1][i].shape, device=self.device, dtype=self.dtype),
                     scale=self.rank_parameters[i]),
                                 reinterpreted_batch_ndims=2))
     
@@ -189,7 +194,7 @@ class TTM_with_trainable_rank_parameter(TensorTrainMatrix):
     def _build_low_rank_prior(self):
 
         self.rank_parameters = [
-            self.add_variable(x.clone().detach(),trainable=True)
+            self.add_variable(x.clone().detach().to(self.device),trainable=True)
             for x in self.get_rank_parameters_update()
         ]
 
@@ -199,13 +204,13 @@ class TTM_with_trainable_rank_parameter(TensorTrainMatrix):
 
             self.factor_prior_distributions.append(
                 td.Independent(td.Normal(
-                    loc=torch.zeros(self.factors[i].shape),
+                    loc=torch.zeros(self.factors[i].shape, device=self.device, dtype=self.dtype),
                     scale=self.rank_parameters[i]),
                                 reinterpreted_batch_ndims=4))
 
         self.factor_prior_distributions.append(
             td.Independent(td.Normal(
-                loc=torch.zeros(self.factors[-1].shape),
+                loc=torch.zeros(self.factors[-1].shape, device=self.device, dtype=self.dtype),
                 scale=self.rank_parameters[-1].unsqueeze(1).unsqueeze(2).unsqueeze(3)),
                             reinterpreted_batch_ndims=4))
     
