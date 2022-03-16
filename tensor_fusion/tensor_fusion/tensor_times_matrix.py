@@ -31,8 +31,6 @@ def tensor_times_matrix_fwd(tensor, matrix, return_saved_tensors=False):
     else:
         raise ValueError('Unknown tensor type')
 
-
-
 def tt_times_matrix_fwd(tensor, matrix, return_saved_tensors):
     """
     This function takes the input tensor "tensor", the input matrix "matrix"

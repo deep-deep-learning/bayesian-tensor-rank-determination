@@ -1,231 +1,181 @@
+import tltorch
 import torch
 import torch.nn as nn
 from torch.distributions.half_cauchy import HalfCauchy
-import torch.distributions as td
-from tensor_layers.low_rank_tensors import CP, TensorTrain, Tucker, TensorTrainMatrix
-import numpy as np
+from torch.distributions.normal import Normal
 from .distribution import LogUniform
-import tensorly as tl
-tl.set_backend('pytorch')
+import numpy as np
 
-class CP_with_trainable_rank_parameter(CP):
-    
-    def __init__(self, dims, max_rank, learned_scale=True, tensorized_shape=None, **kwargs):
-        
-        super().__init__(dims, max_rank, learned_scale, **kwargs)
+class LowRankTensor(nn.Module):
 
-        if self.prior_type == 'half_cauchy':
-            self.rank_parameter_prior_distribution = HalfCauchy(self.eta)
-        elif self.prior_type == 'log_uniform':
-            self.rank_parameter_prior_distribution = LogUniform(torch.tensor([1e-30], device=self.device, dtype=self.dtype), 
-                                                                torch.tensor([1e30], device=self.device, dtype=self.dtype))
+    def __init__(self, in_features, out_features, prior_type='log_uniform', eta=None, device=None, dtype=None):
 
-        if tensorized_shape is not None:
-            self.tensorized_shape = tensorized_shape
-            self.shape = (np.prod(tensorized_shape[0]), np.prod(tensorized_shape[1]))
-            self.name = self.tensor_type
+        super().__init__()
 
-        self.threshold = nn.Threshold(1e-30, 1e-30, inplace=True)
-        
-    def _build_low_rank_prior(self):
+        if prior_type == 'half_cauchy':
+            self.rank_parameter_prior_distribution = HalfCauchy(eta)
+        elif prior_type == 'log_uniform':
+            self.rank_parameter_prior_distribution = LogUniform(torch.tensor([1e-30], device=device, dtype=dtype), 
+                                                                torch.tensor([1e30], device=device, dtype=dtype))
 
-        self.rank_parameter = self.add_variable(torch.sqrt(self.get_rank_parameters_update().clone().detach()).view([1,self.max_rank]).to(self.device),
-                                                trainable=True)
+        self.tensorized_shape = tltorch.utils.get_tensorized_shape(in_features, out_features, verbose=False)
 
-        self.factor_prior_distributions = []
+class CP(LowRankTensor):
 
-        for x in self.dims:
-            zero_mean = torch.zeros([x, self.max_rank], device=self.device, dtype=self.dtype)
-            base_dist = td.Normal(loc=zero_mean,scale=self.rank_parameter)
-            independent_dist = td.Independent(base_dist,reinterpreted_batch_ndims=2)
-            self.factor_prior_distributions.append(independent_dist)
-    
-    def _get_log_prior(self):
-        
-        # clamp rank_param because <=0 is undefined 
-        clamped_rank_parameter = self.rank_parameter.clamp(1e-30)
-        self.rank_parameter.data = clamped_rank_parameter.data
-        
+    def __init__(self, in_features, out_features, max_rank, prior_type='log_uniform', eta=None, device=None, dtype=None):
+
+        super().__init__(in_features, out_features, prior_type, eta, device, dtype)
+
+        self.tensor = tltorch.TensorizedTensor.new(tensorized_shape=self.tensorized_shape,
+                                                   rank=max_rank,
+                                                   factorization='CP',
+                                                   device=device,
+                                                   dtype=dtype)
+
+        target_var = 1 / in_features
+        factor_std = (target_var / self.tensor.rank) ** (1 / (4 * self.tensor.order))
+        for factor in self.tensor.factors:
+            nn.init.normal_(factor, 0, factor_std)
+
+        self.rank_parameters = nn.Parameter(torch.rand((max_rank,), device=device, dtype=dtype))
+
+    def get_log_prior(self):
+
+        with torch.no_grad():
+            self.rank_parameters[:] = self.rank_parameters.clamp(1e-10)
         
         # self.threshold(self.rank_parameter)
-        log_prior = torch.sum(self.rank_parameter_prior_distribution.log_prob(self.rank_parameter))
+        log_prior = torch.sum(self.rank_parameter_prior_distribution.log_prob(self.rank_parameters))
         
         # 0 mean normal distribution for the factors
-        for factor_prior_distribution, factor in zip(self.factor_prior_distributions, 
-                                                     self.factors):
-            log_prior = log_prior + torch.sum(factor_prior_distribution.log_prob(factor))
+        factor_prior_distribution = Normal(0, self.rank_parameters)
+        for factor in self.tensor.factors:
+            log_prior = log_prior + factor_prior_distribution.log_prob(factor).sum(0).sum()
         
         return log_prior
-
-class TT_with_trainable_rank_parameter(TensorTrain):
     
-    def __init__(self, dims, max_rank, learned_scale=True, tensorized_shape=None, **kwargs):
+    def estimate_rank(self):
         
-        super().__init__(dims, max_rank, learned_scale, **kwargs)
+        rank = 0
+        for factor in self.tensor.factors:
+            factor_rank = torch.sum(factor.var(axis=0) > 1e-5)
+            rank = max(rank, factor_rank)
+        
+        return rank
 
-        if self.prior_type == 'half_cauchy':
-            self.rank_parameter_prior_distribution = HalfCauchy(self.eta)
-        elif self.prior_type == 'log_uniform':
-            self.rank_parameter_prior_distribution = LogUniform(torch.tensor([1e-30], device=self.device, dtype=self.dtype), 
-                                                                torch.tensor([1e30], device=self.device, dtype=self.dtype))
+class Tucker(LowRankTensor):
 
-        self.shape = dims
-        self.name = 'TT'
-        self.rank = self.max_ranks
-    
-    def _build_low_rank_prior(self):
+    def __init__(self, in_features, out_features, max_rank, prior_type='log_uniform', eta=None, device=None, dtype=None):
 
-        self.rank_parameters = [
-            self.add_variable(torch.sqrt(x.clone().detach()).to(self.device),trainable=True)
-            for x in self.get_rank_parameters_update()
-        ]
+        super().__init__(in_features, out_features, prior_type, eta, device, dtype)
 
-        self.factor_prior_distributions = []
+        self.tensor = tltorch.TensorizedTensor.new(tensorized_shape=self.tensorized_shape,
+                                                   rank=max_rank,
+                                                   factorization='Tucker',
+                                                   device=device,
+                                                   dtype=dtype)
+        tltorch.tensor_init(self.tensor)
 
-        for i in range(len(self.dims) - 1):
+        self.rank_parameters = nn.ParameterList([nn.Parameter(torch.rand((max_rank,), device=device, dtype=dtype)) \
+            for _ in range(len(self.tensor.factors))])
 
-            self.factor_prior_distributions.append(
-                td.Independent(td.Normal(
-                    loc=torch.zeros(self.factors[i].shape, device=self.device, dtype=self.dtype),
-                    scale=self.rank_parameters[i]),
-                                reinterpreted_batch_ndims=3))
-
-        self.factor_prior_distributions.append(
-            td.Independent(td.Normal(
-                loc=torch.zeros(self.factors[-1].shape, device=self.device, dtype=self.dtype),
-                scale=self.rank_parameters[-1].unsqueeze(1).unsqueeze(2)),
-                            reinterpreted_batch_ndims=3))
-    
-    def _get_log_prior(self):
+    def get_log_prior(self):
 
         log_prior = 0.0
-        for rank_parameter in self.rank_parameters:
+        for r in self.rank_parameters:
             # clamp rank_param because <=0 is undefined 
-            clamped_rank_parameter = rank_parameter.clamp(1e-5)
-            rank_parameter.data = clamped_rank_parameter.data
-            log_prior = log_prior + torch.sum(self.rank_parameter_prior_distribution.log_prob(rank_parameter))
-    
-        # 0 mean normal distribution for the factors
-        for factor_prior_distribution, factor in zip(self.factor_prior_distributions, 
-                                                     self.factors):
-            log_prior = log_prior + torch.sum(factor_prior_distribution.log_prob(factor))
+            with torch.no_grad():
+                r[:] = r.clamp(1e-10)
+            log_prior = log_prior + torch.sum(self.rank_parameter_prior_distribution.log_prob(r))
         
+        core_prior_distribution = Normal(0, 10.0)
+        log_prior = log_prior + torch.sum(core_prior_distribution.log_prob(self.tensor.core))
+
+        for r, factor in zip(self.rank_parameters, self.tensor.factors):
+            factor_prior_distribution = Normal(0, r)
+            log_prior = log_prior + torch.sum(factor_prior_distribution.log_prob(factor))
+
         return log_prior
 
-class Tucker_with_trainable_rank_parameter(Tucker):
-    
-    def __init__(self, dims, max_rank, learned_scale=True, tensorized_shape=None, **kwargs):
-        
-        super().__init__(dims, max_rank, learned_scale, **kwargs)
+class TT(LowRankTensor):
 
-        if self.prior_type == 'half_cauchy':
-            self.rank_parameter_prior_distribution = HalfCauchy(self.eta)
-        elif self.prior_type == 'log_uniform':
-            self.rank_parameter_prior_distribution = LogUniform(torch.tensor([1e-30], device=self.device, dtype=self.dtype), 
-                                                                torch.tensor([1e30], device=self.device, dtype=self.dtype))
+    def __init__(self, in_features, out_features, max_rank, prior_type='log_uniform', eta=None, device=None, dtype=None):
 
-        if tensorized_shape is not None:
-            self.tensorized_shape = tensorized_shape
-            self.shape = (np.prod(tensorized_shape[0]), np.prod(tensorized_shape[1]))
-            self.name = self.tensor_type
-        
-        self.core = self.factors[0]
-        self.factors = self.factors[1]
-        self.name = 'Tucker'
-    
-    def get_full(self):
+        super().__init__(in_features, out_features, prior_type, eta, device, dtype)
 
-        factors = [self.core, self.factors]
+        tensorized_dim = [*self.tensorized_shape[0], *self.tensorized_shape[1]]
+        self.tensor = tltorch.TTTensor.new(shape=tensorized_dim, rank=max_rank, device=device, dtype=dtype)
 
-        return tl.tucker_to_tensor(factors)
+        target_var = 1 / in_features
+        factor_std = ((target_var / np.prod(self.tensor.rank)) ** (1 / self.tensor.order)) ** 0.5
 
-    def _build_low_rank_prior(self, core_prior=10.0):
+        for factor in self.tensor.factors:
+            nn.init.normal_(factor, 0, factor_std)
 
-        self.rank_parameters = [
-            self.add_variable(torch.sqrt(x.clone().detach()).to(self.device),trainable=False) for x in self.get_rank_parameters_update()
-        ]
+        self.rank_parameters = nn.ParameterList([nn.Parameter(torch.rand((max_rank,), device=device, dtype=dtype)) \
+            for _ in range(len(tensorized_dim)-1)])
 
-        self.factor_prior_distributions = (td.Independent(
-            td.Normal(loc=torch.zeros(self.factors[0].shape, device=self.device, dtype=self.dtype), scale=core_prior),
-            reinterpreted_batch_ndims=len(self.dims)), [])
-
-        for i in range(len(self.dims)):
-
-            self.factor_prior_distributions[1].append(
-                td.Independent(td.Normal(
-                    loc=torch.zeros(self.factors[1][i].shape, device=self.device, dtype=self.dtype),
-                    scale=self.rank_parameters[i]),
-                                reinterpreted_batch_ndims=2))
-    
-    def _get_log_prior(self):
+    def get_log_prior(self):
 
         log_prior = 0.0
-        for rank_parameter in self.rank_parameters:
+        for r in self.rank_parameters:
             # clamp rank_param because <=0 is undefined 
-            clamped_rank_parameter = rank_parameter.clamp(1e-5)
-            rank_parameter.data = clamped_rank_parameter.data
-            log_prior = log_prior + torch.sum(self.rank_parameter_prior_distribution.log_prob(rank_parameter))
+            with torch.no_grad():
+                r[:] = r.clamp(1e-10)
+            log_prior = log_prior + torch.sum(self.rank_parameter_prior_distribution.log_prob(r))
 
-        # for the core factors
-        log_prior = log_prior + torch.sum(self.factor_prior_distributions[0].log_prob(self.core))
-        # 0 mean normal distribution for the factors
-        for factor_prior_distribution, factor in zip(self.factor_prior_distributions[1], 
-                                                     self.factors):
-            log_prior = log_prior + torch.sum(factor_prior_distribution.log_prob(factor))
         
+        # 0 mean normal distribution for the factors
+        for i in range(len(self.rank_parameters)):
+            factor_prior_distribution = Normal(0, self.rank_parameters[i])
+            log_prior = log_prior + factor_prior_distribution.log_prob(self.tensor.factors[i]).sum((0,1)).sum()
+        
+        factor_prior_distribution = Normal(0, self.rank_parameters[-1])
+        log_prior = log_prior + factor_prior_distribution.log_prob(self.tensor.factors[-1]).sum((1,2)).sum()
+
         return log_prior
-
-class TTM_with_trainable_rank_parameter(TensorTrainMatrix):
     
-    def __init__(self, dims, max_rank, learned_scale=True, tensorized_shape=None, **kwargs):
+    def estimate_rank(self):
+
+        rank = [1]
+        for factor in self.tensor.factors[:-1]:
+            rank.append(torch.sum(factor.var((0,1)) > 1e-5))
         
-        super().__init__(dims, max_rank, learned_scale, **kwargs)
+        rank.append(torch.sum(self.tensor.factors[-1].var((1,2) > 1e-5)))
+        
+        return rank
 
-        if self.prior_type == 'half_cauchy':
-            self.rank_parameter_prior_distribution = HalfCauchy(self.eta)
-        elif self.prior_type == 'log_uniform':
-            self.rank_parameter_prior_distribution = LogUniform(torch.tensor([1e-30], device=self.device, dtype=self.dtype), 
-                                                                torch.tensor([1e30], device=self.device, dtype=self.dtype))
+class TTM(LowRankTensor):
 
-        self.tensorized_shape = (self.dims1, self.dims2)
-        self.name = 'BlockTT'
-        self.rank = self.max_ranks
+    def __init__(self, in_features, out_features, max_rank, prior_type='log_uniform', eta=None, device=None, dtype=None):
 
-    def _build_low_rank_prior(self):
+        super().__init__(in_features, out_features, prior_type, eta, device, dtype)
 
-        self.rank_parameters = [
-            self.add_variable(x.clone().detach().to(self.device),trainable=True)
-            for x in self.get_rank_parameters_update()
-        ]
+        self.tensor = tltorch.TensorizedTensor.new(tensorized_shape=self.tensorized_shape,
+                                              rank=max_rank,
+                                              factorization='blocktt',
+                                              dtype=dtype,
+                                              device=device)
+        tltorch.tensor_init(self.tensor)
 
-        self.factor_prior_distributions = []
+        self.rank_parameters = nn.ParameterList([nn.Parameter(torch.rand((max_rank,), device=device, dtype=dtype)) \
+            for _ in range(len(self.tensor.factors)-1)])
 
-        for i in range(self.num_cores - 1):
-
-            self.factor_prior_distributions.append(
-                td.Independent(td.Normal(
-                    loc=torch.zeros(self.factors[i].shape, device=self.device, dtype=self.dtype),
-                    scale=self.rank_parameters[i]),
-                                reinterpreted_batch_ndims=4))
-
-        self.factor_prior_distributions.append(
-            td.Independent(td.Normal(
-                loc=torch.zeros(self.factors[-1].shape, device=self.device, dtype=self.dtype),
-                scale=self.rank_parameters[-1].unsqueeze(1).unsqueeze(2).unsqueeze(3)),
-                            reinterpreted_batch_ndims=4))
-    
-    def _get_log_prior(self):
+    def get_log_prior(self):
 
         log_prior = 0.0
-        for rank_parameter in self.rank_parameters:
+        for r in self.rank_parameters:
             # clamp rank_param because <=0 is undefined 
-            clamped_rank_parameter = rank_parameter.clamp(1e-5)
-            rank_parameter.data = clamped_rank_parameter.data
-            log_prior = log_prior + torch.sum(self.rank_parameter_prior_distribution.log_prob(rank_parameter))
+            with torch.no_grad():
+                r[:] = r.clamp(1e-10)
+            log_prior = log_prior + torch.sum(self.rank_parameter_prior_distribution.log_prob(r))
     
         # 0 mean normal distribution for the factors
-        for factor_prior_distribution, factor in zip(self.factor_prior_distributions, 
-                                                     self.factors):
-            log_prior = log_prior + torch.sum(factor_prior_distribution.log_prob(factor))
+        for i in range(len(self.rank_parameters)):
+            factor_prior_distribution = Normal(0, self.rank_parameters[i])
+            log_prior = log_prior + torch.sum(factor_prior_distribution.log_prob(self.tensor.factors[i]))
+        
+        factor_prior_distribution = Normal(0, self.rank_parameters[-1])
+        log_prior = log_prior + torch.sum(factor_prior_distribution.log_prob(self.tensor.factors[-1]))
 
         return log_prior

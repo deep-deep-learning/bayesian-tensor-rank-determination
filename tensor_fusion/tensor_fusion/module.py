@@ -1,12 +1,12 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-import tltorch
+from torch.distributions.half_cauchy import HalfCauchy
+from torch.distributions.normal import Normal
+
 import numpy as np
-
-
-from .low_rank_tensor import CP_with_trainable_rank_parameter, TT_with_trainable_rank_parameter, \
-    Tucker_with_trainable_rank_parameter, TTM_with_trainable_rank_parameter
+from .distribution import LogUniform
+from . import low_rank_tensor as LowRankTensor
 
 from .tensor_times_matrix import tensor_times_matrix_fwd
 
@@ -44,7 +44,10 @@ class TensorFusion(nn.Module):
         if self.bias is not None:
             output = output + self.bias
 
-        return F.relu(output)
+        output = F.relu(output)
+        output = self.dropout(output)
+
+        return output
 
 class LowRankFusion(nn.Module):
 
@@ -79,192 +82,136 @@ class LowRankFusion(nn.Module):
         output = 1.0
         for x, factor in zip(inputs, self.weight_tensor_factors[:-1]):
             output = output * (x @ factor)
-        
-        output = self.dropout(output)
 
         output = output @ self.weight_tensor_factors[-1].T
 
         if self.bias is not None:
             output = output + self.bias
 
-        return F.relu(output)
+        output = F.relu(output)
+        output = self.dropout(output)
+
+        return output
 
 class AdaptiveRankFusion(nn.Module):
 
     def __init__(self, input_sizes, output_size, dropout=0.0, bias=True,
                  max_rank=20, prior_type='log_uniform', eta=None, 
                  device=None, dtype=None):
-        '''
-        args:
-            input_sizes: a tuple of ints, (input_size_1, input_size_2, ..., input_size_M)
-            output_sizes: an int, output size of the fusion layer
-            max_rank: an int, maximum rank for the CP decomposition
-            eta: a float, hyperparameter for rank parameter distribution
-            device:
-            dtype:
-        '''
+
         super().__init__()
 
         self.input_sizes = input_sizes
         self.output_size = output_size
+        self.max_rank = max_rank
         self.dropout = nn.Dropout(dropout)
 
-        # initialize weight tensor
-        tensorized_shape = input_sizes + (output_size,)
-        target_stddev = np.sqrt(2/np.prod(input_sizes))
-        self.weight_tensor = CP_with_trainable_rank_parameter(tensorized_shape, 
-                                                              prior_type=prior_type, 
-                                                              max_rank=max_rank, 
-                                                              initialization_method='nn',
-                                                              target_stddev=target_stddev,
-                                                              learned_scale=False,
-                                                              eta=eta,
-                                                              device=device,
-                                                              dtype=dtype)
+        # initialize weight tensor factors
+        factors = [nn.Parameter(torch.empty((input_size, max_rank), device=device, dtype=dtype)) \
+            for input_size in input_sizes]
+        factors = factors + [nn.Parameter(torch.empty((output_size, max_rank), device=device, dtype=dtype))]
         
-        self.weight_tensor.to(dtype)
-        self.weight_tensor.to(device)
+        target_var = 1 / np.prod(input_sizes)
+        factor_std = (target_var / max_rank) ** (1 / (4 * 4))
+        for factor in factors:
+            nn.init.normal_(factor, 0, factor_std)
+
+        self.weight_tensor_factors = nn.ParameterList(factors)
+
+        self.rank_parameters = nn.Parameter(torch.rand((max_rank,), device=device, dtype=dtype))
+
+        if prior_type == 'half_cauchy':
+            self.rank_parameter_prior_distribution = HalfCauchy(eta)
+        elif prior_type == 'log_uniform':
+            self.rank_parameter_prior_distribution = LogUniform(torch.tensor([1e-30], device=device, dtype=dtype), 
+                                                                torch.tensor([1e30], device=device, dtype=dtype))
 
         # initialize bias
         if bias:
             self.bias = nn.Parameter(torch.zeros((output_size,), device=device, dtype=dtype))
         else:
             self.bias = None
-        
+
     def forward(self, inputs):
-
+        
+        # tensorized forward propagation
         output = 1.0
-        for i, x in enumerate(inputs):
-            output = output * (x @ self.weight_tensor.factors[i])
+        for x, factor in zip(inputs, self.weight_tensor_factors[:-1]):
+            output = output * (x @ factor)
 
-        output = self.dropout(output)
-
-        output = output @ self.weight_tensor.factors[-1].T
+        output = output @ self.weight_tensor_factors[-1].T
 
         if self.bias is not None:
             output = output + self.bias
-            
-        return F.relu(output)
+
+        output = F.relu(output)
+        output = self.dropout(output)
+
+        return output
 
     def get_log_prior(self):
-
-        return self.weight_tensor._get_log_prior()
+        
+        # clamp rank_param because <=0 is undefined 
+        with torch.no_grad():
+            self.rank_parameters[:] = self.rank_parameters.clamp(1e-10)
+        
+        # self.threshold(self.rank_parameter)
+        log_prior = torch.sum(self.rank_parameter_prior_distribution.log_prob(self.rank_parameters))
+        
+        # 0 mean normal distribution for the factors
+        factor_prior_distribution = Normal(0, self.rank_parameters)
+        for factor in self.weight_tensor_factors:
+            log_prior = log_prior + factor_prior_distribution.log_prob(factor).sum(0).sum()
+        
+        return log_prior
+    
+    def estimate_rank(self):
+        
+        rank = 0
+        for factor in self.weight_tensor_factors:
+            factor_rank = torch.sum(factor.var(axis=0) > 1e-5)
+            rank = max(rank, factor_rank)
+        
+        return rank
 
 class AdaptiveRankLinear(nn.Module):
-    
-    def __init__(self, in_features, out_features, bias=True,
-                 max_rank=20, tensor_type='CP', prior_type='log_uniform', eta=None,
-                 device=None, dtype=None):
-        '''
-        args:
-            in_features: input dimension size
-            out_features: output dimension size
-            max_rank: maximum rank for weight tensor
-            tensor_type: weight tensor type 'CP', 'Tucker', 'TT' or 'TTM'
-            prior_type: prior for the rank parameter 'log_uniform' or 'half_cauchy'
-            eta: hyperparameter for the 'half_cauchy' distribution
-        '''
-        
+
+    def __init__(self, in_features, out_features, max_rank, bias=True, tensor_type='TT', prior_type='log_uniform',
+                 eta=None, device=None, dtype=None):
+
         super().__init__()
-        
-        self.in_features = in_features
-        self.out_features = out_features
-        
-        tensorized_shape = tltorch.utils.get_tensorized_shape(in_features, out_features, verbose=False)
-        
-        # TT, Tucker, TTM does not support un even order
-        if len(tensorized_shape[0]) == len(tensorized_shape[1]):
-            if tensor_type == 'TTM':
-                dims = tensorized_shape
-            else:
-                dims = tensorized_shape[0] + tensorized_shape[1]
-        else:
-            if tensor_type == 'TTM':
-                dims = ((in_features,), (out_features,))
-            else:
-                dims = (in_features, out_features)
 
-        target_stddev = np.sqrt(2/in_features)
-        if tensor_type == 'CP':
-            self.weight_tensor = CP_with_trainable_rank_parameter(dims,
-                                                                  prior_type=prior_type, 
-                                                                  max_rank=max_rank,
-                                                                  tensorized_shape=tensorized_shape,
-                                                                  initialization_method='nn',
-                                                                  target_stddev=target_stddev,
-                                                                  learned_scale=False,
-                                                                  eta=eta,
-                                                                  device=device,
-                                                                  dtype=dtype)
-        elif tensor_type == 'TT':
-            self.weight_tensor = TT_with_trainable_rank_parameter(dims,
-                                                                  prior_type=prior_type,
-                                                                  max_rank=max_rank,
-                                                                  tensorized_shape=None,
-                                                                  initialization_method='nn',
-                                                                  target_stddev=target_stddev,
-                                                                  learned_scale=False,
-                                                                  eta=eta,
-                                                                  device=device,
-                                                                  dtype=dtype)
-        elif tensor_type == 'Tucker':
-            self.weight_tensor = Tucker_with_trainable_rank_parameter(dims,
-                                                                      prior_type=prior_type,
-                                                                      max_rank=max_rank,
-                                                                      tensorized_shape=tensorized_shape,
-                                                                      initialization_method='nn',
-                                                                      target_stddev=target_stddev,
-                                                                      learned_scale=False,
-                                                                      eta=eta,
-                                                                      device=device,
-                                                                      dtype=dtype)
-            print("Do not set Tucker's max rank too high (less than 15)")
-        elif tensor_type == 'TTM':
-            self.weight_tensor = TTM_with_trainable_rank_parameter(dims,
-                                                                   prior_type=prior_type,
-                                                                   max_rank=max_rank,
-                                                                   tensorized_shape=None,
-                                                                   initialization_method='nn',
-                                                                   target_stddev=target_stddev,
-                                                                   learned_scale=False,
-                                                                   eta=eta,
-                                                                   device=device,
-                                                                   dtype=dtype)
-        else:
-            print("Do not support the tensor type")
-
-        self.weight_tensor.to(dtype)
-        self.weight_tensor.to(device)
+        self.weight_tensor = getattr(LowRankTensor, tensor_type)(in_features, out_features, max_rank, prior_type, eta, device, dtype)
         
+       # initialize bias
         if bias:
-            self.bias = nn.Parameter(torch.empty((out_features,), device=device, dtype=dtype))
-            target_stddev = np.sqrt(1/in_features)
-            nn.init.uniform_(self.bias, -target_stddev, target_stddev)
+            self.bias = nn.Parameter(torch.zeros((out_features,), device=device, dtype=dtype))
         else:
             self.bias = None
-            
+
     def forward(self, x):
-        
-        output = tensor_times_matrix_fwd(self.weight_tensor, x.T)
-        
+
+        output = tensor_times_matrix_fwd(self.weight_tensor.tensor, x.T)
+
         if self.bias is not None:
             output = output + self.bias
             
         return output
-    
+
     def get_log_prior(self):
 
-        return self.weight_tensor._get_log_prior()
+        return self.weight_tensor.get_log_prior()
+
+    def estimate_rank(self):
+
+        return self.weight_tensor.estimate_rank()
 
 class AdaptiveRankLSTM(nn.Module):
     '''
-    
     no frills batch first LSTM implementation
-
     '''
-    
-    def __init__(self, input_size, hidden_size, bias=False,
-                 max_rank=20, tensor_type='CP', prior_type='log_uniform', eta=None,
+    def __init__(self, input_size, hidden_size, max_rank, bias=True,
+                 tensor_type='TT', prior_type='log_uniform', eta=None,
                  device=None, dtype=None):
         '''
         args:
@@ -277,31 +224,27 @@ class AdaptiveRankLSTM(nn.Module):
             device:
             dtype:
         '''
-
         
         super().__init__()
         
         self.input_size = input_size
         self.hidden_size = hidden_size
         
-        self.layer_ih = AdaptiveRankLinear(input_size, hidden_size*4, bias=bias, 
-                                           max_rank=max_rank, tensor_type=tensor_type, 
-                                           prior_type=prior_type, eta=eta,
-                                           device=device, dtype=dtype)
-        self.layer_hh = AdaptiveRankLinear(hidden_size, hidden_size*4, bias,
-                                           max_rank=max_rank, tensor_type=tensor_type, 
-                                           prior_type=prior_type, eta=eta,
-                                           device=device, dtype=dtype)
+        self.layer_ih = AdaptiveRankLinear(input_size, hidden_size*4, max_rank, bias, 
+                                           tensor_type, prior_type, eta, device, dtype)
+        self.layer_hh = AdaptiveRankLinear(hidden_size, hidden_size*4, max_rank, bias,
+                                           tensor_type, prior_type, eta, device, dtype)
         
     def forward(self, x):
 
         # LSTM forward propagation
         output = []
         batch_size = x.shape[0]
+        seq_length = x.shape[1]
         
         c = torch.zeros((batch_size, self.hidden_size), device=x.device, dtype=x.dtype)
         h = torch.zeros((batch_size, self.hidden_size), device=x.device, dtype=x.dtype)
-        for seq in range(20):
+        for seq in range(seq_length):
             ih = self.layer_ih(x[:,seq,:])
             hh = self.layer_hh(h)
             i, f, g, o = torch.split(ih + hh, self.hidden_size, 1)

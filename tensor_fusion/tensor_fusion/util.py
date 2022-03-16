@@ -11,7 +11,7 @@ def concatenate_one(inputs):
 
     return concatenated_inputs
 
-def get_log_prior_coeff(epoch, warm_up_epochs, no_log_prior_epochs):
+def get_log_prior_coeff(log_prior_coeff, epoch, warm_up_epochs, no_log_prior_epochs):
 
-    coeff = (epoch - no_log_prior_epochs) / warm_up_epochs
+    coeff = log_prior_coeff * (epoch - no_log_prior_epochs) / warm_up_epochs
     return min(max(coeff, 0), 1)
