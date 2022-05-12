@@ -237,18 +237,34 @@ class ARF_with_AR_TextSubNet(nn.Module):
 
     def count_parameters(self):
 
-        param_list = list(self.parameters())
-
+        param_list = list(self.inference_subnet.parameters()) + list(self.audio_subnet.parameters()) + list(self.video_subnet.parameters())
         count = 0
         for param in param_list:
             count += torch.numel(param)
-    
+        rank = self.fusion_layer.estimate_rank()
+        for size in self.fusion_layer.input_sizes:
+            count += rank * size
+        count += rank * self.fusion_layer.output_size
+        rank = self.text_subnet.rnn.layer_ih.estimate_rank()
+        for i, size in enumerate(self.text_subnet.rnn.layer_ih.weight_tensor.tensor.shape):
+            count += rank[i] * rank[i+1] * size
+        rank = self.text_subnet.rnn.layer_hh.estimate_rank()
+        for i, size in enumerate(self.text_subnet.rnn.layer_hh.weight_tensor.tensor.shape):
+            count += rank[i] * rank[i+1] * size
+        rank = self.text_subnet.linear_1.estimate_rank()
+        for i, size in enumerate(self.text_subnet.linear_1.weight_tensor.tensor.shape):
+            count += rank[i] * rank[i+1] * size
+        rank = self.text_subnet.linear_2.estimate_rank()
+        for i, size in enumerate(self.text_subnet.linear_2.weight_tensor.tensor.shape):
+            count += rank[i] * rank[i+1] * size
+        
         return count
-
-    def count_fusion_parameters(self):
+    '''
+    def get_compression_ratio(self):
 
         count = 0
-        for param in list(self.fusion_layer.parameters()):
+        for param in list(self.parameters()):
             count += torch.numel(param)
 
-        return count
+        return self.count_parameters() / count
+    '''

@@ -153,7 +153,7 @@ class AdaptiveRankFusion(nn.Module):
         
         # clamp rank_param because <=0 is undefined 
         with torch.no_grad():
-            self.rank_parameters[:] = self.rank_parameters.clamp(1e-10)
+            self.rank_parameters[:] = self.rank_parameters.clamp(1e-10, 1e10)
         
         # self.threshold(self.rank_parameter)
         log_prior = torch.sum(self.rank_parameter_prior_distribution.log_prob(self.rank_parameters))
@@ -181,6 +181,10 @@ class AdaptiveRankLinear(nn.Module):
 
         super().__init__()
 
+        self.in_features = in_features
+        self.out_features = out_features
+        self.device = device
+        self.dtype = dtype
         self.weight_tensor = getattr(LowRankTensor, tensor_type)(in_features, out_features, max_rank, prior_type, eta, device, dtype)
         
        # initialize bias

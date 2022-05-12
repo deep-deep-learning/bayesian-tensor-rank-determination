@@ -11,6 +11,11 @@ class LowRankTensor(nn.Module):
     def __init__(self, in_features, out_features, prior_type='log_uniform', eta=None, device=None, dtype=None):
 
         super().__init__()
+        
+        self.in_features = in_features
+        self.out_features = out_features
+        self.device = device
+        self.dtype = dtype
 
         if prior_type == 'half_cauchy':
             self.rank_parameter_prior_distribution = HalfCauchy(eta)
@@ -32,17 +37,18 @@ class CP(LowRankTensor):
                                                    device=device,
                                                    dtype=dtype)
 
+        self.max_rank = self.tensor.rank
         target_var = 1 / in_features
         factor_std = (target_var / self.tensor.rank) ** (1 / (4 * self.tensor.order))
         for factor in self.tensor.factors:
             nn.init.normal_(factor, 0, factor_std)
 
-        self.rank_parameters = nn.Parameter(torch.rand((max_rank,), device=device, dtype=dtype))
+        self.rank_parameters = nn.Parameter(torch.rand((self.max_rank,), device=device, dtype=dtype))
 
     def get_log_prior(self):
 
         with torch.no_grad():
-            self.rank_parameters[:] = self.rank_parameters.clamp(1e-10)
+            self.rank_parameters[:] = self.rank_parameters.clamp(1e-10, 1e10)
         
         # self.threshold(self.rank_parameter)
         log_prior = torch.sum(self.rank_parameter_prior_distribution.log_prob(self.rank_parameters))
@@ -100,20 +106,24 @@ class Tucker(LowRankTensor):
 class TT(LowRankTensor):
 
     def __init__(self, in_features, out_features, max_rank, prior_type='log_uniform', eta=None, device=None, dtype=None):
+        '''
+        max_rank: an 'int' or a 'float' if indicating comprssion ratio
+        '''
 
         super().__init__(in_features, out_features, prior_type, eta, device, dtype)
 
-        tensorized_dim = [*self.tensorized_shape[0], *self.tensorized_shape[1]]
-        self.tensor = tltorch.TTTensor.new(shape=tensorized_dim, rank=max_rank, device=device, dtype=dtype)
-
+        self.tensorized_dim = [*self.tensorized_shape[0], *self.tensorized_shape[1]]
+            
+        self.tensor = tltorch.TTTensor.new(shape=self.tensorized_dim, rank=max_rank, device=device, dtype=dtype)
+        self.max_rank = self.tensor.rank
         target_var = 1 / in_features
         factor_std = ((target_var / np.prod(self.tensor.rank)) ** (1 / self.tensor.order)) ** 0.5
 
         for factor in self.tensor.factors:
             nn.init.normal_(factor, 0, factor_std)
 
-        self.rank_parameters = nn.ParameterList([nn.Parameter(torch.rand((max_rank,), device=device, dtype=dtype)) \
-            for _ in range(len(tensorized_dim)-1)])
+        self.rank_parameters = nn.ParameterList([nn.Parameter(torch.rand((self.max_rank[1+i],), device=device, dtype=dtype)) \
+            for i in range(len(self.tensorized_dim)-1)])
 
     def get_log_prior(self):
 
@@ -121,7 +131,7 @@ class TT(LowRankTensor):
         for r in self.rank_parameters:
             # clamp rank_param because <=0 is undefined 
             with torch.no_grad():
-                r[:] = r.clamp(1e-10)
+                r[:] = r.clamp(1e-10, 1e10)
             log_prior = log_prior + torch.sum(self.rank_parameter_prior_distribution.log_prob(r))
 
         
@@ -139,10 +149,11 @@ class TT(LowRankTensor):
 
         rank = [1]
         for factor in self.tensor.factors[:-1]:
-            rank.append(torch.sum(factor.var((0,1)) > 1e-5))
+            rank.append(torch.sum(factor.var((0,1)) > 1e-4).item())
         
-        rank.append(torch.sum(self.tensor.factors[-1].var((1,2) > 1e-5)))
-        
+        #rank.append(torch.sum(self.tensor.factors[-1].var((1,2) > 1e-5)))
+        rank.append(1)
+
         return rank
 
 class TTM(LowRankTensor):
