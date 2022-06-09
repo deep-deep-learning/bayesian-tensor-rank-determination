@@ -27,7 +27,7 @@ class TensorFusion(nn.Module):
 
         # initialize bias
         if bias:
-            self.bias = nn.Parameter(torch.zeros((output_size,), device=device, dtype=dtype))
+            self.bias = nn.Parameter(torch.full((output_size,), 0.1, device=device, dtype=dtype))
         else:
             self.bias = None
 
@@ -72,7 +72,7 @@ class LowRankFusion(nn.Module):
 
         # initialize bias
         if bias:
-            self.bias = nn.Parameter(torch.zeros((output_size,), device=device, dtype=dtype))
+            self.bias = nn.Parameter(torch.full((output_size,), 0.1, device=device, dtype=dtype))
         else:
             self.bias = None
 
@@ -128,7 +128,7 @@ class AdaptiveRankFusion(nn.Module):
 
         # initialize bias
         if bias:
-            self.bias = nn.Parameter(torch.zeros((output_size,), device=device, dtype=dtype))
+            self.bias = nn.Parameter(torch.full((output_size,), 0.1, device=device, dtype=dtype))
         else:
             self.bias = None
 
@@ -189,7 +189,7 @@ class AdaptiveRankLinear(nn.Module):
         
        # initialize bias
         if bias:
-            self.bias = nn.Parameter(torch.zeros((out_features,), device=device, dtype=dtype))
+            self.bias = nn.Parameter(torch.full((out_features,), 0.1, device=device, dtype=dtype))
         else:
             self.bias = None
 
