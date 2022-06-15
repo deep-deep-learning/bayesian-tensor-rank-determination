@@ -27,15 +27,23 @@ class LowRankTensor(nn.Module):
 
 class CP(LowRankTensor):
 
-    def __init__(self, in_features, out_features, max_rank, prior_type='log_uniform', eta=None, device=None, dtype=None):
-
+    def __init__(self, in_features, out_features, max_rank, prior_type='log_uniform', eta=None, device=None, dtype=None, tensorized_shape=None):
+        
         super().__init__(in_features, out_features, prior_type, eta, device, dtype)
 
-        self.tensor = tltorch.TensorizedTensor.new(tensorized_shape=self.tensorized_shape,
-                                                   rank=max_rank,
-                                                   factorization='CP',
-                                                   device=device,
-                                                   dtype=dtype)
+        if tensorized_shape:
+            self.tensorized_shape = tensorized_shape
+            self.tensor = tltorch.TensorizedTensor.new(tensorized_shape=self.tensorized_shape,
+                                                       rank=max_rank,
+                                                       factorization='CP',
+                                                       device=device,
+                                                       dtype=dtype)
+        else:
+            self.tensor = tltorch.TensorizedTensor.new(tensorized_shape=self.tensorized_shape,
+                                                       rank=max_rank,
+                                                       factorization='CP',
+                                                       device=device,
+                                                       dtype=dtype)
 
         self.max_rank = self.tensor.rank
         target_var = 1 / in_features

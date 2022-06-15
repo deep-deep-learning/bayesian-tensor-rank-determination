@@ -7,3 +7,4 @@ from . import module
 from . import util
 from . import net
 from . import train
+from . import quantized_module
