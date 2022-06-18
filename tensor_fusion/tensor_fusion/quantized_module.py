@@ -10,7 +10,7 @@ from .quantized_tensor_times_matrix import tensor_times_matrix_fwd
 
 class QuantizedAdaptiveRankFusion(nn.Module):
 
-    def __init__(self, quantizer, in_features, out_features, tensorized_shape, bias=True, 
+    def __init__(self, quantizer, in_features, out_features, tensorized_shape, bias=False, 
                  max_rank=20, prior_type='log_uniform', eta=None, 
                  device=None, dtype=None):
 
@@ -35,12 +35,12 @@ class QuantizedAdaptiveRankFusion(nn.Module):
         # tensorized forward propagation
         output = 1.0
         for x, factor in zip(inputs, self.weight_tensor.tensor.factors[:-1]):
-            output = output * (x @ self.quantizer(factor))
+            output = output * (x @ self.quantizer(factor.float()))
 
-        output = output @ self.quantizer(self.weight_tensor.tensor.factors[-1].T)
+        output = output @ self.quantizer(self.weight_tensor.tensor.factors[-1].T.float())
 
         if self.bias is not None:
-            output = self.quantizer(output + self.bias)
+            output = output + self.bias
 
         output = F.relu(output)
             
@@ -48,7 +48,7 @@ class QuantizedAdaptiveRankFusion(nn.Module):
 
     def get_log_prior(self):
 
-        return self.weight_tensor.get_log_prior()
+        return self.weight_tensor.get_quantized_log_prior(self.quantizer)
 
     def estimate_rank(self):
 

@@ -67,6 +67,22 @@ class CP(LowRankTensor):
             log_prior = log_prior + factor_prior_distribution.log_prob(factor).sum(0).sum()
         
         return log_prior
+
+    def get_quantized_log_prior(self, quantizer):
+
+        with torch.no_grad():
+            self.rank_parameters[:] = self.rank_parameters.clamp(1e-10, 1e10)
+        
+        # self.threshold(self.rank_parameter)
+        log_prior = torch.sum(self.rank_parameter_prior_distribution.log_prob(self.rank_parameters))
+        
+        # 0 mean normal distribution for the factors
+        factor_prior_distribution = Normal(0, self.rank_parameters)
+        for factor in self.tensor.factors:
+            log_prior = log_prior + factor_prior_distribution.log_prob(quantizer(factor)).sum(0).sum()
+        
+        return log_prior
+
     
     def estimate_rank(self):
         
